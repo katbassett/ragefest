@@ -190,7 +190,8 @@ main > :not(.hero-section) {
   z-index: 2;
 
   color: #ffffff;
-  background: transparent;
+  /* Match sky base so mobile chrome / overscroll never flash page black */
+  background: #140818;
 
   /* Soft lift as this world slides over the sticky hero */
   box-shadow: 0 -28px 64px rgba(33, 20, 47, 0.18);

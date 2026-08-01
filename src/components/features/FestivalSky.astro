@@ -173,8 +173,14 @@
     top: 0;
     z-index: 0;
 
-    height: 100svh;
-    margin-bottom: -100svh;
+    /*
+      Large viewport height so collapsing mobile browser chrome
+      doesn't leave a black strip under the sticky sky.
+    */
+    height: 100vh;
+    margin-bottom: -100vh;
+    height: 100lvh;
+    margin-bottom: -100lvh;
 
     overflow: hidden;
     pointer-events: none;
