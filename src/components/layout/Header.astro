@@ -8,105 +8,108 @@ const rightNavigationItems = navigation.slice(2, 4);
 ---
 
 <header id="site-header" class="site-header">
-  <PageContainer>
-    <!-- Mobile header -->
-    <div class="mobile-header">
-      <a
-        href="#home"
-        class="site-logo site-logo--mobile"
-        aria-label="Back to hero"
-        data-scroll-home
-      >
-        <img
-          src={logoIcon.src}
-          alt=""
-          width={logoIcon.width}
-          height={logoIcon.height}
-        />
-      </a>
-
-      <button
-        id="mobile-menu-button"
-        class="mobile-menu-button"
-        type="button"
-        aria-label="Open navigation menu"
-        aria-expanded="false"
-        aria-controls="mobile-navigation"
-      >
-        <svg
-          class="menu-icon menu-icon--open"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          aria-hidden="true"
+  <!-- Blur lives on this bar only so it doesn't break the fixed mobile overlay -->
+  <div class="site-header__bar">
+    <PageContainer>
+      <!-- Mobile header -->
+      <div class="mobile-header">
+        <a
+          href="#home"
+          class="site-logo site-logo--mobile"
+          aria-label="Back to hero"
+          data-scroll-home
         >
-          <path d="M4 7h16" />
-          <path d="M4 12h16" />
-          <path d="M4 17h16" />
-        </svg>
+          <img
+            src={logoIcon.src}
+            alt=""
+            width={logoIcon.width}
+            height={logoIcon.height}
+          />
+        </a>
 
-        <svg
-          class="menu-icon menu-icon--close"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          aria-hidden="true"
+        <button
+          id="mobile-menu-button"
+          class="mobile-menu-button"
+          type="button"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+          aria-controls="mobile-navigation"
         >
-          <path d="M6 6l12 12" />
-          <path d="M18 6L6 18" />
-        </svg>
-      </button>
-    </div>
+          <svg
+            class="menu-icon menu-icon--open"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M4 7h16" />
+            <path d="M4 12h16" />
+            <path d="M4 17h16" />
+          </svg>
 
-    <!-- Desktop header -->
-    <div class="desktop-header">
-      <nav
-        class="desktop-nav desktop-nav--left"
-        aria-label="Primary navigation"
-      >
-        {
-          leftNavigationItems.map((item) => (
-            <a href={item.href} class="desktop-nav-link">
-              {item.label}
-            </a>
-          ))
-        }
-      </nav>
+          <svg
+            class="menu-icon menu-icon--close"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M6 6l12 12" />
+            <path d="M18 6L6 18" />
+          </svg>
+        </button>
+      </div>
 
-      <a
-        href="#home"
-        class="site-logo site-logo--desktop"
-        aria-label="Back to hero"
-        data-scroll-home
-      >
-        <img
-          src={logoIcon.src}
-          alt=""
-          width={logoIcon.width}
-          height={logoIcon.height}
-        />
-      </a>
+      <!-- Desktop header -->
+      <div class="desktop-header">
+        <nav
+          class="desktop-nav desktop-nav--left"
+          aria-label="Primary navigation"
+        >
+          {
+            leftNavigationItems.map((item) => (
+              <a href={item.href} class="desktop-nav-link">
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
 
-      <nav
-        class="desktop-nav desktop-nav--right"
-        aria-label="Secondary navigation"
-      >
-        {
-          rightNavigationItems.map((item) => (
-            <a href={item.href} class="desktop-nav-link">
-              {item.label}
-            </a>
-          ))
-        }
-      </nav>
-    </div>
-  </PageContainer>
+        <a
+          href="#home"
+          class="site-logo site-logo--desktop"
+          aria-label="Back to hero"
+          data-scroll-home
+        >
+          <img
+            src={logoIcon.src}
+            alt=""
+            width={logoIcon.width}
+            height={logoIcon.height}
+          />
+        </a>
 
-  <!-- Mobile navigation overlay -->
+        <nav
+          class="desktop-nav desktop-nav--right"
+          aria-label="Secondary navigation"
+        >
+          {
+            rightNavigationItems.map((item) => (
+              <a href={item.href} class="desktop-nav-link">
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </PageContainer>
+  </div>
+
+  <!-- Mobile navigation overlay (sibling of blur bar — stays full-screen) -->
   <nav
     id="mobile-navigation"
     class="mobile-navigation"
@@ -116,12 +119,11 @@ const rightNavigationItems = navigation.slice(2, 4);
     <div class="mobile-navigation__inner">
       {
         navigation.map((item) => (
-          <a href={item.href} class="mobile-nav-link">
+          <a href={item.href} class="mobile-nav-link" data-mobile-nav-link>
             {item.label}
           </a>
         ))
       }
-
     </div>
   </nav>
 </header>
@@ -141,10 +143,7 @@ const rightNavigationItems = navigation.slice(2, 4);
     mobileNavigation?.setAttribute("aria-hidden", "true");
 
     menuButton?.setAttribute("aria-expanded", "false");
-    menuButton?.setAttribute(
-      "aria-label",
-      "Open navigation menu"
-    );
+    menuButton?.setAttribute("aria-label", "Open navigation menu");
 
     document.body.classList.remove("mobile-menu-open");
   }
@@ -154,17 +153,13 @@ const rightNavigationItems = navigation.slice(2, 4);
     mobileNavigation?.setAttribute("aria-hidden", "false");
 
     menuButton?.setAttribute("aria-expanded", "true");
-    menuButton?.setAttribute(
-      "aria-label",
-      "Close navigation menu"
-    );
+    menuButton?.setAttribute("aria-label", "Close navigation menu");
 
     document.body.classList.add("mobile-menu-open");
   }
 
   menuButton?.addEventListener("click", () => {
-    const isOpen =
-      menuButton.getAttribute("aria-expanded") === "true";
+    const isOpen = menuButton.getAttribute("aria-expanded") === "true";
 
     if (isOpen) {
       closeMobileMenu();
@@ -173,18 +168,51 @@ const rightNavigationItems = navigation.slice(2, 4);
     }
   });
 
+  const scrollToTarget = (href: string) => {
+    if (href === "#home" || href === "#") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      history.replaceState(null, "", "#home");
+      return;
+    }
+
+    const id = href.startsWith("#") ? href.slice(1) : href;
+    const target = document.getElementById(id);
+
+    if (!target) return;
+
+    const headerOffset =
+      siteHeader?.querySelector(".site-header__bar")?.getBoundingClientRect()
+        .height ?? 72;
+
+    const top =
+      window.scrollY + target.getBoundingClientRect().top - headerOffset - 8;
+
+    window.scrollTo({ top: Math.max(top, 0), behavior: "smooth" });
+    history.replaceState(null, "", href);
+  };
+
   mobileNavigation
-    ?.querySelectorAll("a")
+    ?.querySelectorAll<HTMLAnchorElement>("[data-mobile-nav-link]")
     .forEach((link) => {
-      link.addEventListener("click", closeMobileMenu);
+      link.addEventListener("click", (event) => {
+        const href = link.getAttribute("href");
+        if (!href?.startsWith("#")) return;
+
+        event.preventDefault();
+        closeMobileMenu();
+
+        // Wait a tick so body unlocks before scrolling
+        window.requestAnimationFrame(() => {
+          scrollToTarget(href);
+        });
+      });
     });
 
   document.querySelectorAll("[data-scroll-home]").forEach((logo) => {
     logo.addEventListener("click", (event) => {
       event.preventDefault();
       closeMobileMenu();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      history.replaceState(null, "", "#home");
+      scrollToTarget("#home");
     });
   });
 
@@ -201,10 +229,7 @@ const rightNavigationItems = navigation.slice(2, 4);
   });
 
   function updateHeader() {
-    siteHeader?.classList.toggle(
-      "is-scrolled",
-      window.scrollY > 40
-    );
+    siteHeader?.classList.toggle("is-scrolled", window.scrollY > 40);
   }
 
   updateHeader();
@@ -221,9 +246,18 @@ const rightNavigationItems = navigation.slice(2, 4);
     z-index: 1000;
 
     width: 100%;
+    pointer-events: none;
+  }
+
+  .site-header__bar {
+    position: relative;
+    z-index: 1002;
+
+    width: 100%;
     padding: 1.25rem 2rem;
 
     background: transparent;
+    pointer-events: auto;
 
     transition:
       padding 250ms ease,
@@ -231,10 +265,10 @@ const rightNavigationItems = navigation.slice(2, 4);
       backdrop-filter 250ms ease;
   }
 
-  .site-header.is-scrolled {
+  .site-header.is-scrolled .site-header__bar {
     padding-block: 0.85rem;
 
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(12, 8, 20, 0.35);
 
     backdrop-filter: blur(28px) saturate(1.35);
     -webkit-backdrop-filter: blur(28px) saturate(1.35);
@@ -286,11 +320,7 @@ const rightNavigationItems = navigation.slice(2, 4);
 
     height: 2px;
 
-    background: linear-gradient(
-      90deg,
-      #ff2083,
-      #8a2be2
-    );
+    background: linear-gradient(90deg, #ff2083, #8a2be2);
 
     transform: scaleX(0);
     transform-origin: center;
@@ -307,6 +337,15 @@ const rightNavigationItems = navigation.slice(2, 4);
   .desktop-nav-link:hover::after,
   .desktop-nav-link:focus-visible::after {
     transform: scaleX(1);
+  }
+
+  .site-header.is-scrolled .desktop-nav-link {
+    color: #ffffff;
+  }
+
+  .site-header.is-scrolled .desktop-nav-link:hover,
+  .site-header.is-scrolled .desktop-nav-link:focus-visible {
+    color: var(--rf-yellow);
   }
 
   /* Logo */
@@ -343,12 +382,8 @@ const rightNavigationItems = navigation.slice(2, 4);
   .site-logo:focus-visible {
     transform: scale(1.05);
 
-    filter: drop-shadow(
-      0 0 14px rgba(138, 43, 226, 0.35)
-    );
+    filter: drop-shadow(0 0 14px rgba(138, 43, 226, 0.35));
   }
-
-  /* Mobile header hidden on desktop */
 
   .mobile-header {
     display: none;
@@ -358,10 +393,8 @@ const rightNavigationItems = navigation.slice(2, 4);
     display: none;
   }
 
-  /* Mobile */
-
   @media (max-width: 1023px) {
-    .site-header {
+    .site-header__bar {
       padding: 1rem 1.25rem;
     }
 
@@ -404,6 +437,12 @@ const rightNavigationItems = navigation.slice(2, 4);
       border: 0;
 
       cursor: pointer;
+
+      transition: color 200ms ease;
+    }
+
+    .site-header.is-scrolled .mobile-menu-button {
+      color: #ffffff;
     }
 
     .menu-icon {
@@ -415,13 +454,11 @@ const rightNavigationItems = navigation.slice(2, 4);
       display: none;
     }
 
-    .mobile-menu-button[aria-expanded="true"]
-      .menu-icon--open {
+    .mobile-menu-button[aria-expanded="true"] .menu-icon--open {
       display: none;
     }
 
-    .mobile-menu-button[aria-expanded="true"]
-      .menu-icon--close {
+    .mobile-menu-button[aria-expanded="true"] .menu-icon--close {
       display: block;
       color: #ffffff;
     }
@@ -442,13 +479,10 @@ const rightNavigationItems = navigation.slice(2, 4);
       background:
         radial-gradient(
           circle at center,
-          rgba(138, 43, 226, 0.12),
+          rgba(138, 43, 226, 0.16),
           transparent 45%
         ),
         rgba(10, 10, 12, 0.97);
-
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
 
       transition:
         opacity 250ms ease,
@@ -466,6 +500,7 @@ const rightNavigationItems = navigation.slice(2, 4);
       flex-direction: column;
       align-items: center;
       gap: 2rem;
+      pointer-events: auto;
     }
 
     .mobile-nav-link {
@@ -479,11 +514,10 @@ const rightNavigationItems = navigation.slice(2, 4);
       text-decoration: none;
       text-transform: uppercase;
     }
-
   }
 
   @media (max-width: 520px) {
-    .site-header {
+    .site-header__bar {
       padding-inline: 0.9rem;
     }
 
@@ -508,5 +542,13 @@ const rightNavigationItems = navigation.slice(2, 4);
 
   :global(body.mobile-menu-open) {
     overflow: hidden;
+  }
+
+  :global(#experience),
+  :global(#lineup),
+  :global(#tickets),
+  :global(#faq),
+  :global(#signal) {
+    scroll-margin-top: 5.5rem;
   }
 </style>
