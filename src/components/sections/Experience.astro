@@ -319,7 +319,8 @@ const hiddenPlaces = [
 
   .s2s-title__accent {
     color: var(--rf-pink);
-    white-space: nowrap;
+    max-width: 100%;
+    text-wrap: balance;
     text-shadow: 0 2px 7px rgba(0, 0, 0, 0.43);
   }
 
@@ -652,7 +653,19 @@ const hiddenPlaces = [
     }
 
     .s2s-title {
-      font-size: clamp(1.9rem, 9vw, 2.8rem);
+      width: 100%;
+      font-size: clamp(1.65rem, 8.2vw, 2.5rem);
+      letter-spacing: -0.03em;
+    }
+
+    .s2s-title__day {
+      font-size: 1.18em;
+    }
+
+    .s2s-title__accent {
+      font-size: 0.92em;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
     }
 
     .world-row {
