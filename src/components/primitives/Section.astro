@@ -1,0 +1,19 @@
+---
+interface Props {
+  id?: string;
+  theme?: "night" | "sunset" | "ocean";
+  class?: string;
+}
+
+const { id, theme = "night", class: className = "" }: Props = Astro.props;
+---
+
+<section
+  {id}
+  class:list={[
+    "relative py-24 md:py-32 lg:py-40",
+    className,
+  ]}
+>
+  <slot />
+</section>

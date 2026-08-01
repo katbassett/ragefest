@@ -1,0 +1,1232 @@
+---
+import logoIcon from "../../assets/navigation/logo-icon.png";
+
+const signals = [
+  {
+    signal: "Signal 01",
+    date: "Phase 1",
+    title: "First Wave",
+    description:
+      "The first artists drop and the journey starts — a taste of the sound before the world expands.",
+    includes: "Opening artists",
+    status: "Incoming",
+    className: "lineup-card--signal-01",
+    graphic: "wave",
+  },
+  {
+    signal: "Signal 02",
+    date: "Phase 2",
+    title: "The World Expands",
+    description:
+      "More artists land, experience reveals unlock, and new corners of the island come into view.",
+    includes: "Artists + experiences",
+    status: "Locked",
+    className: "lineup-card--signal-02",
+    graphic: "expand",
+  },
+  {
+    signal: "Signal 03",
+    date: "Phase 3",
+    title: "Full Reveal",
+    description:
+      "The complete lineup, headliner, and final event details — everything before we hit the island.",
+    includes: "Full lineup + headliner",
+    status: "Classified",
+    className: "lineup-card--signal-03",
+    graphic: "strobe",
+  },
+];
+
+const nextDrop = signals[0];
+---
+
+<section id="lineup" class="lineup-section">
+  <div class="lineup-shell">
+    <header class="lineup-head">
+      <p class="lineup-kicker">The Sound</p>
+
+      <h2 class="lineup-title">
+        <span class="lineup-title__main">A Journey,</span>
+        <span class="lineup-title__accent">Not a Playlist</span>
+      </h2>
+
+      <p class="lineup-lead">
+        Guests don’t watch a lineup — they move through a feeling
+      </p>
+    </header>
+
+    <aside class="lineup-next" aria-label="Next release">
+      <div class="lineup-next__meta">
+        <p class="lineup-next__frame">Three Releases · One Lineup</p>
+        <p class="lineup-next__label">Next Drop</p>
+        <p class="lineup-next__signal">{nextDrop.signal}</p>
+      </div>
+
+      <div class="lineup-next__main">
+        <p class="lineup-next__date">{nextDrop.date}</p>
+        <p class="lineup-next__title">{nextDrop.title}</p>
+        <p class="lineup-next__detail">{nextDrop.includes}</p>
+      </div>
+
+      <p class="lineup-next__status">{nextDrop.status}</p>
+    </aside>
+
+    <div class="lineup-grid">
+      {
+        signals.map((signal) => (
+          <article class:list={["lineup-card", "lineup-card--signal", signal.className]}>
+            <div class="lineup-card__fx" aria-hidden="true">
+              <span class="lineup-scan"></span>
+
+              {signal.graphic === "wave" && (
+                <span class="lineup-graphic lineup-graphic--ocean" aria-hidden="true">
+                  <span class="lineup-ocean-line"></span>
+                  <span class="lineup-ocean-line lineup-ocean-line--soft"></span>
+                </span>
+              )}
+
+              {signal.graphic === "expand" && (
+                <span class="lineup-graphic lineup-graphic--expand">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </span>
+              )}
+
+              {signal.graphic === "strobe" && (
+                <span class="lineup-graphic lineup-graphic--strobe">
+                  <span class="lineup-laser lineup-laser--cyan"></span>
+                  <span class="lineup-laser lineup-laser--pink"></span>
+                  <span class="lineup-laser lineup-laser--yellow"></span>
+                  <span class="lineup-laser lineup-laser--magenta"></span>
+                  <span class="lineup-laser lineup-laser--white"></span>
+                </span>
+              )}
+            </div>
+
+            <div class="lineup-card__top">
+              <p class="lineup-card__eyebrow">{signal.signal}</p>
+              <p class="lineup-card__status">{signal.status}</p>
+            </div>
+
+            <div class="lineup-card__body">
+              <p class="lineup-card__date">{signal.date}</p>
+              <h3 class="lineup-card__title">{signal.title}</h3>
+              <p class="lineup-card__detail">{signal.description}</p>
+            </div>
+
+            <div class="lineup-card__foot">
+              <p class="lineup-card__includes">{signal.includes}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="lineup-cta" id="signal">
+      <img
+        class="lineup-cta__eyes"
+        src={logoIcon.src}
+        alt=""
+        width={logoIcon.width}
+        height={logoIcon.height}
+      />
+
+      <p class="lineup-cta__eyebrow">The Waitlist</p>
+
+      <h3 class="lineup-cta__title">
+        <span class="lineup-cta__title-main">Join The Signal</span>
+      </h3>
+
+      <p class="lineup-cta__text">
+        Get first access to every lineup drop, ticket release, and hidden
+        announcement — priority pricing and founding-community status.
+      </p>
+
+      <form class="lineup-signup" action="#" method="post">
+        <label class="visually-hidden" for="lineup-signal-email">Email address</label>
+        <input
+          id="lineup-signal-email"
+          type="email"
+          name="email"
+          placeholder="your@email.com"
+          autocomplete="email"
+          required
+        />
+        <button class="join-waitlist-btn lineup-signup__btn" type="submit">
+          <span>Join The Signal</span>
+        </button>
+      </form>
+
+      <ul class="lineup-cta__benefits">
+        <li>Priority access</li>
+        <li>Lowest pricing</li>
+        <li>Secret drops</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  const initLineupReveal = () => {
+    const section = document.querySelector("#lineup");
+    const next = document.querySelector("#lineup .lineup-next");
+    const cards = Array.from(
+      document.querySelectorAll("#lineup .lineup-card"),
+    );
+    const cta = document.querySelector("#lineup .lineup-cta");
+
+    if (!section || cards.length === 0) return;
+    if (section.dataset.revealReady === "true") return;
+
+    section.dataset.revealReady = "true";
+
+    const showCards = () => {
+      if (section.dataset.revealed === "true") return;
+      section.dataset.revealed = "true";
+
+      const startDelay = 80;
+
+      if (next) {
+        window.setTimeout(() => {
+          next.classList.add("is-visible");
+        }, startDelay);
+      }
+
+      cards.forEach((card, index) => {
+        window.setTimeout(() => {
+          card.classList.add("is-visible");
+        }, startDelay + 120 + index * 140);
+      });
+
+      if (cta) {
+        window.setTimeout(() => {
+          cta.classList.add("is-visible");
+        }, startDelay + 120 + cards.length * 140 + 160);
+      }
+    };
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      next?.classList.add("is-visible");
+      cards.forEach((card) => card.classList.add("is-visible"));
+      cta?.classList.add("is-visible");
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            showCards();
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -8% 0px" },
+    );
+
+    observer.observe(section);
+  };
+
+  initLineupReveal();
+  document.addEventListener("astro:page-load", initLineupReveal);
+
+  const initLineupSignup = () => {
+    const form = document.querySelector("#lineup .lineup-signup");
+    if (!(form instanceof HTMLFormElement)) return;
+    if (form.dataset.ready === "true") return;
+
+    form.dataset.ready = "true";
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+    });
+  };
+
+  initLineupSignup();
+  document.addEventListener("astro:page-load", initLineupSignup);
+</script>
+
+<style>
+  .lineup-section {
+    position: relative;
+    z-index: 1;
+    isolation: isolate;
+    overflow: hidden;
+
+    padding:
+      clamp(3.5rem, 6vh, 5rem)
+      0
+      clamp(3.5rem, 6vh, 5rem);
+
+    color: #ffffff;
+    background: transparent;
+  }
+
+  .lineup-shell {
+    width: min(calc(100% - clamp(1.25rem, 5vw, 4rem)), 76.25rem);
+    margin-inline: auto;
+  }
+
+  .lineup-head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    max-width: 46rem;
+    margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+  }
+
+  .lineup-kicker {
+    margin: 0;
+
+    color: var(--rf-yellow);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+
+    text-shadow: 0 2px 7px rgba(0, 0, 0, 0.43);
+  }
+
+  .lineup-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.06em;
+
+    margin: 0;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: clamp(2.1rem, 5.2vw, 3.8rem);
+    font-weight: 900;
+    line-height: 0.94;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+  }
+
+  .lineup-title__main {
+    color: #ffffff;
+
+    font-family: "Road Rage", cursive;
+    font-size: 1.28em;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+
+    text-shadow: 0 2px 7px rgba(0, 0, 0, 0.43);
+  }
+
+  .lineup-title__accent {
+    color: var(--rf-pink);
+    white-space: nowrap;
+    text-shadow: 0 2px 7px rgba(0, 0, 0, 0.43);
+  }
+
+  .lineup-lead {
+    max-width: 42rem;
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.78);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: clamp(1.05rem, 1.7vw, 1.25rem);
+    font-weight: 500;
+    line-height: 1.55;
+    letter-spacing: 0;
+    text-transform: none;
+
+    text-shadow: none;
+  }
+
+  /* Slim next-drop strip — replaces the vague full-bleed banner */
+
+  .lineup-next {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1.25rem 1.75rem;
+
+    margin-bottom: 0.85rem;
+    padding: 1rem 1.25rem;
+
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 1rem;
+
+    background: linear-gradient(
+      105deg,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 32, 131, 0.18) 45%,
+      rgba(180, 80, 255, 0.22) 100%
+    );
+
+    backdrop-filter: blur(8px);
+
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .lineup-next.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .lineup-next__meta,
+  .lineup-next__main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .lineup-next__frame,
+  .lineup-next__label,
+  .lineup-next__signal,
+  .lineup-next__detail,
+  .lineup-next__status {
+    margin: 0;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .lineup-next__frame {
+    margin-bottom: 0.45rem;
+
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.58rem;
+  }
+
+  .lineup-next__label {
+    color: var(--rf-yellow);
+    font-size: 0.64rem;
+  }
+
+  .lineup-next__signal {
+    color: #ffffff;
+    font-size: 0.82rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+
+  .lineup-next__date {
+    margin: 0 0 0.2rem;
+
+    color: #ffffff;
+
+    font-family: "Road Rage", cursive;
+    font-size: clamp(1.55rem, 2.6vw, 2rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    text-transform: none;
+
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .lineup-next__title {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .lineup-next__detail {
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.68rem;
+  }
+
+  .lineup-next__status {
+    justify-self: end;
+
+    padding: 0.4rem 0.7rem;
+
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.22);
+
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+  }
+
+  .lineup-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+    align-items: stretch;
+  }
+
+  .lineup-card {
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.35rem;
+
+    min-height: clamp(21rem, 28vw, 24.5rem);
+    padding: clamp(1.5rem, 2.4vw, 1.9rem);
+
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 1.15rem;
+    color: #ffffff;
+
+    opacity: 0;
+    transform: translate3d(0, 2.5rem, 0);
+
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+
+    transition:
+      opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .lineup-card.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .lineup-card--signal {
+    height: 100%;
+  }
+
+  /* Beach / First Wave: smooth white → rf-blue */
+  .lineup-card--signal-01 {
+    background: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      var(--rf-blue) 100%
+    );
+  }
+
+  .lineup-card--signal-01::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.18) 0%,
+      rgba(0, 0, 0, 0.08) 45%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+
+  .lineup-card--signal-01 .lineup-ocean-line {
+    border-color: rgba(255, 255, 255, 0.75);
+  }
+
+  .lineup-card--signal-01 .lineup-ocean-line--soft {
+    border-color: rgba(255, 255, 255, 0.45);
+  }
+
+  /* Match Experience Sunset: orange → pink */
+  .lineup-card--signal-02 {
+    background: linear-gradient(
+      160deg,
+      var(--rf-orange) 0%,
+      var(--rf-pink) 100%
+    );
+  }
+
+  /* Match Experience Night: purple → black */
+  .lineup-card--signal-03 {
+    background: linear-gradient(
+      160deg,
+      var(--rf-purple) 0%,
+      #000000 100%
+    );
+  }
+
+  .lineup-card__fx {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .lineup-scan {
+    position: absolute;
+    inset: 0;
+
+    opacity: 0.08;
+
+    background: repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.16) 0 1px,
+      transparent 1px 4px
+    );
+
+    animation: lineup-scan 7s linear infinite;
+  }
+
+  /* Title-play graphics */
+
+  .lineup-graphic {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  /* First Wave — soft drifting wave */
+  .lineup-graphic--ocean {
+    right: -12%;
+    bottom: 6%;
+    left: -12%;
+
+    height: 4rem;
+    overflow: visible;
+  }
+
+  .lineup-ocean-line {
+    position: absolute;
+    left: 0;
+    bottom: 0.4rem;
+
+    width: 140%;
+    height: 2.4rem;
+
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.65);
+    border-top: none;
+    border-left-color: transparent;
+    border-right-color: transparent;
+
+    opacity: 0.8;
+    animation: lineup-ocean-drift 7s ease-in-out infinite;
+  }
+
+  .lineup-ocean-line--soft {
+    bottom: -0.2rem;
+
+    height: 3rem;
+
+    border-color: rgba(255, 255, 255, 0.4);
+    opacity: 0.55;
+    animation-duration: 9s;
+    animation-direction: reverse;
+  }
+
+  /* The World Expands — pulsing rings */
+  .lineup-graphic--expand {
+    top: 50%;
+    right: 8%;
+
+    width: 7.5rem;
+    height: 7.5rem;
+
+    opacity: 0.55;
+    transform: translateY(-40%);
+  }
+
+  .lineup-graphic--expand span {
+    position: absolute;
+    inset: 18%;
+
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    border-radius: 50%;
+
+    animation: lineup-expand 3.6s ease-out infinite;
+  }
+
+  .lineup-graphic--expand span:nth-child(2) {
+    inset: 8%;
+    animation-delay: 0.7s;
+    opacity: 0.7;
+  }
+
+  .lineup-graphic--expand span:nth-child(3) {
+    inset: 0;
+    animation-delay: 1.4s;
+    opacity: 0.45;
+  }
+
+  /* Everything Revealed — concert / EDM lasers */
+  .lineup-graphic--strobe {
+    inset: 0;
+    overflow: hidden;
+    opacity: 0.55;
+  }
+
+  .lineup-laser {
+    position: absolute;
+    top: -10%;
+    left: 72%;
+
+    width: 3px;
+    height: 140%;
+
+    transform-origin: top center;
+    border-radius: 999px;
+
+    filter: blur(0.4px);
+    opacity: 0.85;
+    mix-blend-mode: screen;
+  }
+
+  .lineup-laser--cyan {
+    background: linear-gradient(
+      180deg,
+      rgba(0, 213, 255, 0.95),
+      rgba(0, 213, 255, 0.15) 70%,
+      transparent
+    );
+
+    box-shadow:
+      0 0 8px rgba(0, 213, 255, 0.9),
+      0 0 22px rgba(0, 213, 255, 0.55);
+
+    animation: lineup-laser-sweep-a 4.5s ease-in-out infinite;
+  }
+
+  .lineup-laser--pink {
+    left: 68%;
+    width: 2px;
+
+    background: linear-gradient(
+      180deg,
+      rgba(255, 32, 131, 0.95),
+      rgba(255, 32, 131, 0.15) 70%,
+      transparent
+    );
+
+    box-shadow:
+      0 0 8px rgba(255, 32, 131, 0.9),
+      0 0 22px rgba(255, 32, 131, 0.5);
+
+    animation: lineup-laser-sweep-b 5.2s ease-in-out infinite;
+  }
+
+  .lineup-laser--yellow {
+    left: 76%;
+    width: 2px;
+
+    background: linear-gradient(
+      180deg,
+      rgba(245, 255, 0, 0.9),
+      rgba(245, 255, 0, 0.12) 70%,
+      transparent
+    );
+
+    box-shadow:
+      0 0 8px rgba(245, 255, 0, 0.8),
+      0 0 18px rgba(245, 255, 0, 0.4);
+
+    animation: lineup-laser-sweep-c 3.8s ease-in-out infinite;
+  }
+
+  .lineup-laser--magenta {
+    left: 64%;
+    width: 2.5px;
+
+    background: linear-gradient(
+      180deg,
+      rgba(180, 80, 255, 0.95),
+      rgba(180, 80, 255, 0.12) 70%,
+      transparent
+    );
+
+    box-shadow:
+      0 0 8px rgba(180, 80, 255, 0.85),
+      0 0 20px rgba(180, 80, 255, 0.45);
+
+    animation: lineup-laser-sweep-a 6s ease-in-out infinite reverse;
+  }
+
+  .lineup-laser--white {
+    left: 71%;
+    width: 1.5px;
+
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.95),
+      rgba(255, 255, 255, 0.1) 65%,
+      transparent
+    );
+
+    box-shadow:
+      0 0 6px rgba(255, 255, 255, 0.9),
+      0 0 16px rgba(255, 255, 255, 0.35);
+
+    animation: lineup-laser-sweep-b 3.2s ease-in-out infinite reverse;
+  }
+
+  .lineup-card__top,
+  .lineup-card__body,
+  .lineup-card__foot {
+    position: relative;
+    z-index: 1;
+  }
+
+  .lineup-card__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .lineup-card__eyebrow,
+  .lineup-card__includes,
+  .lineup-card__status {
+    margin: 0;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .lineup-card__eyebrow {
+    color: #ffffff;
+    font-size: 0.82rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  }
+
+  .lineup-card__date {
+    margin: 0 0 0.55rem;
+
+    color: #ffffff;
+
+    font-family: "Road Rage", cursive;
+    font-size: clamp(2rem, 3.4vw, 2.75rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 0.95;
+    text-transform: none;
+
+    text-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+  }
+
+  .lineup-card__title {
+    margin: 0 0 0.85rem;
+
+    color: #ffffff;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: clamp(1.4rem, 2.5vw, 1.95rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  }
+
+  .lineup-card__detail {
+    margin: 0;
+
+    max-width: 28ch;
+
+    color: rgba(255, 255, 255, 0.96);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: clamp(0.98rem, 1.5vw, 1.12rem);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.55;
+    text-transform: none;
+
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .lineup-card--signal .lineup-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .lineup-card--signal .lineup-card__detail {
+    flex: 1;
+  }
+
+  .lineup-card__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .lineup-card__includes {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .lineup-card__status {
+    flex: none;
+
+    padding: 0.42rem 0.75rem;
+
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.28);
+
+    color: #ffffff;
+    font-size: 0.64rem;
+    letter-spacing: 0.16em;
+  }
+
+  .lineup-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-top: clamp(2.75rem, 5.5vw, 4.25rem);
+    padding: clamp(2.25rem, 5vw, 3.5rem) clamp(1.35rem, 3vw, 2.5rem);
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 1.35rem;
+
+    background:
+      radial-gradient(
+        circle at 50% 0%,
+        rgba(255, 32, 131, 0.28),
+        transparent 55%
+      ),
+      linear-gradient(
+        160deg,
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(138, 43, 226, 0.18) 55%,
+        rgba(0, 0, 0, 0.28) 100%
+      );
+
+    text-align: center;
+
+    opacity: 0;
+    transform: translate3d(0, 1.5rem, 0);
+
+    transition:
+      opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .lineup-cta.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .lineup-cta__eyes {
+    width: clamp(3.5rem, 7vw, 5rem);
+    height: auto;
+    margin-bottom: 0.85rem;
+
+    filter: drop-shadow(0 0 14px rgba(255, 32, 131, 0.55));
+  }
+
+  .lineup-cta__eyebrow {
+    margin: 0 0 0.65rem;
+
+    color: var(--rf-yellow);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .lineup-cta__title {
+    margin: 0 0 0.85rem;
+  }
+
+  .lineup-cta__title-main {
+    display: block;
+
+    color: #ffffff;
+
+    font-family: "Road Rage", cursive;
+    font-size: clamp(2.6rem, 7vw, 4.6rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 0.95;
+    text-transform: none;
+
+    text-shadow: 0 3px 14px rgba(0, 0, 0, 0.45);
+  }
+
+  .lineup-cta__text {
+    max-width: 38rem;
+    margin: 0 auto 1.6rem;
+
+    color: rgba(255, 255, 255, 0.82);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    font-weight: 500;
+    line-height: 1.55;
+  }
+
+  .lineup-signup {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem;
+
+    width: min(100%, 34rem);
+  }
+
+  .lineup-signup input {
+    flex: 1 1 14rem;
+
+    min-width: 0;
+    padding: 1rem 1.15rem;
+
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 0.35rem;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+  }
+
+  .lineup-signup input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .lineup-signup input:focus {
+    outline: none;
+    border-color: var(--rf-yellow);
+    box-shadow: 0 0 0 3px rgba(245, 255, 0, 0.2);
+  }
+
+  .lineup-signup__btn {
+    flex: none;
+    padding: 1rem 1.85rem;
+    font-size: 0.74rem;
+  }
+
+  .lineup-cta__benefits {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.55rem 0.75rem;
+
+    margin: 1.4rem 0 0;
+    padding: 0;
+
+    list-style: none;
+  }
+
+  .lineup-cta__benefits li {
+    padding: 0.45rem 0.8rem;
+
+    color: rgba(255, 255, 255, 0.88);
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @keyframes lineup-scan {
+    from {
+      transform: translateY(-8%);
+    }
+
+    to {
+      transform: translateY(8%);
+    }
+  }
+
+  @keyframes lineup-ocean-drift {
+    0%,
+    100% {
+      transform: translateX(-6%);
+    }
+
+    50% {
+      transform: translateX(6%);
+    }
+  }
+
+  @keyframes lineup-expand {
+    0% {
+      transform: scale(0.55);
+      opacity: 0.8;
+    }
+
+    70% {
+      opacity: 0.2;
+    }
+
+    100% {
+      transform: scale(1.15);
+      opacity: 0;
+    }
+  }
+
+  @keyframes lineup-laser-sweep-a {
+    0%,
+    100% {
+      transform: rotate(-28deg);
+      opacity: 0.35;
+    }
+
+    50% {
+      transform: rotate(32deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes lineup-laser-sweep-b {
+    0%,
+    100% {
+      transform: rotate(24deg);
+      opacity: 0.3;
+    }
+
+    50% {
+      transform: rotate(-36deg);
+      opacity: 0.95;
+    }
+  }
+
+  @keyframes lineup-laser-sweep-c {
+    0%,
+    100% {
+      transform: rotate(-12deg) scaleY(0.92);
+      opacity: 0.25;
+    }
+
+    40% {
+      transform: rotate(18deg) scaleY(1.05);
+      opacity: 1;
+    }
+
+    70% {
+      transform: rotate(-22deg) scaleY(1);
+      opacity: 0.7;
+    }
+  }
+
+  @media (max-width: 980px) {
+    .lineup-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .lineup-card--signal-03 {
+      grid-column: 1 / -1;
+    }
+
+    .lineup-next {
+      grid-template-columns: 1fr auto;
+      gap: 0.85rem 1.25rem;
+    }
+
+    .lineup-next__meta {
+      grid-column: 1;
+    }
+
+    .lineup-next__status {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: start;
+    }
+
+    .lineup-next__main {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .lineup-section {
+      padding-block: 3.5rem 3.5rem;
+    }
+
+    .lineup-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .lineup-card--signal-03 {
+      grid-column: auto;
+    }
+
+    .lineup-kicker {
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+    }
+
+    .lineup-title {
+      font-size: clamp(2.1rem, 10vw, 3rem);
+    }
+
+    .lineup-cta {
+      align-items: center;
+      padding-inline: 1.15rem;
+    }
+
+    .lineup-signup {
+      width: 100%;
+    }
+
+    .lineup-signup__btn {
+      width: 100%;
+    }
+
+    .lineup-card__top {
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .lineup-card__foot {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lineup-scan,
+    .lineup-ocean-line,
+    .lineup-graphic--expand span,
+    .lineup-laser {
+      animation: none;
+    }
+
+    .lineup-ocean-line,
+    .lineup-graphic--expand span,
+    .lineup-laser {
+      opacity: 0.45;
+    }
+
+    .lineup-next,
+    .lineup-card,
+    .lineup-cta {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>

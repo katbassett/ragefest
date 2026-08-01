@@ -1,0 +1,146 @@
+---
+const targetDate = "2027-03-19T18:00:00-04:00";
+
+const units = [
+  {
+    id: "countdown-days",
+    label: "Days",
+  },
+  {
+    id: "countdown-hours",
+    label: "Hrs",
+  },
+  {
+    id: "countdown-minutes",
+    label: "Min",
+  },
+  {
+    id: "countdown-seconds",
+    label: "Sec",
+  },
+];
+---
+
+<div
+  id="countdown"
+  class="countdown-widget"
+  data-target-date={targetDate}
+  aria-label="Countdown to Rage Fest"
+>
+  {
+    units.map((unit) => (
+      <div class="countdown-unit">
+        <span id={unit.id} class="countdown-value">
+          00
+        </span>
+
+        <span class="countdown-label">
+          {unit.label}
+        </span>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  const countdown =
+    document.querySelector<HTMLElement>("#countdown");
+
+  const daysElement =
+    document.querySelector<HTMLElement>("#countdown-days");
+
+  const hoursElement =
+    document.querySelector<HTMLElement>("#countdown-hours");
+
+  const minutesElement =
+    document.querySelector<HTMLElement>("#countdown-minutes");
+
+  const secondsElement =
+    document.querySelector<HTMLElement>("#countdown-seconds");
+
+  let countdownInterval: number | undefined;
+
+  const padNumber = (value: number) => {
+    return String(value).padStart(2, "0");
+  };
+
+  const setCountdownValues = (
+    days: number,
+    hours: number,
+    minutes: number,
+    seconds: number,
+  ) => {
+    if (daysElement) {
+      daysElement.textContent = padNumber(days);
+    }
+
+    if (hoursElement) {
+      hoursElement.textContent = padNumber(hours);
+    }
+
+    if (minutesElement) {
+      minutesElement.textContent = padNumber(minutes);
+    }
+
+    if (secondsElement) {
+      secondsElement.textContent = padNumber(seconds);
+    }
+  };
+
+  const updateCountdown = () => {
+    if (!countdown) return;
+
+    const targetDateValue = countdown.dataset.targetDate;
+
+    if (!targetDateValue) return;
+
+    const targetTime = new Date(targetDateValue).getTime();
+
+    if (Number.isNaN(targetTime)) {
+      setCountdownValues(0, 0, 0, 0);
+      return;
+    }
+
+    const distance = targetTime - Date.now();
+
+    if (distance <= 0) {
+      setCountdownValues(0, 0, 0, 0);
+
+      if (countdownInterval) {
+        window.clearInterval(countdownInterval);
+      }
+
+      return;
+    }
+
+    const days = Math.floor(
+      distance / (1000 * 60 * 60 * 24),
+    );
+
+    const hours = Math.floor(
+      (distance / (1000 * 60 * 60)) % 24,
+    );
+
+    const minutes = Math.floor(
+      (distance / (1000 * 60)) % 60,
+    );
+
+    const seconds = Math.floor(
+      (distance / 1000) % 60,
+    );
+
+    setCountdownValues(
+      days,
+      hours,
+      minutes,
+      seconds,
+    );
+  };
+
+  updateCountdown();
+
+  countdownInterval = window.setInterval(
+    updateCountdown,
+    1000,
+  );
+</script>

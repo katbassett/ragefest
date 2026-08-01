@@ -1,0 +1,37 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "RAGE FEST 2027 | Sun to Strobe",
+  description = "A one-day music and experience festival on South Padre Island, Texas.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+  rel="stylesheet"
+/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta name="theme-color" content="#090713" />
+  </head>
+
+  <body class="min-h-screen bg-rf-night text-rf-white antialiased">
+    <slot />
+  </body>
+</html>

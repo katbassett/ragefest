@@ -1,0 +1,1129 @@
+/* Global Styles - RageFest */
+@import "tailwindcss";
+@import "./design-system.css";
+
+/* ==========================================================
+   RAGE FEST DESIGN TOKENS
+========================================================== */
+
+:root {
+  /* Brand */
+
+  --rf-pink: #ff2b84;
+  --rf-pink-dark: #b9135a;
+
+  --rf-purple: #6d3cff;
+  --rf-blue: #25b8ff;
+
+  /* Neutrals */
+
+  --rf-black: #050505;
+  --rf-night: #111111;
+  --rf-white: #ffffff;
+
+  --rf-gray-100: #f5f5f5;
+  --rf-gray-300: #d4d4d4;
+  --rf-gray-500: #737373;
+  --rf-gray-700: #404040;
+
+  /* Gradients */
+
+  --rf-gradient-primary:
+    linear-gradient(
+      135deg,
+      var(--rf-pink),
+      var(--rf-purple)
+    );
+
+  --rf-gradient-sunset:
+    linear-gradient(
+      135deg,
+      #ff6b3d,
+      var(--rf-pink)
+    );
+
+  /* Shadows */
+
+  --rf-shadow-pink:
+    8px 8px 0 var(--rf-pink-dark);
+
+  --rf-shadow-soft:
+    0 12px 40px rgba(0,0,0,.12);
+}
+
+.join-waitlist-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  padding: 0.72rem 1.55rem;
+
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  text-transform: uppercase;
+
+  background: linear-gradient(
+    135deg,
+    #FF2083 0%,
+    #FF4D6D 40%,
+    #FF6A00 100%
+  );
+
+  border: 1px solid rgba(255,255,255,.15);
+
+  transform: skewX(-8deg);
+
+  box-shadow:
+    6px 6px 0 rgba(170, 50, 0, .45),
+    0 12px 28px rgba(255, 70, 90, .25);
+
+  transition:
+    transform .22s cubic-bezier(.22,1,.36,1),
+    box-shadow .22s cubic-bezier(.22,1,.36,1),
+    filter .22s ease;
+}
+
+.join-waitlist-btn {
+  background: linear-gradient(
+    135deg,
+    #FFF500 0%,
+    #FF8300 100%
+  );
+
+  color: #1a1a1a;
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease,
+    background .45s ease,
+    filter .25s ease;
+}
+
+.join-waitlist-btn:hover {
+  background: linear-gradient(
+    135deg,
+    #8A2BE2 0%,
+    #0d0d0d 100%
+  );
+
+  color: white;
+
+  transform: skewX(-8deg) translate(2px, 2px);
+
+  box-shadow:
+    4px 4px 0 #3d135d,
+    0 12px 24px rgba(138, 43, 226, 0.35);
+
+  filter: saturate(1.05);
+}
+
+.join-waitlist-btn:active {
+  transform: skewX(-8deg) translate(4px, 4px);
+
+  box-shadow:
+    2px 2px 0 #3d135d;
+}
+
+/* =========================================
+   Festival hero
+========================================= */
+
+.hero-section {
+  color: #ffffff;
+  background: #f0e8cf;
+}
+
+.hero-sky {
+  background:
+    radial-gradient(
+      circle at 66% 69%,
+      rgba(255, 255, 194, 0.95) 0%,
+      rgba(255, 213, 124, 0.76) 10%,
+      rgba(255, 135, 67, 0.38) 22%,
+      transparent 38%
+    ),
+    linear-gradient(
+      180deg,
+      #9adfff 0%,
+      #75e6f5 23%,
+      #e7f1cf 50%,
+      #ffd69a 73%,
+      #ff8658 100%
+    );
+}
+
+.hero-haze {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.15),
+      transparent 35%,
+      rgba(255, 0, 140, 0.08)
+    ),
+    linear-gradient(
+      180deg,
+      transparent 52%,
+      rgba(255, 111, 73, 0.16) 76%,
+      rgba(16, 8, 23, 0.22) 100%
+    );
+}
+
+.hero-sun {
+  left: 66%;
+  bottom: 18%;
+  width: clamp(11rem, 22vw, 23rem);
+  aspect-ratio: 1;
+  border-radius: 999px;
+
+  transform: translateX(-50%);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 255, 226, 1) 0%,
+      rgba(255, 236, 163, 0.96) 24%,
+      rgba(255, 147, 74, 0.66) 51%,
+      rgba(255, 39, 135, 0.2) 72%,
+      transparent 100%
+    );
+
+  filter: blur(3px);
+
+  box-shadow:
+    0 0 4rem rgba(255, 139, 62, 0.7),
+    0 0 8rem rgba(255, 39, 135, 0.35);
+}
+
+.hero-gradient-text {
+  color: transparent;
+
+  background:
+    linear-gradient(
+      90deg,
+      #ff7417 0%,
+      #ff3d52 42%,
+      #ff008c 72%,
+      #b829ff 100%
+    );
+
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.hero-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  gap: .75rem;
+
+  padding: .72rem 1.6rem;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,.35);
+
+  background: rgba(255,255,255,.12);
+  backdrop-filter: blur(16px);
+
+  color: #21142f;
+
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+
+  transition: all .25s ease;
+}
+
+.hero-secondary-button:hover {
+  background: rgba(255,255,255,.22);
+
+  border-color: rgba(255,255,255,.55);
+
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   Countdown
+========================================= */
+
+.countdown-widget {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.countdown-unit {
+  display: flex;
+  min-height: 6rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 0.8rem;
+
+  background: rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(10px);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.36),
+    0 12px 30px rgba(50, 15, 60, 0.08);
+}
+
+.countdown-value {
+  display: block;
+
+  color: #120d18;
+  font-family: var(--font-display, inherit);
+  font-size: clamp(2rem, 4vw, 3.1rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+.countdown-label {
+  display: block;
+  margin-top: 0.7rem;
+
+  color: rgba(18, 13, 24, 0.62);
+  font-size: 0.52rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* =========================================
+   Hero lasers
+========================================= */
+
+.hero-laser {
+  position: absolute;
+  left: 53%;
+  bottom: 22%;
+
+  width: min(56rem, 75vw);
+  height: 2px;
+
+  opacity: 0.24;
+  transform-origin: left center;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 0, 145, 0.9),
+      rgba(255, 217, 0, 0.8),
+      transparent
+    );
+
+  filter: blur(0.3px);
+
+  box-shadow:
+    0 0 8px rgba(255, 0, 145, 0.65),
+    0 0 18px rgba(255, 119, 0, 0.35);
+}
+
+.hero-laser-one {
+  transform: rotate(-19deg);
+}
+
+.hero-laser-two {
+  transform: rotate(-5deg);
+}
+
+.hero-laser-three {
+  transform: rotate(14deg);
+}
+
+/* =========================================
+   Stage
+========================================= */
+
+.hero-stage {
+  position: absolute;
+  left: 50%;
+  bottom: 1.5rem;
+
+  width: min(44rem, 68vw);
+  height: min(18rem, 27vw);
+
+  transform: translateX(-50%);
+}
+
+.hero-stage-roof {
+  position: absolute;
+  top: 0;
+  left: 8%;
+
+  width: 84%;
+  height: 1.3rem;
+
+  background: #090511;
+}
+
+.hero-stage-screen {
+  position: absolute;
+  top: 1.3rem;
+  bottom: 0;
+  left: 18%;
+  right: 18%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: clamp(0.65rem, 1.2vw, 1.1rem) solid #090511;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 0, 135, 0.45),
+      rgba(49, 22, 65, 0.42) 55%,
+      rgba(10, 5, 17, 0.68)
+    );
+
+  backdrop-filter: blur(4px);
+}
+
+.hero-eye-placeholder {
+  color: #090511;
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.2rem, 3vw, 3rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.hero-stage-left,
+.hero-stage-right {
+  position: absolute;
+  top: -1.8rem;
+  bottom: 0;
+
+  width: 1.3rem;
+
+  background: #090511;
+}
+
+.hero-stage-left {
+  left: 10%;
+}
+
+.hero-stage-right {
+  right: 10%;
+}
+
+.hero-ground {
+  position: absolute;
+  right: -100vw;
+  bottom: 0;
+  left: -100vw;
+
+  height: 2.6rem;
+
+  background: #090511;
+}
+
+/* =========================================
+   Palm placeholders
+========================================= */
+
+.hero-palm {
+  position: absolute;
+  bottom: 1.8rem;
+
+  width: 10rem;
+  height: 15rem;
+
+  transform-origin: bottom center;
+}
+
+.hero-palm-left {
+  left: -1rem;
+  transform: rotate(-4deg);
+}
+
+.hero-palm-right {
+  right: -1rem;
+  transform: scaleX(-1) rotate(-3deg);
+}
+
+.hero-palm-trunk {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+
+  width: 0.75rem;
+  height: 11rem;
+
+  transform: translateX(-50%) rotate(3deg);
+  transform-origin: bottom center;
+
+  background: #090511;
+}
+
+.hero-palm-leaves {
+  position: absolute;
+  top: 0;
+  left: 50%;
+
+  width: 9rem;
+  height: 6rem;
+
+  transform: translateX(-50%);
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      #090511 0 8%,
+      transparent 9%
+    );
+}
+
+.hero-palm-leaves::before,
+.hero-palm-leaves::after {
+  content: "";
+
+  position: absolute;
+  top: 48%;
+  left: 50%;
+
+  width: 8rem;
+  height: 1.1rem;
+
+  border-radius: 100%;
+  background: #090511;
+
+  transform-origin: left center;
+}
+
+.hero-palm-leaves::before {
+  transform: rotate(-28deg);
+}
+
+.hero-palm-leaves::after {
+  transform: rotate(28deg);
+}
+
+/* =========================================
+   Festival ticker
+========================================= */
+
+.festival-ticker {
+  overflow: hidden;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+
+  background: #090511;
+  color: white;
+}
+
+.festival-ticker-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: 2rem;
+
+  padding-block: 1rem;
+
+  font-family: var(--font-display, inherit);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  animation: festivalTicker 28s linear infinite;
+}
+
+.festival-ticker-symbol {
+  color: #ff6b00;
+}
+
+@keyframes festivalTicker {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* =========================================
+   Rainbow scroll progress
+========================================= */
+
+.festival-scroll-track {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 200;
+
+  width: 5px;
+  height: 100vh;
+
+  background: rgba(255, 255, 255, 0.14);
+
+  pointer-events: none;
+}
+
+.festival-scroll-progress {
+  width: 100%;
+  height: 100%;
+
+  transform: scaleY(0);
+  transform-origin: top;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #45ddff 0%,
+      #eaff00 22%,
+      #ff8617 43%,
+      #ff007f 64%,
+      #a624ff 82%,
+      #2d19ff 100%
+    );
+
+  box-shadow:
+    0 0 8px rgba(255, 0, 145, 0.65),
+    0 0 16px rgba(69, 221, 255, 0.45);
+
+  will-change: transform;
+}
+
+/* =========================================
+   Responsive adjustments
+========================================= */
+
+@media (max-width: 767px) {
+  .hero-sun {
+    left: 72%;
+    bottom: 22%;
+  }
+
+  .countdown-widget {
+    gap: 0.4rem;
+  }
+
+  .countdown-unit {
+    min-height: 5rem;
+    border-radius: 0.55rem;
+  }
+
+  .countdown-value {
+    font-size: 2rem;
+  }
+
+  .countdown-label {
+    margin-top: 0.5rem;
+    font-size: 0.44rem;
+  }
+
+  .hero-stage {
+    width: 90vw;
+    height: 12rem;
+  }
+
+  .hero-palm {
+    width: 6rem;
+    height: 10rem;
+  }
+
+  .hero-palm-trunk {
+    height: 7rem;
+  }
+
+  .hero-palm-leaves {
+    width: 6rem;
+    height: 4rem;
+  }
+
+  .hero-palm-leaves::before,
+  .hero-palm-leaves::after {
+    width: 5rem;
+  }
+
+  .festival-ticker-track {
+    gap: 1.4rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .festival-ticker-track {
+    animation: none;
+  }
+
+  .hero-secondary-button {
+    transition: none;
+  }
+}
+
+.hero-clouds {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  z-index: 2;
+
+  width: 112%;
+  min-width: 1200px;
+  height: auto;
+
+  opacity: 0.65;
+
+  pointer-events: none;
+  user-select: none;
+
+  filter:
+    saturate(0.95)
+    contrast(1.08)
+    blur(.5px);
+
+  transform: translate3d(-50%, 0, 0);
+  transform-origin: center;
+
+  animation: hero-cloud-drift 10s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes hero-cloud-drift {
+  0% {
+    transform: translate3d(calc(-50% - 28px), 0, 0) rotate(-0.25deg);
+  }
+
+  50% {
+    transform: translate3d(-50%, 8px, 0) rotate(0deg);
+  }
+
+  100% {
+    transform: translate3d(calc(-50% + 18px), 4px, 0) rotate(0.25deg);
+  }
+}
+
+/* ==========================================
+   HERO STRUCTURE
+========================================== */
+
+.hero-section {
+  position: relative;
+  isolation: isolate;
+
+  display: flex;
+  flex-direction: column;
+
+  min-height: 100svh;
+  height: auto;
+  overflow-x: hidden;
+}
+
+.hero-sky {
+  position: absolute;
+  inset: 0;
+  z-index: -30;
+}
+
+.hero-sun {
+  position: absolute;
+  z-index: -20;
+}
+
+.hero-haze {
+  position: absolute;
+  inset: 0;
+  z-index: -20;
+}
+
+.hero-lasers {
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-main {
+  position: relative;
+  z-index: 1;
+  flex: 1 0 auto;
+  height: auto;
+}
+
+.hero-layout {
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  min-height: 0;
+
+  padding-top: 5rem;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Bigger banner logo */
+.hero-logo-wrap {
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.hero-logo-text {
+    font-size: clamp(8.5rem, 12vw, 14rem);
+    line-height: .7;
+}
+
+/* Keep all copy together */
+.hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-title {
+    margin: 0;
+}
+
+.hero-eyebrow {
+    margin-top: .9rem;
+}
+
+.hero-description {
+    max-width: 760px;
+    margin-top: 1rem;
+}
+
+.hero-event-details {
+    margin-top: .9rem;
+}
+
+/* Separate CTA area */
+.hero-countdown {
+    margin-top: 2.2rem;
+}
+
+.hero-actions {
+    margin-top: 1.8rem;
+
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+}
+/* ==========================================
+   HERO BRANDING
+========================================== */
+
+.hero-eyebrow {
+  margin-top: .1rem;
+  margin-bottom:.1rem; 
+
+
+  font-family: var("Montserrat", --font-sans);
+  font-size: 1.75rem;
+  font-weight: 700;
+
+  line-height: 1;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+
+  color: #a53dff;
+}
+
+.hero-logo-wrap {
+  width: 100%;
+  padding-inline: clamp(1.5rem, 4vw, 4rem);
+  overflow: visible;
+  text-align: center;
+}
+
+.hero-logo-text {
+  display: inline-block;
+  margin: 0;
+  padding: 0.08em 0.22em;
+
+  font-family: "Road Rage", sans-serif;
+font-size: clamp(7rem, 10.5vw, 12rem);
+  font-weight: 400;
+  line-height: 0.8;
+  white-space: nowrap;
+
+  margin-bottom: 1.5rem;
+
+  background: linear-gradient(
+    180deg,
+    #8a2be2 0%,
+    #ff2083 38%,
+    #ff6a00 64%,
+    #f5ff00 100%
+  );
+
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  transform: scaleX(0.92);
+  transform-origin: center;
+}
+
+.hero-title {
+  display: inline-block;
+
+  margin-bottom: 1rem;
+  padding: 0;
+
+  font-family: var("Montseratt",--font-sans);
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-weight: 900;
+
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  text-align: center;
+  text-transform: uppercase;
+
+  background: linear-gradient(
+       180deg,
+    #8a2be2 0%,
+    #ff2083 38%,
+    #ff6a00 64%,
+    #f5ff00 100%
+  );
+
+  background-clip: text;
+  color: transparent;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-description {
+  width: min(100%, 53rem);
+
+  margin: 1rem auto 0;
+
+  font-family: var(--font-sans);
+  font-size: clamp(0.65rem, 0.9vw, 0.8rem);
+  font-weight: 700;
+
+  line-height: 1.45;
+  letter-spacing: .1em;
+  text-align: center;
+  text-transform: uppercase;
+
+  color: #8a2be2;
+}
+
+.hero-event-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.45rem 0.75rem;
+  margin-top: 0.45rem;
+
+  font-family: var(--font-sans);
+  font-size: clamp(0.85rem, 1.15vw, 1rem);
+  font-weight: 500;
+
+  line-height: 1.4;
+  text-align: center;
+
+  color: #8a2be2;
+}
+
+.hero-event-divider {
+  color: #ff2083;
+}
+
+/* ==========================================
+   COUNTDOWN AND ACTIONS
+========================================== */
+
+.hero-countdown {
+  width: 100%;
+  max-width: 34rem;
+
+  margin-top: 1.75rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.join-waitlist-btn,
+.hero-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-secondary-button {
+  gap: 0.75rem;
+}
+
+.hero-secondary-icon {
+  width: 1rem;
+  height: 1rem;
+
+  transition: transform 300ms ease;
+}
+
+.hero-secondary-button:hover .hero-secondary-icon {
+  transform: translateX(0.25rem);
+}
+
+/* ==========================================
+   FESTIVAL ARTWORK
+========================================== */
+
+.hero-artwork {
+  position: relative;
+
+  min-height: 30rem;
+  margin-top: auto;
+}
+
+/* ==========================================
+   TICKER
+========================================== */
+
+.festival-ticker {
+  position: relative;
+  inset: auto;
+  z-index: 10;
+  flex: none;
+}
+
+/* ==========================================
+   ANIMATION
+========================================== */
+
+@keyframes logoFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1023px) {
+  .hero-layout {
+    padding-top: 5rem;
+  }
+
+  .hero-artwork {
+    min-height: 25rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .hero-layout {
+    padding-top: 4rem;
+  }
+
+  .hero-logo {
+    width: min(100%, 31rem);
+  }
+
+  .hero-title {
+    font-size: clamp(2.6rem, 12vw, 4rem);
+  }
+
+  .hero-description {
+    width: min(100%, 32rem);
+  }
+
+  .hero-event-details {
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .hero-event-divider {
+    display: none;
+  }
+
+  .hero-countdown {
+    margin-top: 1.35rem;
+  }
+
+  .hero-actions {
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .hero-artwork {
+    min-height: 20rem;
+  }
+}
+
+  .countdown-widget {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+
+    width: 100%;
+  }
+
+  .countdown-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+.countdown-value {
+
+  font-family: "Road Rage", cursive;
+  
+  background: linear-gradient(
+    180deg,
+    #8A2BE2 0%,
+    #B73FFF 20%,
+    #FF2083 55%,
+    #FF7E5F 100%
+  );
+
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+  .countdown-label {
+    margin-top: 0.35rem;
+
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+
+    color: rgba(33, 20, 47, 0.7); 
+  }
+
+
+ 

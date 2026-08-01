@@ -1,0 +1,626 @@
+---
+---
+
+<div class="festival-sky" aria-hidden="true">
+  <div class="festival-sky__base"></div>
+
+  <div class="festival-sky__layer festival-sky__layer--night" data-sky="night"></div>
+  <div class="festival-sky__layer festival-sky__layer--sunset" data-sky="sunset"></div>
+  <div class="festival-sky__layer festival-sky__layer--day" data-sky="day"></div>
+
+  <div class="festival-sky__wash" data-sky-wash></div>
+
+  <div class="festival-sky__leaks" data-sky-leaks>
+    <span class="festival-sky__leak festival-sky__leak--a"></span>
+    <span class="festival-sky__leak festival-sky__leak--b"></span>
+    <span class="festival-sky__leak festival-sky__leak--c"></span>
+    <span class="festival-sky__leak festival-sky__leak--d"></span>
+    <span class="festival-sky__leak festival-sky__leak--e"></span>
+  </div>
+
+  <div class="festival-sky__beams" data-sky-beams>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <div class="festival-sky__scan" data-sky-scan></div>
+  <div class="festival-sky__grain"></div>
+</div>
+
+<script>
+  const clamp = (value: number, min = 0, max = 1) =>
+    Math.min(max, Math.max(min, value));
+
+  const smoothstep = (t: number) => t * t * (3 - 2 * t);
+
+  type PhasePoint = { y: number; ph: number };
+
+  const initFestivalSky = () => {
+    const world = document.querySelector(".festival-world");
+    const day = document.querySelector<HTMLElement>('[data-sky="day"]');
+    const sunset = document.querySelector<HTMLElement>('[data-sky="sunset"]');
+    const night = document.querySelector<HTMLElement>('[data-sky="night"]');
+    const leaks = document.querySelector<HTMLElement>("[data-sky-leaks]");
+    const scan = document.querySelector<HTMLElement>("[data-sky-scan]");
+    const wash = document.querySelector<HTMLElement>("[data-sky-wash]");
+    const beams = document.querySelector<HTMLElement>("[data-sky-beams]");
+
+    if (!world || !day || !sunset || !night) return;
+    if (world instanceof HTMLElement && world.dataset.skyReady === "true") return;
+    if (world instanceof HTMLElement) world.dataset.skyReady = "true";
+
+    let frameRequested = false;
+    let phases: PhasePoint[] = [];
+
+    const buildPhases = () => {
+      const markers: Array<{ selector: string; ph: number }> = [
+        { selector: "#experience", ph: 0 },
+        { selector: "#experience .world-hidden", ph: 0.42 },
+        { selector: "#lineup", ph: 0.72 },
+        { selector: "#tickets", ph: 0.9 },
+        { selector: "#faq", ph: 1 },
+      ];
+
+      phases = markers
+        .map(({ selector, ph }) => {
+          const el = document.querySelector(selector);
+          if (!(el instanceof HTMLElement)) return null;
+
+          const y =
+            el.getBoundingClientRect().top +
+            window.scrollY +
+            el.offsetHeight * 0.2;
+
+          return { y, ph };
+        })
+        .filter((point): point is PhasePoint => point !== null)
+        .sort((a, b) => a.y - b.y);
+    };
+
+    const phaseAt = (cy: number) => {
+      if (!phases.length) return 0;
+      if (cy <= phases[0].y) return phases[0].ph;
+
+      const last = phases[phases.length - 1];
+      if (cy >= last.y) return last.ph;
+
+      for (let i = 0; i < phases.length - 1; i += 1) {
+        const a = phases[i];
+        const b = phases[i + 1];
+
+        if (cy >= a.y && cy <= b.y) {
+          const t = smoothstep((cy - a.y) / Math.max(b.y - a.y, 1));
+          return a.ph + (b.ph - a.ph) * t;
+        }
+      }
+
+      return 1;
+    };
+
+    const updateSky = () => {
+      frameRequested = false;
+
+      const focusY = window.scrollY + window.innerHeight * 0.48;
+      const phase = clamp(phaseAt(focusY));
+
+      const dayOpacity = clamp(1 - phase * 2);
+      const sunsetOpacity = clamp(1 - Math.abs(phase - 0.5) * 2);
+      const nightOpacity = clamp(phase * 2 - 1);
+
+      day.style.opacity = dayOpacity.toFixed(3);
+      sunset.style.opacity = sunsetOpacity.toFixed(3);
+      night.style.opacity = nightOpacity.toFixed(3);
+
+      if (leaks) {
+        // Brighter leaks through sunset, softer at deep night
+        const leakOpacity =
+          0.42 + sunsetOpacity * 0.28 + nightOpacity * 0.12;
+        leaks.style.opacity = leakOpacity.toFixed(3);
+      }
+
+      if (scan) {
+        scan.style.opacity = (nightOpacity * 0.5).toFixed(3);
+      }
+
+      if (wash) {
+        wash.style.opacity = (0.18 + sunsetOpacity * 0.22 + nightOpacity * 0.12).toFixed(
+          3,
+        );
+      }
+
+      if (beams) {
+        beams.style.opacity = (nightOpacity * 0.55).toFixed(3);
+      }
+
+      document.documentElement.style.setProperty(
+        "--rf-sky-phase",
+        phase.toFixed(3),
+      );
+      document.documentElement.style.setProperty(
+        "--rf-sky-sunset",
+        sunsetOpacity.toFixed(3),
+      );
+      document.documentElement.style.setProperty(
+        "--rf-sky-night",
+        nightOpacity.toFixed(3),
+      );
+    };
+
+    const requestSkyUpdate = () => {
+      if (frameRequested) return;
+      frameRequested = true;
+      window.requestAnimationFrame(updateSky);
+    };
+
+    buildPhases();
+    updateSky();
+
+    window.addEventListener("scroll", requestSkyUpdate, { passive: true });
+    window.addEventListener("resize", () => {
+      buildPhases();
+      requestSkyUpdate();
+    });
+  };
+
+  initFestivalSky();
+  document.addEventListener("astro:page-load", initFestivalSky);
+</script>
+
+<style>
+  .festival-sky {
+    position: sticky;
+    top: 0;
+    z-index: 0;
+
+    height: 100svh;
+    margin-bottom: -100svh;
+
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .festival-sky__base,
+  .festival-sky__layer,
+  .festival-sky__wash,
+  .festival-sky__leaks,
+  .festival-sky__beams,
+  .festival-sky__scan,
+  .festival-sky__grain {
+    position: absolute;
+    inset: 0;
+  }
+
+  .festival-sky__layer {
+    inset: -3%;
+    opacity: 0;
+    will-change: opacity, transform;
+    animation: festival-sky-breathe 18s ease-in-out infinite;
+  }
+
+  .festival-sky__layer--sunset {
+    animation-duration: 22s;
+    animation-delay: -4s;
+  }
+
+  .festival-sky__layer--night {
+    animation-duration: 26s;
+    animation-delay: -8s;
+  }
+
+  /* Opaque underlay so sticky hero never bleeds through */
+  .festival-sky__base {
+    background: #140818;
+  }
+
+  /* DAY — closer to HTML South Padre afternoon, brand hues */
+  .festival-sky__layer--day {
+    opacity: 1;
+
+    background:
+      radial-gradient(
+        120% 80% at 78% 8%,
+        rgba(255, 255, 255, 0.72) 0%,
+        color-mix(in srgb, var(--rf-yellow) 55%, transparent) 18%,
+        color-mix(in srgb, var(--rf-orange) 28%, transparent) 40%,
+        transparent 62%
+      ),
+      radial-gradient(
+        90% 60% at 20% 92%,
+        color-mix(in srgb, var(--rf-blue) 32%, transparent),
+        transparent 60%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--rf-blue) 48%, #ffffff) 0%,
+        #9fd9ea 24%,
+        color-mix(in srgb, var(--rf-yellow) 42%, #ffe8b0) 58%,
+        color-mix(in srgb, var(--rf-orange) 70%, var(--rf-yellow)) 82%,
+        var(--rf-orange) 100%
+      );
+  }
+
+  /* SUNSET — golden → orange → magenta → purple */
+  .festival-sky__layer--sunset {
+    background:
+      radial-gradient(
+        100% 70% at 62% 20%,
+        color-mix(in srgb, var(--rf-yellow) 70%, transparent) 0%,
+        color-mix(in srgb, var(--rf-orange) 55%, transparent) 34%,
+        transparent 66%
+      ),
+      radial-gradient(
+        120% 90% at 28% 100%,
+        color-mix(in srgb, var(--rf-pink) 52%, transparent),
+        transparent 60%
+      ),
+      linear-gradient(
+        180deg,
+        #ff9a3c 0%,
+        var(--rf-orange) 28%,
+        #ff2d6b 58%,
+        color-mix(in srgb, var(--rf-pink) 55%, var(--rf-purple)) 78%,
+        #5c0f3f 100%
+      );
+  }
+
+  /* NIGHT — neon pink / cyan / purple over deep black */
+  .festival-sky__layer--night {
+    background:
+      radial-gradient(
+        90% 60% at 50% 6%,
+        color-mix(in srgb, var(--rf-pink) 38%, transparent),
+        transparent 55%
+      ),
+      radial-gradient(
+        70% 60% at 82% 30%,
+        color-mix(in srgb, var(--rf-blue) 24%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(
+        80% 70% at 12% 78%,
+        color-mix(in srgb, var(--rf-purple) 40%, transparent),
+        transparent 62%
+      ),
+      linear-gradient(
+        180deg,
+        #12001a 0%,
+        #0a0410 40%,
+        #05010a 78%,
+        #000000 100%
+      );
+  }
+
+  /* Slow shifting color wash for living atmosphere */
+  .festival-sky__wash {
+    opacity: 0.2;
+    mix-blend-mode: soft-light;
+
+    background:
+      radial-gradient(
+        circle at 20% 30%,
+        color-mix(in srgb, var(--rf-yellow) 55%, transparent),
+        transparent 42%
+      ),
+      radial-gradient(
+        circle at 78% 40%,
+        color-mix(in srgb, var(--rf-pink) 50%, transparent),
+        transparent 45%
+      ),
+      radial-gradient(
+        circle at 50% 85%,
+        color-mix(in srgb, var(--rf-blue) 45%, transparent),
+        transparent 48%
+      ),
+      radial-gradient(
+        circle at 40% 60%,
+        color-mix(in srgb, var(--rf-purple) 40%, transparent),
+        transparent 50%
+      );
+
+    background-size: 140% 140%;
+    animation: festival-sky-wash 20s ease-in-out infinite alternate;
+    will-change: background-position, opacity;
+  }
+
+  .festival-sky__leaks {
+    opacity: 0.5;
+    mix-blend-mode: screen;
+    will-change: opacity;
+  }
+
+  .festival-sky__leak {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(58px);
+    will-change: transform, opacity;
+  }
+
+  .festival-sky__leak--a {
+    top: 6vh;
+    left: -10vw;
+    width: 48vw;
+    height: 48vw;
+
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--rf-orange) 62%, transparent),
+      transparent 68%
+    );
+
+    animation:
+      festival-sky-drift-a 22s ease-in-out infinite,
+      festival-sky-pulse 9s ease-in-out infinite;
+  }
+
+  .festival-sky__leak--b {
+    top: 24vh;
+    right: -8vw;
+    width: 42vw;
+    height: 42vw;
+
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--rf-pink) 58%, transparent),
+      transparent 68%
+    );
+
+    animation:
+      festival-sky-drift-b 28s ease-in-out infinite,
+      festival-sky-pulse 11s ease-in-out infinite reverse;
+  }
+
+  .festival-sky__leak--c {
+    bottom: -12vh;
+    left: 24vw;
+    width: 36vw;
+    height: 36vw;
+
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--rf-blue) 50%, transparent),
+      transparent 70%
+    );
+
+    animation:
+      festival-sky-drift-a 34s ease-in-out infinite reverse,
+      festival-sky-pulse 13s ease-in-out infinite;
+  }
+
+  .festival-sky__leak--d {
+    top: 40vh;
+    left: 38vw;
+    width: 30vw;
+    height: 30vw;
+
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--rf-purple) 48%, transparent),
+      transparent 70%
+    );
+
+    animation:
+      festival-sky-drift-b 38s ease-in-out infinite reverse,
+      festival-sky-pulse 10s ease-in-out infinite;
+  }
+
+  .festival-sky__leak--e {
+    top: 10vh;
+    left: 55vw;
+    width: 26vw;
+    height: 26vw;
+
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--rf-yellow) 45%, transparent),
+      transparent 70%
+    );
+
+    animation:
+      festival-sky-drift-a 30s ease-in-out infinite,
+      festival-sky-pulse 8s ease-in-out infinite reverse;
+  }
+
+  /* Night laser-ish beams */
+  .festival-sky__beams {
+    opacity: 0;
+    overflow: hidden;
+    mix-blend-mode: screen;
+    will-change: opacity;
+  }
+
+  .festival-sky__beams span {
+    position: absolute;
+    top: -15%;
+    left: 68%;
+
+    width: 3px;
+    height: 140%;
+
+    border-radius: 999px;
+    transform-origin: top center;
+
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--rf-blue) 85%, transparent),
+      transparent 75%
+    );
+
+    filter: blur(0.5px);
+    animation: festival-sky-beam-a 5.5s ease-in-out infinite;
+  }
+
+  .festival-sky__beams span:nth-child(2) {
+    left: 74%;
+    width: 2px;
+
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--rf-pink) 85%, transparent),
+      transparent 75%
+    );
+
+    animation: festival-sky-beam-b 6.4s ease-in-out infinite;
+  }
+
+  .festival-sky__beams span:nth-child(3) {
+    left: 62%;
+    width: 2.5px;
+
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--rf-yellow) 75%, transparent),
+      transparent 75%
+    );
+
+    animation: festival-sky-beam-a 4.8s ease-in-out infinite reverse;
+  }
+
+  .festival-sky__scan {
+    opacity: 0;
+
+    background: repeating-linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--rf-blue) 14%, transparent) 0 1px,
+      transparent 1px 3px
+    );
+
+    will-change: opacity;
+  }
+
+  .festival-sky__grain {
+    z-index: 2;
+    opacity: 0.055;
+    mix-blend-mode: overlay;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: festival-sky-grain 0.55s steps(3) infinite;
+  }
+
+  /* Soft vignette */
+  .festival-sky::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    background: radial-gradient(
+      120% 90% at 50% 42%,
+      transparent 40%,
+      rgba(8, 2, 12, 0.22) 100%
+    );
+
+    pointer-events: none;
+  }
+
+  @keyframes festival-sky-breathe {
+    0%,
+    100% {
+      transform: scale(1) translate3d(0, 0, 0);
+    }
+
+    50% {
+      transform: scale(1.04) translate3d(-1.2%, 0.8%, 0);
+    }
+  }
+
+  @keyframes festival-sky-wash {
+    0% {
+      background-position:
+        0% 20%,
+        100% 30%,
+        40% 100%,
+        30% 60%;
+    }
+
+    100% {
+      background-position:
+        30% 40%,
+        70% 10%,
+        60% 70%,
+        55% 40%;
+    }
+  }
+
+  @keyframes festival-sky-drift-a {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+      transform: translate(7vw, 5vh) scale(1.12);
+    }
+  }
+
+  @keyframes festival-sky-drift-b {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+      transform: translate(-6vw, 7vh) scale(1.14);
+    }
+  }
+
+  @keyframes festival-sky-pulse {
+    0%,
+    100% {
+      opacity: 0.55;
+    filter: blur(58px);
+    }
+
+    50% {
+      opacity: 0.95;
+      filter: blur(48px);
+    }
+  }
+
+  @keyframes festival-sky-beam-a {
+    0%,
+    100% {
+      transform: rotate(-24deg);
+      opacity: 0.25;
+    }
+
+    50% {
+      transform: rotate(28deg);
+      opacity: 0.85;
+    }
+  }
+
+  @keyframes festival-sky-beam-b {
+    0%,
+    100% {
+      transform: rotate(20deg);
+      opacity: 0.2;
+    }
+
+    50% {
+      transform: rotate(-30deg);
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes festival-sky-grain {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+
+    50% {
+      transform: translate(-2%, 1%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .festival-sky__layer,
+    .festival-sky__wash,
+    .festival-sky__leak,
+    .festival-sky__beams span,
+    .festival-sky__grain {
+      animation: none;
+    }
+  }
+</style>

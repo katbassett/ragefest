@@ -1,0 +1,48 @@
+<div class="festival-pathway" aria-hidden="true">
+  <div class="festival-pathway__fill"></div>
+  <div class="festival-pathway__node"></div>
+</div>
+
+<script>
+  const pathwayFill = document.querySelector<HTMLElement>(
+    ".festival-pathway__fill",
+  );
+  const pathwayNode = document.querySelector<HTMLElement>(
+    ".festival-pathway__node",
+  );
+
+  let frameRequested = false;
+
+  const updatePathway = () => {
+    frameRequested = false;
+
+    if (!pathwayFill || !pathwayNode) return;
+
+    const documentHeight =
+      document.documentElement.scrollHeight - window.innerHeight;
+
+    const progress =
+      documentHeight > 0 ? window.scrollY / documentHeight : 0;
+
+    const boundedProgress = Math.min(Math.max(progress, 0), 1);
+    const percent = `${(boundedProgress * 100).toFixed(1)}%`;
+
+    pathwayFill.style.height = percent;
+    pathwayNode.style.top = percent;
+  };
+
+  const requestPathwayUpdate = () => {
+    if (frameRequested) return;
+
+    frameRequested = true;
+    window.requestAnimationFrame(updatePathway);
+  };
+
+  updatePathway();
+
+  window.addEventListener("scroll", requestPathwayUpdate, {
+    passive: true,
+  });
+
+  window.addEventListener("resize", requestPathwayUpdate);
+</script>

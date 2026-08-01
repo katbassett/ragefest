@@ -1,0 +1,945 @@
+---
+/* Full ladder kept for later — flip showFullLadder when ready */
+const showFullLadder = false;
+
+const allTiers = [
+  {
+    name: "Founding Access",
+    tagline: "The first and lowest-priced RAGEFEST ticket.",
+    status: "Extremely Limited",
+    featured: true,
+    className: "ticket-card--founding",
+    features: [
+      "General Admission",
+      "Extremely limited release",
+      "Founding Attendee designation",
+      "Early supporter recognition",
+      "Potential first access to merchandise and future presales",
+      "Once this tier is gone, this price will never return",
+    ],
+  },
+  {
+    name: "Early Access",
+    tagline: "Get in before standard GA pricing begins.",
+    status: "Limited Release",
+    featured: false,
+    className: "ticket-card--early",
+    features: [
+      "General Admission",
+      "Limited early release",
+      "Full general festival access",
+      "Lower price for purchasing early",
+      "Available for a limited time or until sold out",
+    ],
+  },
+  {
+    name: "GA Tier 1",
+    tagline: "Standard General Admission.",
+    status: "First Public Tier",
+    featured: false,
+    className: "ticket-card--ga1",
+    features: [
+      "Full general festival access",
+      "First standard public ticket tier",
+      "Price increases when Tier 1 sells out",
+    ],
+  },
+  {
+    name: "GA Tier 2",
+    tagline: "The next General Admission release.",
+    status: "Next Release",
+    featured: false,
+    className: "ticket-card--ga2",
+    features: [
+      "Full general festival access",
+      "Same access as GA Tier 1",
+      "Higher price as ticket inventory decreases",
+      "Available until this tier sells out",
+    ],
+  },
+  {
+    name: "Final Tier",
+    tagline: "The final General Admission release.",
+    status: "Last GA",
+    featured: false,
+    className: "ticket-card--final",
+    features: [
+      "Full general festival access",
+      "Limited remaining inventory",
+      "Final GA price before sellout",
+    ],
+  },
+  {
+    name: "VIP",
+    tagline: "A limited premium RAGEFEST experience.",
+    status: "150 Initial",
+    featured: false,
+    className: "ticket-card--vip",
+    features: [
+      "Festival admission",
+      "Event Center access",
+      "Premium VIP experience",
+      "Additional VIP amenities to be announced",
+      "Very limited availability",
+      "Initial release limited to 150 tickets",
+    ],
+  },
+];
+
+const tiers = showFullLadder
+  ? allTiers
+  : allTiers.filter((tier) => tier.name === "Founding Access");
+---
+
+<section id="tickets" class="tickets-section">
+  <div class="tickets-shell">
+    <header class="tickets-head">
+      <p class="tickets-kicker">Tickets · Founding Access</p>
+
+      <h2 class="tickets-title">
+        <span class="tickets-title__main">Buy Into</span>
+        <span class="tickets-title__accent">The World</span>
+      </h2>
+
+      <p class="tickets-lead">
+        {
+          showFullLadder
+            ? "Tickets aren’t access — they’re participation. Believers move first: join The Signal, then climb the ladder before each tier disappears."
+            : "Tickets aren’t access — they’re participation. Founding Access is open first — the lowest price, extremely limited, and once it’s gone it never returns."
+        }
+      </p>
+    </header>
+
+    <div class:list={["tickets-grid", !showFullLadder && "tickets-grid--launch"]}>
+      {
+        tiers.map((tier) => (
+          <article
+            class:list={[
+              "ticket-card",
+              tier.className,
+              tier.featured && "ticket-card--featured",
+              !showFullLadder && "ticket-card--banner",
+            ]}
+          >
+            <div class="ticket-card__fx" aria-hidden="true">
+              <span class="ticket-card__scan"></span>
+              <span class="ticket-card__glow"></span>
+              <span class="ticket-card__sheen"></span>
+              <span class="ticket-card__orb ticket-card__orb--one"></span>
+              <span class="ticket-card__orb ticket-card__orb--two"></span>
+            </div>
+
+            {tier.featured && (
+              <p class="ticket-card__flag">Believers move first</p>
+            )}
+
+            <div class="ticket-card__main">
+              <div class="ticket-card__top">
+                <div class="ticket-card__heading">
+                  <h3 class="ticket-card__name">{tier.name}</h3>
+                  <p class="ticket-card__tagline">{tier.tagline}</p>
+                </div>
+                <p class="ticket-card__status">{tier.status}</p>
+              </div>
+
+              <ul class="ticket-card__features">
+                {tier.features.map((feature) => (
+                  <li>{feature}</li>
+                ))}
+              </ul>
+
+              <div class="ticket-card__foot">
+                <a href="#signal" class="join-waitlist-btn ticket-card__cta">
+                  <span>Join The Signal</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="tickets-note">
+      {
+        showFullLadder
+          ? "On-sale dates set at launch — Founding Access opens first. Pricing announced with tickets."
+          : "Founding Access is the first release. More tiers unlock later — join The Signal to be first in line."
+      }
+    </p>
+  </div>
+</section>
+
+<script>
+  const initTicketsReveal = () => {
+    const section = document.querySelector("#tickets");
+    const cards = Array.from(
+      document.querySelectorAll("#tickets .ticket-card"),
+    );
+
+    if (!section || cards.length === 0) return;
+    if (section instanceof HTMLElement && section.dataset.revealReady === "true")
+      return;
+    if (section instanceof HTMLElement) section.dataset.revealReady = "true";
+
+    const showCards = () => {
+      if (section instanceof HTMLElement && section.dataset.revealed === "true")
+        return;
+      if (section instanceof HTMLElement) section.dataset.revealed = "true";
+
+      cards.forEach((card, index) => {
+        window.setTimeout(() => {
+          card.classList.add("is-visible");
+        }, 80 + index * 120);
+      });
+    };
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      cards.forEach((card) => card.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          showCards();
+          observer.disconnect();
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+    );
+
+    observer.observe(section);
+  };
+
+  initTicketsReveal();
+  document.addEventListener("astro:page-load", initTicketsReveal);
+</script>
+
+<style>
+  .tickets-section {
+    position: relative;
+    z-index: 1;
+    isolation: isolate;
+
+    padding:
+      clamp(2.5rem, 5vh, 4rem)
+      0
+      clamp(3.5rem, 6vh, 5rem);
+
+    color: #ffffff;
+    background: transparent;
+  }
+
+  .tickets-shell {
+    width: min(calc(100% - clamp(1.25rem, 5vw, 4rem)), 76.25rem);
+    margin-inline: auto;
+  }
+
+  .tickets-head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    max-width: 46rem;
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .tickets-kicker {
+    margin: 0;
+
+    color: var(--rf-yellow);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+
+    text-shadow: 0 2px 7px rgba(0, 0, 0, 0.43);
+  }
+
+  .tickets-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.06em;
+
+    margin: 0;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: clamp(2.1rem, 5.2vw, 3.8rem);
+    font-weight: 900;
+    line-height: 0.94;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+  }
+
+  .tickets-title__main {
+    color: #ffffff;
+
+    font-family: "Road Rage", cursive;
+    font-size: 1.28em;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+
+    text-shadow: 0 2px 7px rgba(0, 0, 0, 0.43);
+  }
+
+  .tickets-title__accent {
+    color: var(--rf-pink);
+    text-shadow: 0 2px 7px rgba(0, 0, 0, 0.43);
+  }
+
+  .tickets-lead {
+    max-width: 42rem;
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.78);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: clamp(1.05rem, 1.7vw, 1.25rem);
+    font-weight: 500;
+    line-height: 1.55;
+  }
+
+  .tickets-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem;
+    align-items: stretch;
+  }
+
+  .tickets-grid--launch {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ticket-card {
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+
+    min-height: 100%;
+    padding: clamp(1.25rem, 2vw, 1.6rem);
+
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 1.15rem;
+    color: #ffffff;
+
+    opacity: 0;
+    transform: translate3d(0, 2rem, 0);
+
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+
+    transition:
+      opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 280ms ease;
+  }
+
+  /* Launch: wide ticket rectangle */
+  .ticket-card--banner {
+    display: block;
+
+    min-height: clamp(15rem, 28vw, 19rem);
+    padding: clamp(1.5rem, 2.8vw, 2.15rem) clamp(1.5rem, 3vw, 2.4rem);
+
+    border-radius: 1.35rem;
+
+    background-size: 180% 180%;
+    animation: ticket-gradient-shift 10s ease-in-out infinite;
+  }
+
+  .ticket-card--banner .ticket-card__main {
+    position: relative;
+    z-index: 1;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.15fr) auto;
+    grid-template-areas:
+      "top features cta"
+      "top features cta";
+    align-items: center;
+    column-gap: clamp(1.25rem, 3vw, 2.5rem);
+    row-gap: 1rem;
+
+    height: 100%;
+  }
+
+  .ticket-card--banner .ticket-card__top {
+    grid-area: top;
+    height: 100%;
+    justify-content: center;
+    padding: 0 1.25rem 0 0;
+    border-bottom: none;
+    border-right: 1px dashed rgba(255, 255, 255, 0.35);
+  }
+
+  .ticket-card--banner .ticket-card__features {
+    grid-area: features;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem 1.1rem;
+  }
+
+  .ticket-card--banner .ticket-card__foot {
+    grid-area: cta;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .ticket-card--banner .ticket-card__cta {
+    width: max-content;
+    min-width: 11.5rem;
+  }
+
+  .ticket-card--banner .ticket-card__name {
+    font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+  }
+
+  .ticket-card--banner .ticket-card__flag {
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .ticket-card__orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(22px);
+    opacity: 0.75;
+    mix-blend-mode: screen;
+  }
+
+  .ticket-card__orb--one {
+    top: -25%;
+    left: 10%;
+
+    width: 18rem;
+    height: 18rem;
+
+    background: radial-gradient(
+      circle,
+      rgba(245, 255, 0, 0.85),
+      rgba(255, 106, 0, 0.35) 45%,
+      transparent 70%
+    );
+
+    animation: ticket-orb-a 5.5s ease-in-out infinite;
+  }
+
+  .ticket-card__orb--two {
+    right: 0%;
+    bottom: -35%;
+
+    width: 20rem;
+    height: 20rem;
+
+    background: radial-gradient(
+      circle,
+      rgba(255, 32, 131, 0.8),
+      rgba(138, 43, 226, 0.4) 48%,
+      transparent 70%
+    );
+
+    animation: ticket-orb-b 6.5s ease-in-out infinite;
+  }
+
+  .ticket-card--banner .ticket-card__scan {
+    opacity: 0.22;
+    animation: ticket-scan 4.5s linear infinite;
+  }
+
+  .ticket-card--banner .ticket-card__glow {
+    top: -10%;
+    right: -5%;
+
+    width: 70%;
+    height: 70%;
+
+    opacity: 0.85;
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.55),
+      rgba(245, 255, 0, 0.25) 40%,
+      transparent 68%
+    );
+
+    animation: ticket-glow 3.8s ease-in-out infinite;
+  }
+
+  .ticket-card--banner .ticket-card__sheen {
+    inset: -50% -80%;
+
+    background: linear-gradient(
+      115deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.45) 48%,
+      transparent 64%
+    );
+
+    animation: ticket-sheen 4.2s ease-in-out infinite;
+  }
+
+  .ticket-card.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .ticket-card:hover {
+    transform: translate3d(0, -0.35rem, 0);
+    border-color: rgba(255, 255, 255, 0.55);
+  }
+
+  .ticket-card.is-visible:hover {
+    transform: translate3d(0, -0.35rem, 0);
+  }
+
+  .ticket-card--banner.is-visible:hover {
+    transform: translate3d(0, -0.25rem, 0) scale(1.01);
+  }
+
+  /* Ladder colors — sun → strobe arc */
+
+  .ticket-card--founding {
+    background: linear-gradient(
+      115deg,
+      var(--rf-yellow) 0%,
+      var(--rf-orange) 38%,
+      var(--rf-pink) 72%,
+      var(--rf-purple) 100%
+    );
+  }
+
+  .ticket-card--early {
+    background: linear-gradient(
+      180deg,
+      var(--rf-blue) 0%,
+      var(--rf-yellow) 100%
+    );
+  }
+
+  .ticket-card--early::before,
+  .ticket-card--ga1::before,
+  .ticket-card--ga2::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: rgba(0, 0, 0, 0.22);
+    pointer-events: none;
+  }
+
+  .ticket-card--ga1 {
+    background: linear-gradient(
+      180deg,
+      var(--rf-orange) 0%,
+      var(--rf-pink) 100%
+    );
+  }
+
+  .ticket-card--ga2 {
+    background: linear-gradient(
+      160deg,
+      var(--rf-pink) 0%,
+      var(--rf-purple) 100%
+    );
+  }
+
+  .ticket-card--final {
+    background: linear-gradient(
+      160deg,
+      var(--rf-purple) 0%,
+      #000000 100%
+    );
+  }
+
+  .ticket-card--vip {
+    background: linear-gradient(
+      145deg,
+      var(--rf-yellow) 0%,
+      var(--rf-orange) 28%,
+      var(--rf-pink) 62%,
+      var(--rf-purple) 100%
+    );
+  }
+
+  .ticket-card--featured {
+    border-color: rgba(255, 255, 255, 0.45);
+    box-shadow:
+      0 0 0 1px rgba(255, 32, 131, 0.28),
+      0 22px 48px rgba(255, 32, 131, 0.2);
+  }
+
+  .ticket-card__fx {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .ticket-card__scan {
+    position: absolute;
+    inset: 0;
+
+    opacity: 0.12;
+
+    background: repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.18) 0 1px,
+      transparent 1px 4px
+    );
+
+    animation: ticket-scan 7s linear infinite;
+  }
+
+  .ticket-card__glow {
+    position: absolute;
+    top: -20%;
+    right: -15%;
+
+    width: 55%;
+    height: 55%;
+
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.35),
+      transparent 68%
+    );
+
+    filter: blur(8px);
+    animation: ticket-glow 6.5s ease-in-out infinite;
+  }
+
+  .ticket-card__sheen {
+    position: absolute;
+    inset: -40% -60%;
+
+    background: linear-gradient(
+      115deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.22) 48%,
+      transparent 62%
+    );
+
+    transform: translateX(-30%);
+    animation: ticket-sheen 7.5s ease-in-out infinite;
+  }
+
+  .ticket-card__flag {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 2;
+
+    margin: 0;
+    padding: 0.22rem 0.45rem;
+
+    color: #1a1a1a;
+    background: rgba(245, 255, 0, 0.92);
+    border-radius: 999px;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.48rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .ticket-card__top,
+  .ticket-card__features,
+  .ticket-card__foot,
+  .ticket-card__main {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ticket-card__top {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+
+    padding-bottom: 1rem;
+
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.28);
+  }
+
+  .ticket-card--featured:not(.ticket-card--banner) .ticket-card__top {
+    padding-top: 0.85rem;
+  }
+
+  .ticket-card__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .ticket-card__name {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-family: "Road Rage", cursive;
+    font-size: clamp(1.7rem, 2.8vw, 2.2rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 0.95;
+    text-transform: none;
+
+    transform: skewX(-4deg);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  }
+
+  .ticket-card__tagline {
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.92);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.45;
+
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+  }
+
+  .ticket-card__status {
+    align-self: flex-start;
+
+    margin: 0;
+    padding: 0.4rem 0.7rem;
+
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.22);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .ticket-card__features {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.55rem;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+  }
+
+  .ticket-card__features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+
+    color: rgba(255, 255, 255, 0.95);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.88rem;
+    font-weight: 500;
+    line-height: 1.45;
+
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  .ticket-card__features li::before {
+    content: "✦";
+    flex: none;
+
+    margin-top: 0.05em;
+
+    color: var(--rf-yellow);
+    font-size: 0.75em;
+
+    filter: drop-shadow(0 0 6px rgba(245, 255, 0, 0.45));
+  }
+
+  .ticket-card__foot {
+    margin-top: auto;
+    padding-top: 0.35rem;
+  }
+
+  .ticket-card__cta {
+    width: 100%;
+  }
+
+  .tickets-note {
+    max-width: 48rem;
+    margin: 1.35rem 0 0;
+
+    color: rgba(255, 255, 255, 0.62);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.82rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  @keyframes ticket-scan {
+    from {
+      transform: translateY(-8%);
+    }
+
+    to {
+      transform: translateY(8%);
+    }
+  }
+
+  @keyframes ticket-orb-a {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(0.9);
+      opacity: 0.45;
+    }
+
+    50% {
+      transform: translate(18%, 20%) scale(1.35);
+      opacity: 1;
+    }
+  }
+
+  @keyframes ticket-orb-b {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(0.95);
+      opacity: 0.4;
+    }
+
+    50% {
+      transform: translate(-20%, -14%) scale(1.3);
+      opacity: 0.95;
+    }
+  }
+
+  @keyframes ticket-sheen {
+    0% {
+      transform: translateX(-55%);
+      opacity: 0;
+    }
+
+    18% {
+      opacity: 0.85;
+    }
+
+    42% {
+      transform: translateX(55%);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateX(55%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes ticket-glow {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: scale(0.95) translate(0, 0);
+    }
+
+    50% {
+      opacity: 0.95;
+      transform: scale(1.25) translate(-6%, 8%);
+    }
+  }
+
+  @keyframes ticket-gradient-shift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @media (max-width: 980px) {
+    .tickets-grid:not(.tickets-grid--launch) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ticket-card--banner .ticket-card__main {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "top"
+        "features"
+        "cta";
+      align-items: start;
+    }
+
+    .ticket-card--banner .ticket-card__top {
+      padding: 0 0 1rem;
+      border-right: none;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.35);
+    }
+
+    .ticket-card--banner .ticket-card__features {
+      grid-template-columns: 1fr;
+    }
+
+    .ticket-card--banner .ticket-card__cta {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .tickets-kicker {
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+    }
+
+    .tickets-title {
+      font-size: clamp(2.1rem, 10vw, 3rem);
+    }
+
+    .tickets-grid:not(.tickets-grid--launch) {
+      grid-template-columns: 1fr;
+    }
+
+    .tickets-grid--launch {
+      grid-template-columns: 1fr;
+    }
+
+    .ticket-card__flag {
+      position: static;
+      align-self: flex-start;
+      width: fit-content;
+      margin-bottom: 0.35rem;
+    }
+
+    .ticket-card--banner {
+      min-height: 0;
+      animation: ticket-gradient-shift 12s ease-in-out infinite;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ticket-card,
+    .ticket-card__scan,
+    .ticket-card__glow,
+    .ticket-card__sheen,
+    .ticket-card__orb,
+    .ticket-card--banner {
+      animation: none;
+      transition: none;
+    }
+
+    .ticket-card {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

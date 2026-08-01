@@ -1,0 +1,162 @@
+---
+import PageContainer from "../primitives/Container.astro";
+import Countdown from "../features/Countdown.astro";
+---
+
+<section id="home" class="hero-section">
+  <div class="hero-background" aria-hidden="true">
+    <!-- Background sky (behind clouds) -->
+    <div class="hero-sky"></div>
+
+    <!-- Single seamless tropical background -->
+    <img
+      src="/assets/hero/tropical-background.png"
+      alt=""
+      class="hero-tropical-background"
+    />
+
+    <!-- Sunset glow and atmospheric haze -->
+    <div class="hero-sun"></div>
+    <div class="hero-texture"></div>
+    <div class="hero-haze"></div>
+
+    <!-- Illustrated clouds over the gradient -->
+    <img
+      src="/assets/hero/clouds-top-overlay.png"
+      alt=""
+      class="hero-clouds-top"
+    />
+
+    <!-- Lasers -->
+    <div class="hero-lasers">
+      <span class="hero-laser hero-laser-one"></span>
+      <span class="hero-laser hero-laser-two"></span>
+      <span class="hero-laser hero-laser-three"></span>
+    </div>
+  </div>
+
+  <!-- Main hero content -->
+<div class="hero-main">
+  <PageContainer>
+    <div class="hero-layout">
+      <div class="hero-content">
+
+        <!-- Festival wordmark -->
+        <div class="hero-logo-wrap">
+          <h1 class="hero-logo-text">
+            RageFest
+          </h1>
+        </div>
+
+        <!-- Hero copy -->
+        <div class="hero-copy">
+
+          <h2 class="hero-title">
+            Sun to Strobe
+          </h2>
+
+          <p class="hero-eyebrow">
+            A new kind of spring break
+          </p>
+
+          <div class="hero-event-details">
+            <span>March 19, 2027</span>
+
+            <span
+              class="hero-event-divider"
+              aria-hidden="true"
+            >
+              •
+            </span>
+
+            <span>South Padre Island, Texas</span>
+          </div>
+
+        </div>
+
+        <!-- Countdown -->
+        <div class="hero-countdown">
+          <Countdown />
+        </div>
+
+        <!-- CTA buttons -->
+        <div class="hero-actions">
+
+          <a
+            href="#tickets"
+            class="join-waitlist-btn"
+          >
+            <span>Join the Waitlist</span>
+          </a>
+
+          <a
+            href="#about"
+            class="hero-secondary-button"
+          >
+            <span>Enter the World</span>
+
+            <svg
+              viewBox="0 0 24 24"
+              class="hero-secondary-icon"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14"></path>
+              <path d="m13 6 6 6-6 6"></path>
+            </svg>
+
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+  </PageContainer>
+</div>
+
+  <!-- Moving festival ticker -->
+  <div class="festival-ticker">
+    <div class="festival-ticker-track">
+      <span>Music</span>
+      <span class="festival-ticker-symbol">✦</span>
+      <span>Memories</span>
+      <span class="festival-ticker-symbol">✦</span>
+      <span>Unpredictable</span>
+      <span class="festival-ticker-symbol">✦</span>
+      <span>Always Watching</span>
+      <span class="festival-ticker-symbol">✦</span>
+      <span>Chaos</span>
+      <span class="festival-ticker-symbol">✦</span>
+      <span>Community</span>
+      <span class="festival-ticker-symbol">✦</span>
+      <span>Freedom</span>
+      <span class="festival-ticker-symbol">✦</span>
+
+      <!-- Repeated for continuous movement -->
+      <span aria-hidden="true">Music</span>
+      <span class="festival-ticker-symbol" aria-hidden="true">✦</span>
+
+      <span aria-hidden="true">Memories</span>
+      <span class="festival-ticker-symbol" aria-hidden="true">✦</span>
+
+      <span aria-hidden="true">Unpredictable</span>
+      <span class="festival-ticker-symbol" aria-hidden="true">✦</span>
+
+      <span aria-hidden="true">Always Watching</span>
+      <span class="festival-ticker-symbol" aria-hidden="true">✦</span>
+
+      <span aria-hidden="true">Chaos</span>
+      <span class="festival-ticker-symbol" aria-hidden="true">✦</span>
+
+      <span aria-hidden="true">Community</span>
+      <span class="festival-ticker-symbol" aria-hidden="true">✦</span>
+
+      <span aria-hidden="true">Freedom</span>
+      <span class="festival-ticker-symbol" aria-hidden="true">✦</span>
+    </div>
+  </div>
+</section>
