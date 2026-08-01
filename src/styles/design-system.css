@@ -7,17 +7,16 @@
    --------------------------------------------------------- */
 
 /*
-  Montserrat can be loaded through Google Fonts in BaseLayout.astro.
+  Montserrat is loaded via Google Fonts in the page <head>.
 
-  Road Rage should be added with @font-face once the font file is
-  placed inside:
-
-  public/fonts/road-rage.woff2
+  Road Rage is self-hosted from public/fonts/.
 */
 
 @font-face {
   font-family: "Road Rage";
-  src: url("/fonts/road-rage.woff2") format("woff2");
+  src:
+    url("/fonts/Road_Rage.otf") format("opentype"),
+    url("/fonts/road-rage.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
