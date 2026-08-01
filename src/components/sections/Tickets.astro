@@ -100,14 +100,6 @@ const tiers = showFullLadder
         <span class="tickets-title__main">Buy Into</span>
         <span class="tickets-title__accent">The World</span>
       </h2>
-
-      <p class="tickets-lead">
-        {
-          showFullLadder
-            ? "Tickets aren’t access — they’re participation. Believers move first: join The Signal, then climb the ladder before each tier disappears."
-            : "Tickets aren’t access — they’re participation. Founding Access is open first — the lowest price, extremely limited, and once it’s gone it never returns."
-        }
-      </p>
     </header>
 
     <div class:list={["tickets-grid", !showFullLadder && "tickets-grid--launch"]}>
@@ -290,18 +282,6 @@ const tiers = showFullLadder
   .tickets-title__accent {
     color: var(--rf-pink);
     text-shadow: 0 2px 7px rgba(0, 0, 0, 0.43);
-  }
-
-  .tickets-lead {
-    max-width: 42rem;
-    margin: 0;
-
-    color: rgba(255, 255, 255, 0.78);
-
-    font-family: var(--font-sans, "Montserrat", sans-serif);
-    font-size: clamp(1.05rem, 1.7vw, 1.25rem);
-    font-weight: 500;
-    line-height: 1.55;
   }
 
   .tickets-grid {
