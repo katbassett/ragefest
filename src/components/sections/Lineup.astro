@@ -1,6 +1,12 @@
 ---
 import logoIcon from "../../assets/navigation/logo-icon.png";
 
+/**
+ * Flip to true to restore the three phase cards + next-drop strip.
+ * Kept in place so the phased lineup layout can come back later.
+ */
+const showPhaseReleases = false;
+
 const signals = [
   {
     signal: "Signal 01",
@@ -38,6 +44,16 @@ const signals = [
 ];
 
 const nextDrop = signals[0];
+
+/** Unrevealed festival lineup silhouette (headliner → support) */
+const hiddenLineup = [
+  { size: "xl", names: ["???????????????????"] },
+  { size: "lg", names: ["?????????", "???????????"] },
+  { size: "md", names: ["???????", "????????", "???????"] },
+  { size: "sm", names: ["??????", "???????", "?????", "????????"] },
+  { size: "xs", names: ["?????", "??????", "???????", "?????", "?????"] },
+  { size: "xxs", names: ["????", "?????", "??????", "?????", "?????", "????"] },
+];
 ---
 
 <section id="lineup" class="lineup-section">
@@ -51,77 +67,156 @@ const nextDrop = signals[0];
       </h2>
 
       <p class="lineup-lead">
-        The sound unlocks in waves, not all at once.
+        {
+          showPhaseReleases
+            ? "The sound unlocks in waves, not all at once."
+            : "We know who's playing. You don't. Yet."
+        }
       </p>
     </header>
 
-    <aside class="lineup-next" aria-label="Next release">
-      <div class="lineup-next__meta">
-        <p class="lineup-next__frame">Three Releases · One Lineup</p>
-        <p class="lineup-next__label">Next Drop</p>
-        <p class="lineup-next__signal">{nextDrop.signal}</p>
-      </div>
+    {
+      showPhaseReleases ? (
+        <aside class="lineup-next" aria-label="Next release">
+          <div class="lineup-next__meta">
+            <p class="lineup-next__frame">Three Releases · One Lineup</p>
+            <p class="lineup-next__label">Next Drop</p>
+            <p class="lineup-next__signal">{nextDrop.signal}</p>
+          </div>
 
-      <div class="lineup-next__main">
-        <p class="lineup-next__date">{nextDrop.date}</p>
-        <p class="lineup-next__title">{nextDrop.title}</p>
-        <p class="lineup-next__detail">{nextDrop.includes}</p>
-      </div>
+          <div class="lineup-next__main">
+            <p class="lineup-next__date">{nextDrop.date}</p>
+            <p class="lineup-next__title">{nextDrop.title}</p>
+            <p class="lineup-next__detail">{nextDrop.includes}</p>
+          </div>
 
-      <p class="lineup-next__status">{nextDrop.status}</p>
-    </aside>
+          <p class="lineup-next__status">{nextDrop.status}</p>
+        </aside>
+      ) : (
+        <aside class="lineup-locked" aria-label="Lineup incoming">
+          <div class="lineup-locked__fx" aria-hidden="true">
+            <span class="lineup-locked__glow"></span>
+            <span class="lineup-locked__core-glow"></span>
+            <span class="lineup-locked__scan"></span>
+            <span class="lineup-locked__grain"></span>
+            <span class="lineup-locked__lasers">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </div>
 
-    <div class="lineup-grid">
-      {
-        signals.map((signal) => (
-          <article class:list={["lineup-card", "lineup-card--signal", signal.className]}>
-            <div class="lineup-card__fx" aria-hidden="true">
-              <span class="lineup-scan"></span>
+          <div class="lineup-locked__top">
+            <p>RAGEFEST 2027</p>
+            <p>SOUTH PADRE</p>
+          </div>
 
-              {signal.graphic === "wave" && (
-                <span class="lineup-graphic lineup-graphic--ocean" aria-hidden="true">
-                  <span class="lineup-ocean-line"></span>
-                  <span class="lineup-ocean-line lineup-ocean-line--soft"></span>
-                </span>
-              )}
-
-              {signal.graphic === "expand" && (
-                <span class="lineup-graphic lineup-graphic--expand">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </span>
-              )}
-
-              {signal.graphic === "strobe" && (
-                <span class="lineup-graphic lineup-graphic--strobe">
-                  <span class="lineup-laser lineup-laser--cyan"></span>
-                  <span class="lineup-laser lineup-laser--pink"></span>
-                  <span class="lineup-laser lineup-laser--yellow"></span>
-                  <span class="lineup-laser lineup-laser--magenta"></span>
-                  <span class="lineup-laser lineup-laser--white"></span>
-                </span>
-              )}
+          <div class="lineup-locked__stage">
+            <div class="lineup-locked__hidden" data-redacted aria-hidden="true">
+              {hiddenLineup.map((row) => (
+                <p class:list={["lineup-locked__names", `lineup-locked__names--${row.size}`]}>
+                  {row.names.map((name) => (
+                    <span class="lineup-locked__name">{name}</span>
+                  ))}
+                </p>
+              ))}
             </div>
 
-            <div class="lineup-card__top">
-              <p class="lineup-card__eyebrow">{signal.signal}</p>
-              <p class="lineup-card__status">{signal.status}</p>
+            <div class="lineup-locked__center">
+              <img
+                class="lineup-locked__eyes"
+                src={logoIcon.src}
+                alt=""
+                width={logoIcon.width}
+                height={logoIcon.height}
+              />
+              <div class="lineup-locked__titles">
+                <p class="lineup-locked__lineup">Lineup</p>
+                <p class="lineup-locked__incoming">Incoming</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="lineup-locked__bottom">
+            <div class="lineup-locked__copy">
+              <p class="lineup-locked__headline">First names drop soon.</p>
+              <p class="lineup-locked__hint">
+                Get the reveal before everyone else.
+              </p>
             </div>
 
-            <div class="lineup-card__body">
-              <p class="lineup-card__date">{signal.date}</p>
-              <h3 class="lineup-card__title">{signal.title}</h3>
-              <p class="lineup-card__detail">{signal.description}</p>
-            </div>
+            <a class="join-waitlist-btn lineup-locked__cta" href="#signal">
+              <span>Join The Signal →</span>
+            </a>
 
-            <div class="lineup-card__foot">
-              <p class="lineup-card__includes">{signal.includes}</p>
+            <div class="lineup-locked__codes">
+              <span>03.19.27</span>
+              <span>RF // 001</span>
+              <span>SOUTH PADRE ISLAND</span>
             </div>
-          </article>
-        ))
-      }
-    </div>
+          </div>
+        </aside>
+      )
+    }
+
+    {
+      showPhaseReleases && (
+        <div class="lineup-grid">
+          {signals.map((signal) => (
+            <article
+              class:list={["lineup-card", "lineup-card--signal", signal.className]}
+            >
+              <div class="lineup-card__fx" aria-hidden="true">
+                <span class="lineup-scan"></span>
+
+                {signal.graphic === "wave" && (
+                  <span
+                    class="lineup-graphic lineup-graphic--ocean"
+                    aria-hidden="true"
+                  >
+                    <span class="lineup-ocean-line"></span>
+                    <span class="lineup-ocean-line lineup-ocean-line--soft"></span>
+                  </span>
+                )}
+
+                {signal.graphic === "expand" && (
+                  <span class="lineup-graphic lineup-graphic--expand">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </span>
+                )}
+
+                {signal.graphic === "strobe" && (
+                  <span class="lineup-graphic lineup-graphic--strobe">
+                    <span class="lineup-laser lineup-laser--cyan"></span>
+                    <span class="lineup-laser lineup-laser--pink"></span>
+                    <span class="lineup-laser lineup-laser--yellow"></span>
+                    <span class="lineup-laser lineup-laser--magenta"></span>
+                    <span class="lineup-laser lineup-laser--white"></span>
+                  </span>
+                )}
+              </div>
+
+              <div class="lineup-card__top">
+                <p class="lineup-card__eyebrow">{signal.signal}</p>
+                <p class="lineup-card__status">{signal.status}</p>
+              </div>
+
+              <div class="lineup-card__body">
+                <p class="lineup-card__date">{signal.date}</p>
+                <h3 class="lineup-card__title">{signal.title}</h3>
+                <p class="lineup-card__detail">{signal.description}</p>
+              </div>
+
+              <div class="lineup-card__foot">
+                <p class="lineup-card__includes">{signal.includes}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      )
+    }
 
     <div class="lineup-cta" id="signal">
       <img
@@ -170,13 +265,15 @@ const nextDrop = signals[0];
 <script>
   const initLineupReveal = () => {
     const section = document.querySelector("#lineup");
-    const next = document.querySelector("#lineup .lineup-next");
+    const next = document.querySelector(
+      "#lineup .lineup-next, #lineup .lineup-locked",
+    );
     const cards = Array.from(
       document.querySelectorAll("#lineup .lineup-card"),
     );
     const cta = document.querySelector("#lineup .lineup-cta");
 
-    if (!section || cards.length === 0) return;
+    if (!section || (!next && cards.length === 0 && !cta)) return;
     if (section.dataset.revealReady === "true") return;
 
     section.dataset.revealReady = "true";
@@ -202,7 +299,7 @@ const nextDrop = signals[0];
       if (cta) {
         window.setTimeout(() => {
           cta.classList.add("is-visible");
-        }, startDelay + 120 + cards.length * 140 + 160);
+        }, startDelay + 120 + Math.max(cards.length, 1) * 140 + 160);
       }
     };
 
@@ -222,7 +319,7 @@ const nextDrop = signals[0];
           }
         });
       },
-      { threshold: 0.2, rootMargin: "0px 0px -8% 0px" },
+      { threshold: 0.18, rootMargin: "0px 0px -8% 0px" },
     );
 
     observer.observe(section);
@@ -230,6 +327,35 @@ const nextDrop = signals[0];
 
   initLineupReveal();
   document.addEventListener("astro:page-load", initLineupReveal);
+
+  const initRedactedGlitch = () => {
+    const board = document.querySelector("#lineup [data-redacted]");
+    if (!(board instanceof HTMLElement)) return;
+    if (board.dataset.ready === "true") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    board.dataset.ready = "true";
+    const names = Array.from(board.querySelectorAll(".lineup-locked__name"));
+
+    board.addEventListener("pointermove", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      if (!target.classList.contains("lineup-locked__name")) return;
+
+      target.classList.add("is-glitching");
+      window.setTimeout(() => target.classList.remove("is-glitching"), 420);
+    });
+
+    window.setInterval(() => {
+      if (document.hidden || names.length === 0) return;
+      const name = names[Math.floor(Math.random() * names.length)];
+      name.classList.add("is-glitching");
+      window.setTimeout(() => name.classList.remove("is-glitching"), 280);
+    }, 2200);
+  };
+
+  initRedactedGlitch();
+  document.addEventListener("astro:page-load", initRedactedGlitch);
 
   const initLineupSignup = () => {
     const form = document.querySelector("#lineup .lineup-signup");
@@ -375,6 +501,505 @@ const nextDrop = signals[0];
   .lineup-next.is-visible {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+  }
+
+  /* Locked festival lineup teaser */
+
+  .lineup-locked {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.65rem, 1.6vw, 1rem);
+
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+    padding: clamp(1.1rem, 2.6vw, 1.65rem) clamp(1.15rem, 3vw, 1.85rem)
+      clamp(1rem, 2.4vw, 1.4rem);
+
+    min-height: clamp(22rem, 42vw, 26.5rem);
+
+    border: 1px solid color-mix(in srgb, var(--rf-pink) 42%, var(--rf-purple));
+    border-radius: 8px;
+
+    background:
+      radial-gradient(
+        95% 75% at 50% 12%,
+        rgba(255, 32, 131, 0.34),
+        transparent 58%
+      ),
+      radial-gradient(
+        75% 65% at 86% 78%,
+        rgba(138, 43, 226, 0.38),
+        transparent 55%
+      ),
+      radial-gradient(
+        60% 50% at 8% 70%,
+        rgba(255, 106, 0, 0.26),
+        transparent 52%
+      ),
+      radial-gradient(
+        50% 40% at 70% 30%,
+        rgba(245, 255, 0, 0.1),
+        transparent 45%
+      ),
+      linear-gradient(160deg, #1a0824 0%, #10061a 45%, #08040e 100%);
+
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.32);
+
+    opacity: 0;
+    transform: translate3d(0, 1.4rem, 0);
+
+    transition:
+      opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .lineup-locked.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .lineup-locked__fx {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .lineup-locked__glow {
+    position: absolute;
+    inset: -20%;
+    background:
+      radial-gradient(
+        circle at 35% 25%,
+        rgba(255, 106, 0, 0.16),
+        transparent 38%
+      ),
+      radial-gradient(
+        circle at 68% 55%,
+        rgba(255, 32, 131, 0.18),
+        transparent 42%
+      ),
+      radial-gradient(
+        circle at 20% 75%,
+        rgba(138, 43, 226, 0.16),
+        transparent 40%
+      );
+    animation: lineup-locked-glow 10s ease-in-out infinite alternate;
+  }
+
+  .lineup-locked__core-glow {
+    position: absolute;
+    left: 50%;
+    top: 42%;
+    width: min(28rem, 72%);
+    height: min(16rem, 48%);
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 32, 131, 0.22) 0%,
+      rgba(138, 43, 226, 0.1) 42%,
+      transparent 72%
+    );
+    pointer-events: none;
+  }
+
+  .lineup-locked__scan {
+    position: absolute;
+    inset: 0;
+    opacity: 0.18;
+    background: repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0 1px,
+      transparent 1px 3px
+    );
+    animation: lineup-scan 8s linear infinite;
+  }
+
+  .lineup-locked__grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .lineup-locked__lasers {
+    position: absolute;
+    inset: 0;
+    opacity: 0.38;
+    mix-blend-mode: screen;
+    overflow: hidden;
+  }
+
+  .lineup-locked__lasers span {
+    position: absolute;
+    top: -30%;
+    right: -8%;
+    width: 2px;
+    height: 160%;
+    border-radius: 999px;
+    transform-origin: top center;
+    transform: rotate(45deg);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--rf-pink) 85%, transparent),
+      color-mix(in srgb, var(--rf-pink) 40%, transparent) 45%,
+      transparent 80%
+    );
+    filter: blur(0.4px);
+    animation: lineup-locked-beam 6s ease-in-out infinite;
+  }
+
+  .lineup-locked__lasers span:nth-child(2) {
+    top: -35%;
+    right: 6%;
+    width: 1.5px;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--rf-orange) 80%, transparent),
+      color-mix(in srgb, var(--rf-pink) 40%, transparent) 50%,
+      transparent 80%
+    );
+    animation-duration: 7.2s;
+    animation-direction: reverse;
+  }
+
+  .lineup-locked__lasers span:nth-child(3) {
+    top: -25%;
+    right: -18%;
+    width: 1.5px;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--rf-yellow) 75%, transparent),
+      transparent 75%
+    );
+    animation-duration: 5.4s;
+  }
+
+  .lineup-locked__top,
+  .lineup-locked__bottom,
+  .lineup-locked__stage {
+    position: relative;
+    z-index: 1;
+  }
+
+  .lineup-locked__top,
+  .lineup-locked__codes {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .lineup-locked__top p,
+  .lineup-locked__codes span {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.58);
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .lineup-locked__stage {
+    position: relative;
+    flex: 1 1 auto;
+    display: grid;
+    place-items: center;
+    min-height: clamp(12.5rem, 26vw, 15.5rem);
+    margin-top: -0.15rem;
+    padding: 0.15rem 0 0;
+  }
+
+  /* Fake unrevealed artist poster behind the headline */
+  .lineup-locked__hidden {
+    position: absolute;
+    inset: -8% 3% -18%;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(0.22rem, 0.75vw, 0.42rem);
+    opacity: 0.72;
+    filter: blur(1.75px);
+    pointer-events: auto;
+  }
+
+  .lineup-locked__names {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: clamp(0.45rem, 1.5vw, 1.15rem);
+    margin: 0;
+    width: 100%;
+    max-width: 48rem;
+    text-align: center;
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .lineup-locked__name {
+    display: inline-block;
+    color: rgba(255, 210, 240, 0.38);
+    transition:
+      color 140ms ease,
+      opacity 140ms ease,
+      transform 140ms ease,
+      filter 140ms ease;
+  }
+
+  .lineup-locked__names--xl {
+    font-size: clamp(1.45rem, 3.9vw, 2.35rem);
+  }
+
+  .lineup-locked__names--xl .lineup-locked__name {
+    color: rgba(255, 180, 230, 0.34);
+  }
+
+  .lineup-locked__names--lg {
+    font-size: clamp(1.05rem, 2.7vw, 1.65rem);
+  }
+
+  .lineup-locked__names--lg .lineup-locked__name {
+    color: rgba(230, 170, 255, 0.3);
+  }
+
+  .lineup-locked__names--md {
+    font-size: clamp(0.88rem, 2.1vw, 1.22rem);
+  }
+
+  .lineup-locked__names--md .lineup-locked__name {
+    color: rgba(255, 255, 255, 0.26);
+  }
+
+  .lineup-locked__names--sm {
+    font-size: clamp(0.74rem, 1.7vw, 1rem);
+  }
+
+  .lineup-locked__names--sm .lineup-locked__name {
+    color: rgba(255, 150, 210, 0.24);
+  }
+
+  .lineup-locked__names--xs {
+    font-size: clamp(0.62rem, 1.35vw, 0.84rem);
+  }
+
+  .lineup-locked__names--xs .lineup-locked__name {
+    color: rgba(210, 180, 255, 0.22);
+  }
+
+  .lineup-locked__names--xxs {
+    font-size: clamp(0.54rem, 1.15vw, 0.72rem);
+  }
+
+  .lineup-locked__names--xxs .lineup-locked__name {
+    color: rgba(255, 200, 240, 0.2);
+  }
+
+  .lineup-locked__name.is-glitching {
+    color: rgba(255, 32, 131, 0.55);
+    filter: blur(0.2px);
+    transform: translateX(2px) skewX(-4deg);
+  }
+
+  .lineup-locked__center {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(1.05rem, 2.4vw, 1.45rem);
+    text-align: center;
+    padding: 0.25rem 1rem;
+    transform: translateY(-1.25rem);
+    pointer-events: none;
+  }
+
+  .lineup-locked__eyes {
+    width: clamp(3rem, 6.5vw, 4.15rem);
+    height: auto;
+    margin-top: -0.85rem;
+    filter: drop-shadow(0 0 16px rgba(255, 32, 131, 0.45));
+    animation: lineup-locked-pulse 4.5s ease-in-out infinite;
+  }
+
+  .lineup-locked__titles {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .lineup-locked__lineup,
+  .lineup-locked__incoming {
+    margin: 0;
+    font-family: "Road Rage", cursive;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 0.82;
+    text-transform: none;
+  }
+
+  .lineup-locked__lineup {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 236, 248, 0.68) 0%,
+      rgba(255, 190, 230, 0.55) 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    font-size: clamp(2.7rem, 7.1vw, 4.85rem);
+    filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.28));
+  }
+
+  .lineup-locked__incoming {
+    margin-top: -0.12em;
+    color: var(--rf-pink);
+    font-size: clamp(2.7rem, 7.2vw, 5rem);
+    text-shadow:
+      0 2px 0 rgba(0, 0, 0, 0.4),
+      0 8px 28px rgba(255, 32, 131, 0.4);
+  }
+
+  .lineup-locked__bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: -1.65rem;
+    text-align: center;
+  }
+
+  .lineup-locked__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .lineup-locked__headline {
+    margin: 0;
+    color: #ffffff;
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: clamp(0.78rem, 1.4vw, 0.88rem);
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .lineup-locked__hint {
+    margin: 0;
+    max-width: 26rem;
+    color: rgba(255, 255, 255, 0.72);
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .lineup-locked__cta {
+    text-decoration: none;
+  }
+
+  .lineup-locked__codes {
+    width: 100%;
+    margin-top: 0.25rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  @keyframes lineup-locked-glow {
+    from {
+      transform: scale(1) translate3d(0, 0, 0);
+      opacity: 0.75;
+    }
+    to {
+      transform: scale(1.06) translate3d(-2%, 2%, 0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes lineup-locked-beam {
+    0%,
+    100% {
+      transform: rotate(45deg) translateX(-6%);
+      opacity: 0.28;
+    }
+    50% {
+      transform: rotate(45deg) translateX(8%);
+      opacity: 0.85;
+    }
+  }
+
+  @keyframes lineup-locked-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      filter: drop-shadow(0 0 14px rgba(255, 32, 131, 0.35));
+    }
+    50% {
+      transform: scale(1.04);
+      filter: drop-shadow(0 0 26px rgba(255, 32, 131, 0.55));
+    }
+  }
+
+  @media (max-width: 700px) {
+    .lineup-locked {
+      min-height: 20.5rem;
+      gap: 0.7rem;
+      padding: 1rem 0.95rem 1.05rem;
+    }
+
+    .lineup-locked__hidden {
+      inset: -4% 1% -12%;
+      gap: 0.2rem;
+      filter: blur(1.35px);
+    }
+
+    .lineup-locked__names {
+      gap: 0.35rem 0.6rem;
+    }
+
+    .lineup-locked__center {
+      gap: 0.7rem;
+      transform: translateY(-0.95rem);
+    }
+
+    .lineup-locked__bottom {
+      margin-top: -1.15rem;
+      gap: 0.65rem;
+    }
+
+    .lineup-locked__codes {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .lineup-locked__codes span:nth-child(2) {
+      order: 3;
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lineup-locked__glow,
+    .lineup-locked__scan,
+    .lineup-locked__lasers span,
+    .lineup-locked__eyes {
+      animation: none;
+    }
   }
 
   .lineup-next__meta,
