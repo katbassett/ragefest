@@ -39,6 +39,8 @@ import logoIcon from "../../assets/navigation/logo-icon.png";
         </button>
       </form>
 
+      <p class="signal-signup__status" data-signal-status hidden></p>
+
       <ul class="signal-cta__benefits">
         <li>Priority access</li>
         <li>Lowest pricing</li>
@@ -89,12 +91,66 @@ import logoIcon from "../../assets/navigation/logo-icon.png";
 
   const initSignalSignup = () => {
     const form = document.querySelector("#signal .signal-signup");
+    const status = document.querySelector<HTMLElement>("[data-signal-status]");
+    // PUBLIC_ env wins; fallback keeps production live if Vercel env isn’t set yet.
+    const endpoint =
+      (import.meta.env.PUBLIC_WAITLIST_WEBAPP_URL as string | undefined) ||
+      "https://script.google.com/macros/s/AKfycbzg8d27Er_YUaDhAsDDZGMld9dYLnfndEkL5JRMv22lwvENDpInO5sdIQQJ8e0wLuArdg/exec";
+
     if (!(form instanceof HTMLFormElement)) return;
     if (form.dataset.ready === "true") return;
 
     form.dataset.ready = "true";
-    form.addEventListener("submit", (event) => {
+
+    const setStatus = (message: string, tone: "ok" | "err" | "idle" = "idle") => {
+      if (!status) return;
+      status.hidden = !message;
+      status.textContent = message;
+      status.dataset.tone = tone;
+    };
+
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
+
+      const emailInput = form.elements.namedItem("email");
+      if (!(emailInput instanceof HTMLInputElement)) return;
+
+      const email = emailInput.value.trim();
+      if (!email) return;
+
+      if (!endpoint) {
+        setStatus(
+          "Waitlist isn’t connected yet. Add PUBLIC_WAITLIST_WEBAPP_URL.",
+          "err",
+        );
+        return;
+      }
+
+      const button = form.querySelector("button[type='submit']");
+      if (button instanceof HTMLButtonElement) button.disabled = true;
+      setStatus("Sending…", "idle");
+
+      try {
+        // Apps Script often returns a redirect; no-cors avoids CORS failures.
+        // We still treat a completed fetch as success when the script is live.
+        await fetch(endpoint, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            email,
+            source: "signal",
+            userAgent: navigator.userAgent,
+          }),
+        });
+
+        setStatus("You’re on The Signal. We’ll be in touch.", "ok");
+        form.reset();
+      } catch {
+        setStatus("Something went wrong. Try again in a moment.", "err");
+      } finally {
+        if (button instanceof HTMLButtonElement) button.disabled = false;
+      }
     });
   };
 
@@ -250,6 +306,31 @@ import logoIcon from "../../assets/navigation/logo-icon.png";
     flex: none;
     padding: 1rem 1.85rem;
     font-size: 0.74rem;
+  }
+
+  .signal-signup__btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  .signal-signup__status {
+    margin: 1rem 0 0;
+    min-height: 1.25rem;
+
+    color: rgba(255, 255, 255, 0.82);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .signal-signup__status[data-tone="ok"] {
+    color: var(--rf-yellow);
+  }
+
+  .signal-signup__status[data-tone="err"] {
+    color: #ff8fb8;
   }
 
   .signal-cta__benefits {
