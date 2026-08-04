@@ -9,14 +9,13 @@
 /*
   Montserrat is loaded via Google Fonts in the page <head>.
 
-  Road Rage is self-hosted from public/fonts/.
+  Road Rage is self-hosted as WOFF2 from public/fonts/ and
+  preloaded in the document <head> for early discovery.
 */
 
 @font-face {
   font-family: "Road Rage";
-  src:
-    url("/fonts/Road_Rage.otf") format("opentype"),
-    url("/fonts/road-rage.woff2") format("woff2");
+  src: url("/fonts/road-rage.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
