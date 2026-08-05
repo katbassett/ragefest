@@ -52,9 +52,13 @@ export const submitWaitlistEmail = async (
   if (!endpoint) return { ok: false, reason: "unconfigured" };
 
   try {
-    await fetch(endpoint, {
+    // Apps Script POSTs often hang on a cross-origin redirect. With no-cors we
+    // cannot read the result anyway, so cap how long the UI waits while the
+    // request keeps finishing in the background.
+    const pending = fetch(endpoint, {
       method: "POST",
       mode: "no-cors",
+      keepalive: true,
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         email: cleaned,
@@ -62,6 +66,15 @@ export const submitWaitlistEmail = async (
         userAgent: navigator.userAgent,
       }),
     });
+
+    pending.catch(() => {});
+
+    await Promise.race([
+      pending,
+      new Promise<void>((resolve) => {
+        window.setTimeout(resolve, 450);
+      }),
+    ]);
 
     return { ok: true };
   } catch {
