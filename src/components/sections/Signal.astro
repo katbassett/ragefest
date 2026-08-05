@@ -51,6 +51,8 @@ import logoIcon from "../../assets/navigation/logo-icon.png";
 </section>
 
 <script>
+  import { submitWaitlistEmail } from "../../scripts/waitlist";
+
   const initSignalReveal = () => {
     const section = document.querySelector("#signal");
     const cta = document.querySelector("#signal .signal-cta");
@@ -92,10 +94,6 @@ import logoIcon from "../../assets/navigation/logo-icon.png";
   const initSignalSignup = () => {
     const form = document.querySelector("#signal .signal-signup");
     const status = document.querySelector<HTMLElement>("[data-signal-status]");
-    // PUBLIC_ env wins; fallback keeps production live if Vercel env isn’t set yet.
-    const endpoint =
-      (import.meta.env.PUBLIC_WAITLIST_WEBAPP_URL as string | undefined) ||
-      "https://script.google.com/macros/s/AKfycbzg8d27Er_YUaDhAsDDZGMld9dYLnfndEkL5JRMv22lwvENDpInO5sdIQQJ8e0wLuArdg/exec";
 
     if (!(form instanceof HTMLFormElement)) return;
     if (form.dataset.ready === "true") return;
@@ -118,38 +116,21 @@ import logoIcon from "../../assets/navigation/logo-icon.png";
       const email = emailInput.value.trim();
       if (!email) return;
 
-      if (!endpoint) {
-        setStatus(
-          "Waitlist isn’t connected yet. Add PUBLIC_WAITLIST_WEBAPP_URL.",
-          "err",
-        );
-        return;
-      }
-
       const button = form.querySelector("button[type='submit']");
       if (button instanceof HTMLButtonElement) button.disabled = true;
       setStatus("Sending…", "idle");
 
-      try {
-        // Apps Script often returns a redirect; no-cors avoids CORS failures.
-        // We still treat a completed fetch as success when the script is live.
-        await fetch(endpoint, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({
-            email,
-            source: "signal",
-            userAgent: navigator.userAgent,
-          }),
-        });
+      const result = await submitWaitlistEmail(email, "signal");
 
+      if (button instanceof HTMLButtonElement) button.disabled = false;
+
+      if (result.ok) {
         setStatus("You’re on The Signal. We’ll be in touch.", "ok");
         form.reset();
-      } catch {
+      } else if (result.reason === "invalid") {
+        setStatus("Enter a valid email address.", "err");
+      } else {
         setStatus("Something went wrong. Try again in a moment.", "err");
-      } finally {
-        if (button instanceof HTMLButtonElement) button.disabled = false;
       }
     });
   };

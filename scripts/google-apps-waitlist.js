@@ -1,24 +1,24 @@
 /**
  * RageFest waitlist → Google Sheet
  *
- * IMPORTANT DEPLOY SETTINGS (this is why the sheet wasn't updating):
- * Deploy → Manage deployments → Edit (pencil) OR New deployment
- *   Type: Web app
- *   Execute as: Me
- *   Who has access: Anyone   ← must be "Anyone", NOT "Anyone with a Google account"
- * After changing code OR access, create a NEW version and Deploy.
- * Then copy the /exec URL into .env as PUBLIC_WAITLIST_WEBAPP_URL
+ * SETUP
+ * 1. Paste the ID of the target spreadsheet into SPREADSHEET_ID below.
+ *    Grab it from the Sheet URL:
+ *    docs.google.com/spreadsheets/d/<THIS_PART_IS_THE_ID>/edit
+ * 2. Deploy → New deployment → Web app
+ *      Execute as: Me
+ *      Who has access: Anyone
+ * 3. Open the /exec URL in a browser. The response names the spreadsheet it
+ *    writes to, so you can confirm each deployment targets the right Sheet.
  *
- * Setup:
- * 1. Open your Sheet → Extensions → Apps Script (must be bound to the sheet)
- * 2. Paste this file, Save
- * 3. Deploy as above
- * 4. Test the URL in an incognito window — you should see:
- *    {"ok":true,"service":"ragefest-waitlist"}
- *    If you see "You need access", the deployment access is still wrong.
+ * Setting SPREADSHEET_ID explicitly matters when several deployments share this
+ * code: a copied script project stays bound to the spreadsheet it was created
+ * from, so getActiveSpreadsheet() can silently write to the wrong Sheet.
  */
 
-// Leave blank to always use the first tab
+const SPREADSHEET_ID = '';
+
+// Leave blank to use the first tab
 const SHEET_NAME = '';
 
 function doPost(e) {
@@ -52,20 +52,41 @@ function doPost(e) {
 }
 
 function doGet() {
-  return json_({ ok: true, service: 'ragefest-waitlist' });
+  try {
+    const sheet = getSheet_();
+
+    return json_({
+      ok: true,
+      service: 'ragefest-waitlist',
+      spreadsheet: sheet.getParent().getName(),
+      tab: sheet.getName(),
+      rows: Math.max(sheet.getLastRow() - 1, 0),
+    });
+  } catch (err) {
+    return json_({
+      ok: false,
+      service: 'ragefest-waitlist',
+      error: String(err && err.message ? err.message : err),
+    });
+  }
 }
 
 function getSheet_() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = SPREADSHEET_ID
+    ? SpreadsheetApp.openById(SPREADSHEET_ID)
+    : SpreadsheetApp.getActiveSpreadsheet();
+
   if (!ss) {
     throw new Error(
-      'No active spreadsheet. Open Apps Script from the Sheet via Extensions → Apps Script.',
+      'No spreadsheet found. Set SPREADSHEET_ID, or open Apps Script from the Sheet via Extensions → Apps Script.',
     );
   }
+
   if (SHEET_NAME) {
     const named = ss.getSheetByName(SHEET_NAME);
     if (named) return named;
   }
+
   return ss.getSheets()[0];
 }
 
@@ -78,7 +99,8 @@ function ensureHeader_(sheet) {
 function emailExists_(sheet, email) {
   const last = sheet.getLastRow();
   if (last < 2) return false;
-  const values = sheet.getRange(2, 2, last, 2).getValues();
+
+  const values = sheet.getRange(2, 2, last - 1, 1).getValues();
   return values.some((row) => String(row[0]).trim().toLowerCase() === email);
 }
 
