@@ -1,10 +1,9 @@
 /**
  * Ticket shop embed.
  *
- * Staging currently uses pretix’s public demo so we can design the widget
- * before Loop1 goes live. Switch `useDemoShop` to false before launch.
+ * `useDemoShop` points at pretix’s public demo. Keep this false to use Loop1.
  */
-export const useDemoShop = true;
+export const useDemoShop = false;
 
 const LOOP1_EVENT = "https://loop1tickets.com/Ragefest/Ragefest2027/";
 const DEMO_EVENT = "https://pretix.eu/demo/democon/";
