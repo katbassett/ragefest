@@ -145,9 +145,16 @@ const tiers = showFullLadder
       }
     </div>
 
-    <div class="tickets-widget">
-      <pretix-widget event="https://loop1tickets.com/Ragefest/Ragefest2027/"
-      ></pretix-widget>
+    <div class="tickets-widget" data-loop1-widget>
+      <p class="tickets-widget__status" data-loop1-status>
+        Checking the ticket shop…
+      </p>
+
+      <div
+        class="pretix-widget-compat"
+        event="https://loop1tickets.com/Ragefest/Ragefest2027/"
+      ></div>
+
       <noscript>
         <div class="pretix-widget">
           <div class="pretix-widget-info-message">
@@ -220,6 +227,38 @@ const tiers = showFullLadder
 
   initTicketsReveal();
   document.addEventListener("astro:page-load", initTicketsReveal);
+
+  const initLoop1ShopStatus = () => {
+    const root = document.querySelector<HTMLElement>("[data-loop1-widget]");
+    const status = document.querySelector<HTMLElement>("[data-loop1-status]");
+    if (!root || !status) return;
+    if (root.dataset.statusReady === "true") return;
+    root.dataset.statusReady = "true";
+
+    fetch(
+      "https://loop1tickets.com/Ragefest/Ragefest2027/widget/product_list",
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && data.error) {
+          root.dataset.shop = "disabled";
+          status.textContent =
+            "The ticket shop isn’t open yet. Founding Access goes live on the 20th.";
+          return;
+        }
+
+        root.dataset.shop = "live";
+        status.hidden = true;
+      })
+      .catch(() => {
+        root.dataset.shop = "error";
+        status.innerHTML =
+          'The ticket shop couldn’t load here. <a href="https://loop1tickets.com/Ragefest/Ragefest2027/" target="_blank" rel="noopener">Open it in a new tab</a>.';
+      });
+  };
+
+  initLoop1ShopStatus();
+  document.addEventListener("astro:page-load", initLoop1ShopStatus);
 </script>
 
 <style>
@@ -776,8 +815,29 @@ const tiers = showFullLadder
     overflow: visible;
   }
 
+  .tickets-widget__status {
+    margin: 0 0 1rem;
+
+    color: rgba(255, 255, 255, 0.78);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  .tickets-widget__status a {
+    color: var(--rf-yellow, #f5ff00);
+  }
+
+  .tickets-widget[data-shop="disabled"] :global(.pretix-widget),
+  .tickets-widget[data-shop="disabled"] :global(.pretix-widget-compat) {
+    display: none;
+  }
+
   .tickets-widget :global(pretix-widget),
-  .tickets-widget :global(.pretix-widget) {
+  .tickets-widget :global(.pretix-widget),
+  .tickets-widget :global(.pretix-widget-compat) {
     display: block;
     width: 100%;
   }
