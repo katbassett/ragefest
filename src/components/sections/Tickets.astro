@@ -113,6 +113,7 @@ const tiers = showFullLadder
               tier.className,
               tier.featured && "ticket-card--featured",
               !showFullLadder && "ticket-card--banner",
+              !showFullLadder && "ticket-card--purchase",
             ]}
           >
             <div class="ticket-card__fx" aria-hidden="true">
@@ -142,55 +143,66 @@ const tiers = showFullLadder
                 ))}
               </ul>
             </div>
+
+            {
+              tier.name === "Founding Access" && (
+                <div class="tickets-checkout">
+                  <h3 class="tickets-checkout__title">Secure Your Access</h3>
+
+                  <div
+                    class="tickets-widget"
+                    data-loop1-widget
+                    data-shop-list={ticketShop.productListUrl}
+                    data-shop-event={ticketShop.eventUrl}
+                  >
+                    {
+                      useDemoShop && (
+                        <p class="tickets-widget__preview">
+                          Preview widget (pretix demo) — not live Ragefest tickets
+                        </p>
+                      )
+                    }
+
+                    <p class="tickets-widget__status" data-loop1-status>
+                      Checking the ticket shop…
+                    </p>
+
+                    <div
+                      class="pretix-widget-compat"
+                      event={ticketShop.eventUrl}
+                    ></div>
+
+                    <noscript>
+                      <div class="pretix-widget">
+                        <div class="pretix-widget-info-message">
+                          JavaScript is disabled in your browser. To access our
+                          ticket shop without JavaScript, please{" "}
+                          <a
+                            target="_blank"
+                            rel="noopener"
+                            href={ticketShop.eventUrl}
+                          >
+                            click here
+                          </a>.
+                        </div>
+                      </div>
+                    </noscript>
+                  </div>
+                </div>
+              )
+            }
           </article>
         ))
       }
     </div>
 
-    <div class="tickets-checkout">
-      <h3 class="tickets-checkout__title">Secure Your Access</h3>
-
-      <div
-        class="tickets-widget"
-        data-loop1-widget
-        data-shop-list={ticketShop.productListUrl}
-        data-shop-event={ticketShop.eventUrl}
-      >
-        {
-          useDemoShop && (
-            <p class="tickets-widget__preview">
-              Preview widget (pretix demo) — not live Ragefest tickets
-            </p>
-          )
-        }
-
-        <p class="tickets-widget__status" data-loop1-status>
-          Checking the ticket shop…
-        </p>
-
-        <div class="pretix-widget-compat" event={ticketShop.eventUrl}></div>
-
-        <noscript>
-          <div class="pretix-widget">
-            <div class="pretix-widget-info-message">
-              JavaScript is disabled in your browser. To access our ticket shop
-              without JavaScript, please{" "}
-              <a target="_blank" rel="noopener" href={ticketShop.eventUrl}>
-                click here
-              </a>.
-            </div>
-          </div>
-        </noscript>
-      </div>
-
-      <p class="tickets-checkout__close">
-        <span class="tickets-checkout__close-lead">The first gate is open.</span>
-        <span>
-          Founding Access is available now. More tiers will reveal themselves
-          later.
-        </span>
-      </p>
-    </div>
+    <p class="tickets-checkout__close">
+      <span class="tickets-checkout__close-lead">The first gate is open.</span>
+      <span>
+        Founding Access is available now. More tiers will reveal themselves
+        later.
+      </span>
+    </p>
   </div>
 </section>
 
@@ -425,10 +437,13 @@ const tiers = showFullLadder
 
   /* Launch: wide ticket rectangle */
   .ticket-card--banner {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.1rem, 2.2vw, 1.5rem);
 
-    min-height: clamp(15rem, 28vw, 19rem);
-    padding: clamp(1.5rem, 2.8vw, 2.15rem) clamp(1.5rem, 3vw, 2.4rem);
+    min-height: 0;
+    padding: clamp(1.5rem, 2.8vw, 2.15rem) clamp(1.5rem, 3vw, 2.4rem)
+      clamp(1.65rem, 3vw, 2.25rem);
 
     border-radius: 1.35rem;
 
@@ -441,15 +456,11 @@ const tiers = showFullLadder
     z-index: 1;
 
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.15fr) auto;
-    grid-template-areas:
-      "top features cta"
-      "top features cta";
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.15fr);
+    grid-template-areas: "top features";
     align-items: center;
     column-gap: clamp(1.25rem, 3vw, 2.5rem);
     row-gap: 1rem;
-
-    height: 100%;
   }
 
   .ticket-card--banner .ticket-card__top {
@@ -582,6 +593,11 @@ const tiers = showFullLadder
 
   .ticket-card--banner.is-visible:hover {
     transform: translate3d(0, -0.25rem, 0) scale(1.01);
+  }
+
+  .ticket-card--purchase:hover,
+  .ticket-card--purchase.is-visible:hover {
+    transform: none;
   }
 
   /* Ladder colors — sun → strobe arc */
@@ -856,18 +872,25 @@ const tiers = showFullLadder
   }
 
   .tickets-checkout {
-    width: min(100%, 48.75rem);
-    margin: clamp(1.75rem, 3.5vw, 2.5rem) auto 0;
+    position: relative;
+    z-index: 2;
+
+    width: min(100%, 50rem);
+    margin: 0 auto;
     overflow-x: clip;
   }
 
+  .ticket-card--purchase .tickets-widget {
+    background: rgba(5, 5, 5, 0.58);
+  }
+
   .tickets-checkout__title {
-    margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+    margin: 0 0 clamp(0.65rem, 1.4vw, 0.9rem);
 
     color: #ffffff;
 
     font-family: var(--font-sans, "Montserrat", sans-serif);
-    font-size: 0.72rem;
+    font-size: 0.84rem;
     font-weight: 800;
     letter-spacing: 0.22em;
     line-height: 1.2;
@@ -1276,7 +1299,6 @@ const tiers = showFullLadder
     color: rgba(255, 255, 255, 0.55);
   }
 
-  .tickets-widget :global(.pretix-widget-info-message),
   .tickets-widget :global(.pretix-widget-error-message) {
     margin: 0 0 0.85rem;
     padding: 0.7rem 0.8rem;
@@ -1288,6 +1310,69 @@ const tiers = showFullLadder
 
     font-size: 0.8rem;
     line-height: 1.45;
+  }
+
+  .tickets-widget :global(.pretix-widget-info-message) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem 0.85rem;
+
+    margin: 0 0 0.75rem;
+    padding: 0.45rem 0.65rem;
+
+    color: rgba(255, 255, 255, 0.68);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.55rem;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.72rem;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  .tickets-widget :global(.pretix-widget-resume-button),
+  .tickets-widget :global(.pretix-widget button.pretix-widget-resume-button) {
+    float: none;
+    flex: none;
+    order: 1;
+
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0.38rem 0.7rem;
+
+    color: rgba(255, 255, 255, 0.88);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    border-radius: 999px;
+    box-shadow: none;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .tickets-widget :global(.pretix-widget-resume-button:hover),
+  .tickets-widget :global(.pretix-widget-resume-button:focus-visible),
+  .tickets-widget :global(.pretix-widget button.pretix-widget-resume-button:hover),
+  .tickets-widget :global(.pretix-widget button.pretix-widget-resume-button:focus-visible) {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: none;
+    transform: none;
+    outline: none;
+  }
+
+  .tickets-widget :global(.pretix-widget button.pretix-widget-resume-button:focus-visible) {
+    outline: 2px solid var(--rf-yellow, #f5ff00);
+    outline-offset: 2px;
   }
 
   .tickets-widget :global(.pretix-widget a) {
@@ -1303,7 +1388,7 @@ const tiers = showFullLadder
     max-width: 36rem;
     margin: clamp(1.5rem, 2.5vw, 2rem) auto 0;
 
-    color: rgba(255, 255, 255, 0.68);
+    color: rgba(255, 255, 255, 0.86);
 
     font-family: var(--font-sans, "Montserrat", sans-serif);
     font-size: 0.82rem;
@@ -1411,8 +1496,7 @@ const tiers = showFullLadder
       grid-template-columns: 1fr;
       grid-template-areas:
         "top"
-        "features"
-        "cta";
+        "features";
       align-items: start;
     }
 
@@ -1491,6 +1575,16 @@ const tiers = showFullLadder
       box-shadow:
         4px 4px 0 var(--rf-pink-dark),
         0 10px 22px rgba(255, 32, 131, 0.28);
+    }
+
+    .tickets-widget :global(.pretix-widget-info-message) {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .tickets-widget :global(.pretix-widget-resume-button),
+    .tickets-widget :global(.pretix-widget button.pretix-widget-resume-button) {
+      width: auto;
     }
   }
 
