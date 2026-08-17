@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { ticketShop } from "../../data/ticket-shop";
 
 interface Props {
   title?: string;
@@ -54,7 +55,7 @@ const {
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://loop1tickets.com/Ragefest/Ragefest2027/widget/v1.css"
+      href={ticketShop.cssUrl}
     />
   </head>
 
@@ -70,10 +71,6 @@ const {
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
     <slot />
-    <script
-      is:inline
-      type="text/javascript"
-      src="https://loop1tickets.com/widget/v1.en.js"
-    ></script>
+    <script is:inline type="text/javascript" src={ticketShop.jsUrl}></script>
   </body>
 </html>

@@ -10,6 +10,7 @@ import FestivalScrollProgress from "../components/features/FestivalScrollProgres
 import FestivalSky from "../components/features/FestivalSky.astro";
 import EmailPopup from "../components/EmailPopup.astro";
 import Footer from "../components/layout/Footer.astro";
+import { ticketShop } from "../data/ticket-shop";
 
 import "../styles/global.css";
 ---
@@ -58,7 +59,7 @@ import "../styles/global.css";
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://loop1tickets.com/Ragefest/Ragefest2027/widget/v1.css"
+      href={ticketShop.cssUrl}
     />
 
     <title>RAGEFEST</title>
@@ -94,10 +95,6 @@ import "../styles/global.css";
 
     <EmailPopup />
 
-    <script
-      is:inline
-      type="text/javascript"
-      src="https://loop1tickets.com/widget/v1.en.js"
-    ></script>
+    <script is:inline type="text/javascript" src={ticketShop.jsUrl}></script>
   </body>
 </html>

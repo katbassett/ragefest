@@ -1,4 +1,6 @@
 ---
+import { ticketShop, useDemoShop } from "../../data/ticket-shop";
+
 /* Full ladder kept for later — flip showFullLadder when ready */
 const showFullLadder = false;
 
@@ -145,26 +147,32 @@ const tiers = showFullLadder
       }
     </div>
 
-    <div class="tickets-widget" data-loop1-widget>
+    <div
+      class="tickets-widget"
+      data-loop1-widget
+      data-shop-list={ticketShop.productListUrl}
+      data-shop-event={ticketShop.eventUrl}
+    >
+      {
+        useDemoShop && (
+          <p class="tickets-widget__preview">
+            Preview widget (pretix demo) — not live Ragefest tickets
+          </p>
+        )
+      }
+
       <p class="tickets-widget__status" data-loop1-status>
         Checking the ticket shop…
       </p>
 
-      <div
-        class="pretix-widget-compat"
-        event="https://loop1tickets.com/Ragefest/Ragefest2027/"
-      ></div>
+      <div class="pretix-widget-compat" event={ticketShop.eventUrl}></div>
 
       <noscript>
         <div class="pretix-widget">
           <div class="pretix-widget-info-message">
             JavaScript is disabled in your browser. To access our ticket shop
             without JavaScript, please{" "}
-            <a
-              target="_blank"
-              rel="noopener"
-              href="https://loop1tickets.com/Ragefest/Ragefest2027/"
-            >
+            <a target="_blank" rel="noopener" href={ticketShop.eventUrl}>
               click here
             </a>.
           </div>
@@ -235,9 +243,12 @@ const tiers = showFullLadder
     if (root.dataset.statusReady === "true") return;
     root.dataset.statusReady = "true";
 
-    fetch(
-      "https://loop1tickets.com/Ragefest/Ragefest2027/widget/product_list",
-    )
+    const shopList = root.dataset.shopList;
+    const shopEvent = root.dataset.shopEvent || "https://loop1tickets.com/Ragefest/Ragefest2027/";
+
+    if (!shopList) return;
+
+    fetch(shopList)
       .then((response) => response.json())
       .then((data) => {
         if (data && data.error) {
@@ -253,7 +264,9 @@ const tiers = showFullLadder
       .catch(() => {
         root.dataset.shop = "error";
         status.innerHTML =
-          'The ticket shop couldn’t load here. <a href="https://loop1tickets.com/Ragefest/Ragefest2027/" target="_blank" rel="noopener">Open it in a new tab</a>.';
+          'The ticket shop couldn’t load here. <a href="' +
+          shopEvent +
+          '" target="_blank" rel="noopener">Open it in a new tab</a>.';
       });
   };
 
@@ -813,6 +826,18 @@ const tiers = showFullLadder
     width: 100%;
     margin-top: 1.35rem;
     overflow: visible;
+  }
+
+  .tickets-widget__preview {
+    margin: 0 0 0.85rem;
+
+    color: var(--rf-yellow, #f5ff00);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 
   .tickets-widget__status {
