@@ -124,9 +124,11 @@ const tiers = showFullLadder
               <span class="ticket-card__orb ticket-card__orb--two"></span>
             </div>
 
-            {tier.featured && (
-              <p class="ticket-card__flag">Believers move first</p>
-            )}
+            {
+              tier.featured && showFullLadder && (
+                <p class="ticket-card__flag">Believers move first</p>
+              )
+            }
 
             <div class="ticket-card__main">
               <div class="ticket-card__top">
@@ -442,8 +444,8 @@ const tiers = showFullLadder
     gap: clamp(1.1rem, 2.2vw, 1.5rem);
 
     min-height: 0;
-    padding: clamp(1.5rem, 2.8vw, 2.15rem) clamp(1.5rem, 3vw, 2.4rem)
-      clamp(1.65rem, 3vw, 2.25rem);
+    padding: clamp(2rem, 4.2vw, 2.85rem) clamp(2rem, 4.6vw, 3.25rem)
+      clamp(2.1rem, 4.2vw, 2.95rem);
 
     border-radius: 1.35rem;
 
@@ -491,7 +493,7 @@ const tiers = showFullLadder
   }
 
   .ticket-card--banner .ticket-card__name {
-    font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+    font-size: clamp(2.45rem, 4.8vw, 3.85rem);
   }
 
   .ticket-card--banner .ticket-card__flag {
@@ -598,6 +600,68 @@ const tiers = showFullLadder
   .ticket-card--purchase:hover,
   .ticket-card--purchase.is-visible:hover {
     transform: none;
+  }
+
+  .ticket-card--purchase {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(19.5rem, 24.5rem);
+    align-items: center;
+    column-gap: clamp(1.35rem, 3vw, 2.5rem);
+    row-gap: 1.15rem;
+  }
+
+  .ticket-card--purchase .ticket-card__flag {
+    top: 1.45rem;
+    left: 1.45rem;
+    right: auto;
+  }
+
+  .ticket-card--purchase .ticket-card__main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .ticket-card--purchase .ticket-card__top {
+    height: auto;
+    justify-content: flex-start;
+    padding: 0 0 1rem;
+    border-right: none;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.35);
+  }
+
+  .ticket-card--purchase .ticket-card__features {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.62rem;
+  }
+
+  .ticket-card--purchase .ticket-card__tagline,
+  .ticket-card--purchase .ticket-card__features li {
+    color: #ffffff;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: clamp(0.92rem, 1.55vw, 1.08rem);
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    line-height: 1.45;
+    text-transform: uppercase;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+
+  .ticket-card--purchase .ticket-card__tagline {
+    font-size: clamp(0.86rem, 1.45vw, 0.98rem);
+  }
+
+  .ticket-card--purchase .ticket-card__features li {
+    gap: 0.7rem;
+  }
+
+  .ticket-card--purchase .ticket-card__features li::before {
+    margin-top: 0.12em;
+    font-size: 0.72em;
   }
 
   /* Ladder colors — sun → strobe arc */
@@ -880,8 +944,28 @@ const tiers = showFullLadder
     overflow-x: clip;
   }
 
-  .ticket-card--purchase .tickets-widget {
-    background: rgba(5, 5, 5, 0.58);
+  .ticket-card--purchase .tickets-checkout {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    width: 100%;
+    margin: 0;
+    padding: 0.2rem 0.2rem 0.2rem clamp(1.35rem, 2.8vw, 2.15rem);
+    overflow: visible;
+    border-left: 1px dashed rgba(255, 255, 255, 0.38);
+  }
+
+  .ticket-card--purchase .tickets-checkout__title {
+    width: 100%;
+    padding-left: 0.22em;
+    text-align: center;
+  }
+
+  .ticket-card--purchase .tickets-widget :global(.pretix-widget-item-title),
+  .ticket-card--purchase .tickets-widget :global(.pretix-widget-pricebox),
+  .ticket-card--purchase .tickets-widget :global(.pretix-widget-item-price-col) {
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
   }
 
   .tickets-checkout__title {
@@ -1513,6 +1597,20 @@ const tiers = showFullLadder
     .ticket-card--banner .ticket-card__cta {
       width: 100%;
     }
+
+    .ticket-card--purchase {
+      grid-template-columns: 1fr;
+    }
+
+    .ticket-card--purchase .tickets-checkout {
+      padding: 1.05rem 0 0;
+      border-left: none;
+      border-top: 1px dashed rgba(255, 255, 255, 0.38);
+    }
+
+    .ticket-card--purchase .tickets-checkout__title {
+      text-align: center;
+    }
   }
 
   @media (max-width: 680px) {
@@ -1551,6 +1649,10 @@ const tiers = showFullLadder
 
     .tickets-widget {
       padding: 0.95rem 0.95rem 1.25rem;
+    }
+
+    .ticket-card--purchase .tickets-widget {
+      padding: 0;
     }
 
     .tickets-widget :global(.pretix-widget-main-item-row) {
