@@ -280,7 +280,7 @@ const rightNavigationItems = navigation.slice(2, 4);
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
-    column-gap: clamp(2.75rem, 7vw, 6.5rem);
+    column-gap: clamp(1.5rem, 4vw, 3rem);
     width: 100%;
   }
 
@@ -293,10 +293,12 @@ const rightNavigationItems = navigation.slice(2, 4);
 
   .desktop-nav--left {
     justify-content: flex-start;
+    padding-inline-end: clamp(1.5rem, 4vw, 3.25rem);
   }
 
   .desktop-nav--right {
     justify-content: flex-end;
+    padding-inline-start: clamp(1.5rem, 4vw, 3.25rem);
   }
 
   .desktop-nav-link {
