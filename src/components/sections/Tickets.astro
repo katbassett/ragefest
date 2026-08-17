@@ -96,7 +96,7 @@ const tiers = showFullLadder
 <section id="tickets" class="tickets-section">
   <div class="tickets-shell">
     <header class="tickets-head">
-      <p class="tickets-kicker">Tickets · Founding Access</p>
+      <p class="tickets-kicker">Tickets • Founding Access</p>
 
       <h2 class="tickets-title">
         <span class="tickets-title__main">Buy Into</span>
@@ -147,46 +147,50 @@ const tiers = showFullLadder
       }
     </div>
 
-    <div
-      class="tickets-widget"
-      data-loop1-widget
-      data-shop-list={ticketShop.productListUrl}
-      data-shop-event={ticketShop.eventUrl}
-    >
-      {
-        useDemoShop && (
-          <p class="tickets-widget__preview">
-            Preview widget (pretix demo) — not live Ragefest tickets
-          </p>
-        )
-      }
+    <div class="tickets-checkout">
+      <h3 class="tickets-checkout__title">Secure Your Access</h3>
 
-      <p class="tickets-widget__status" data-loop1-status>
-        Checking the ticket shop…
-      </p>
+      <div
+        class="tickets-widget"
+        data-loop1-widget
+        data-shop-list={ticketShop.productListUrl}
+        data-shop-event={ticketShop.eventUrl}
+      >
+        {
+          useDemoShop && (
+            <p class="tickets-widget__preview">
+              Preview widget (pretix demo) — not live Ragefest tickets
+            </p>
+          )
+        }
 
-      <div class="pretix-widget-compat" event={ticketShop.eventUrl}></div>
+        <p class="tickets-widget__status" data-loop1-status>
+          Checking the ticket shop…
+        </p>
 
-      <noscript>
-        <div class="pretix-widget">
-          <div class="pretix-widget-info-message">
-            JavaScript is disabled in your browser. To access our ticket shop
-            without JavaScript, please{" "}
-            <a target="_blank" rel="noopener" href={ticketShop.eventUrl}>
-              click here
-            </a>.
+        <div class="pretix-widget-compat" event={ticketShop.eventUrl}></div>
+
+        <noscript>
+          <div class="pretix-widget">
+            <div class="pretix-widget-info-message">
+              JavaScript is disabled in your browser. To access our ticket shop
+              without JavaScript, please{" "}
+              <a target="_blank" rel="noopener" href={ticketShop.eventUrl}>
+                click here
+              </a>.
+            </div>
           </div>
-        </div>
-      </noscript>
-    </div>
+        </noscript>
+      </div>
 
-    <p class="tickets-note">
-      {
-        showFullLadder
-          ? "On-sale dates set at launch — Founding Access opens first. Pricing announced with tickets."
-          : "Founding Access is the first release. More tiers unlock later."
-      }
-    </p>
+      <p class="tickets-checkout__close">
+        <span class="tickets-checkout__close-lead">The first gate is open.</span>
+        <span>
+          Founding Access is available now. More tiers will reveal themselves
+          later.
+        </span>
+      </p>
+    </div>
   </div>
 </section>
 
@@ -270,8 +274,40 @@ const tiers = showFullLadder
       });
   };
 
+  const relabelLoop1Copy = (root: HTMLElement) => {
+    root.querySelectorAll(".pretix-widget-item-title").forEach((node) => {
+      const current = node.textContent?.trim() ?? "";
+      if (current === "VIP") node.textContent = "FOUNDING ACCESS";
+    });
+
+    root.querySelectorAll(".pretix-widget-action button").forEach((node) => {
+      if (!(node instanceof HTMLButtonElement)) return;
+      node.setAttribute("aria-label", "Buy Founding Access");
+    });
+  };
+
+  const initLoop1Presentation = () => {
+    const root = document.querySelector<HTMLElement>("[data-loop1-widget]");
+    if (!root || root.dataset.presentationReady === "true") return;
+    root.dataset.presentationReady = "true";
+
+    relabelLoop1Copy(root);
+
+    const observer = new MutationObserver(() => {
+      relabelLoop1Copy(root);
+    });
+
+    observer.observe(root, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+    });
+  };
+
   initLoop1ShopStatus();
+  initLoop1Presentation();
   document.addEventListener("astro:page-load", initLoop1ShopStatus);
+  document.addEventListener("astro:page-load", initLoop1Presentation);
 </script>
 
 <style>
@@ -301,7 +337,7 @@ const tiers = showFullLadder
     gap: 1rem;
 
     max-width: 46rem;
-    margin-bottom: clamp(2rem, 4vw, 3rem);
+    margin-bottom: clamp(2.5rem, 5vw, 3.75rem);
   }
 
   .tickets-kicker {
@@ -819,13 +855,49 @@ const tiers = showFullLadder
     width: 100%;
   }
 
+  .tickets-checkout {
+    width: min(100%, 48.75rem);
+    margin: clamp(1.75rem, 3.5vw, 2.5rem) auto 0;
+    overflow-x: clip;
+  }
+
+  .tickets-checkout__title {
+    margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+
+    color: #ffffff;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 0 2px 7px rgba(0, 0, 0, 0.43);
+  }
+
   .tickets-widget {
     position: relative;
     z-index: 2;
 
     width: 100%;
-    margin-top: 1.35rem;
-    overflow: visible;
+    overflow-x: clip;
+    overflow-y: visible;
+    box-sizing: border-box;
+
+    padding: clamp(1.05rem, 2.6vw, 1.4rem) clamp(1.05rem, 2.8vw, 1.5rem) clamp(1.35rem, 3vw, 1.75rem);
+
+    color: #ffffff;
+    background: rgba(5, 5, 5, 0.76);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 1rem;
+
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 18px 40px rgba(0, 0, 0, 0.38);
+
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
   }
 
   .tickets-widget__preview {
@@ -841,7 +913,7 @@ const tiers = showFullLadder
   }
 
   .tickets-widget__status {
-    margin: 0 0 1rem;
+    margin: 0;
 
     color: rgba(255, 255, 255, 0.78);
 
@@ -849,6 +921,11 @@ const tiers = showFullLadder
     font-size: 0.88rem;
     font-weight: 600;
     line-height: 1.5;
+    text-align: center;
+  }
+
+  .tickets-widget__status:not([hidden]) {
+    margin-bottom: 0.85rem;
   }
 
   .tickets-widget__status a {
@@ -856,27 +933,392 @@ const tiers = showFullLadder
   }
 
   .tickets-widget[data-shop="disabled"] :global(.pretix-widget),
-  .tickets-widget[data-shop="disabled"] :global(.pretix-widget-compat) {
+  .tickets-widget[data-shop="disabled"] :global(.pretix-widget-compat),
+  .tickets-widget[data-shop="disabled"] :global(.pretix-widget-wrapper) {
     display: none;
   }
 
   .tickets-widget :global(pretix-widget),
+  .tickets-widget :global(.pretix-widget-wrapper),
   .tickets-widget :global(.pretix-widget),
   .tickets-widget :global(.pretix-widget-compat) {
     display: block;
     width: 100%;
+    max-width: 100%;
   }
 
-  .tickets-note {
-    max-width: 48rem;
-    margin: 1.35rem 0 0;
+  /* Product list is in-page Vue — style chrome only. Checkout iframe is untouched. */
+  .tickets-widget :global(.pretix-widget) {
+    margin: 0;
+    padding: 0;
+    min-height: 0;
+    overflow: visible;
+
+    color: #ffffff;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+  }
+
+  .tickets-widget :global(.pretix-widget-category-name),
+  .tickets-widget :global(.pretix-widget-event-header),
+  .tickets-widget :global(.pretix-widget-event-details),
+  .tickets-widget :global(.pretix-widget-event-location),
+  .tickets-widget :global(.pretix-widget-event-description) {
+    display: none;
+  }
+
+  .tickets-widget :global(.pretix-widget-category) {
+    margin: 0;
+  }
+
+  .tickets-widget :global(.pretix-widget-item-row),
+  .tickets-widget :global(.pretix-widget-category) {
+    clear: none;
+  }
+
+  .tickets-widget :global(.pretix-widget-main-item-row) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "info price"
+      "qty qty";
+    gap: 0.35rem 1rem;
+    align-items: start;
+
+    width: 100%;
+    padding: 0 0 0.95rem;
+    margin: 0;
+  }
+
+  .tickets-widget :global(.pretix-widget-item-info-col),
+  .tickets-widget :global(.pretix-widget-item-price-col),
+  .tickets-widget :global(.pretix-widget-item-availability-col),
+  .tickets-widget :global(.pretix-widget.pretix-widget-mobile .pretix-widget-item-info-col),
+  .tickets-widget :global(.pretix-widget.pretix-widget-mobile .pretix-widget-item-price-col),
+  .tickets-widget :global(.pretix-widget.pretix-widget-mobile .pretix-widget-item-availability-col) {
+    float: none;
+    width: auto;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .tickets-widget :global(.pretix-widget-item-info-col) {
+    grid-area: info;
+    min-width: 0;
+  }
+
+  .tickets-widget :global(.pretix-widget-item-price-col) {
+    grid-area: price;
+    text-align: right;
+  }
+
+  .tickets-widget :global(.pretix-widget-item-availability-col) {
+    grid-area: qty;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;
+
+    padding-top: 0.9rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .tickets-widget :global(.pretix-widget-item-availability-col)::before {
+    content: "Quantity";
+
+    color: rgba(255, 255, 255, 0.72);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .tickets-widget :global(.pretix-widget-clear) {
+    display: none;
+  }
+
+  .tickets-widget :global(.pretix-widget-item-title) {
+    display: block;
+
+    color: #ffffff;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .tickets-widget :global(.pretix-widget-item-title)::after {
+    content: "General Admission";
+    display: block;
+    margin-top: 0.28rem;
+
+    color: rgba(255, 255, 255, 0.68);
+
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+    text-transform: none;
+  }
+
+  .tickets-widget :global(.pretix-widget-item-description),
+  .tickets-widget :global(.pretix-widget-item-meta) {
+    margin: 0.28rem 0 0;
+
+    color: rgba(255, 255, 255, 0.68);
+
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .tickets-widget :global(.pretix-widget-pricebox),
+  .tickets-widget :global(.pretix-widget-item-price-col) {
+    color: #ffffff;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+
+  .tickets-widget :global(.pretix-widget-pricebox-tax) {
+    display: block;
+    margin-top: 0.2rem;
 
     color: rgba(255, 255, 255, 0.62);
+
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .tickets-widget :global(.pretix-widget-availability-box) {
+    margin: 0;
+  }
+
+  .tickets-widget :global(.pretix-widget-item-count-group) {
+    display: inline-flex;
+    align-items: stretch;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 0.7rem;
+    background: rgba(0, 0, 0, 0.38);
+  }
+
+  .tickets-widget :global(.pretix-widget-item-count-dec),
+  .tickets-widget :global(.pretix-widget-item-count-inc),
+  .tickets-widget :global(.pretix-widget button.pretix-widget-btn-default) {
+    width: 2.75rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    margin: 0;
+    padding: 0;
+
+    color: #ffffff;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .tickets-widget :global(.pretix-widget-item-count-dec:hover),
+  .tickets-widget :global(.pretix-widget-item-count-inc:hover),
+  .tickets-widget :global(.pretix-widget button.pretix-widget-btn-default:hover),
+  .tickets-widget :global(.pretix-widget-item-count-dec:focus-visible),
+  .tickets-widget :global(.pretix-widget-item-count-inc:focus-visible) {
+    color: var(--rf-yellow, #f5ff00);
+    background: rgba(255, 255, 255, 0.08);
+    outline: none;
+  }
+
+  .tickets-widget :global(.pretix-widget-item-count-dec:focus-visible),
+  .tickets-widget :global(.pretix-widget-item-count-inc:focus-visible),
+  .tickets-widget :global(.pretix-widget-item-count-multiple:focus-visible) {
+    outline: 2px solid var(--rf-yellow, #f5ff00);
+    outline-offset: -2px;
+  }
+
+  .tickets-widget :global(.pretix-widget-item-count-multiple),
+  .tickets-widget :global(.pretix-widget input[type="number"].pretix-widget-item-count-multiple) {
+    width: 2.85rem;
+    min-height: 2.75rem;
+    margin: 0;
+    padding: 0;
+
+    color: #ffffff;
+    background: transparent;
+    border: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.16);
+    border-right: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 0;
+    box-shadow: none;
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1;
+    text-align: center;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  .tickets-widget :global(.pretix-widget-item-count-multiple::-webkit-outer-spin-button),
+  .tickets-widget :global(.pretix-widget-item-count-multiple::-webkit-inner-spin-button) {
+    margin: 0;
+    -webkit-appearance: none;
+  }
+
+  .tickets-widget :global(.pretix-widget-action),
+  .tickets-widget :global(.pretix-widget.pretix-widget-mobile .pretix-widget-action) {
+    float: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .tickets-widget :global(.pretix-widget-action button) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 3.05rem;
+    margin: 0;
+    padding: 0.85rem 1rem;
+
+    color: transparent;
+    background: linear-gradient(135deg, var(--rf-pink) 0%, var(--rf-purple) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 0.2rem;
+    box-shadow:
+      6px 6px 0 var(--rf-pink-dark),
+      0 12px 28px rgba(255, 32, 131, 0.28);
+
+    font-family: var(--font-sans, "Montserrat", sans-serif);
+    font-size: 0;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    line-height: 0;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .tickets-widget :global(.pretix-widget-action button)::after {
+    content: "Buy Founding Access";
+
+    color: #ffffff;
+
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .tickets-widget :global(.pretix-widget-action button:hover:not(:disabled)),
+  .tickets-widget :global(.pretix-widget-action button:focus-visible:not(:disabled)) {
+    color: transparent;
+    background: linear-gradient(135deg, var(--rf-orange) 0%, var(--rf-pink) 55%, var(--rf-purple) 100%);
+    transform: translate(2px, 2px);
+    box-shadow:
+      4px 4px 0 var(--rf-pink-dark),
+      0 10px 22px rgba(255, 32, 131, 0.32);
+  }
+
+  .tickets-widget :global(.pretix-widget-action button:focus-visible) {
+    outline: 2px solid var(--rf-yellow, #f5ff00);
+    outline-offset: 3px;
+  }
+
+  .tickets-widget :global(.pretix-widget-action button:disabled),
+  .tickets-widget :global(.pretix-widget-action button[disabled]) {
+    cursor: not-allowed;
+    opacity: 0.48;
+    filter: saturate(0.7);
+    box-shadow: 4px 4px 0 rgba(185, 19, 90, 0.35);
+    transform: none;
+  }
+
+  .tickets-widget :global(.pretix-widget-attribution) {
+    margin: 0.75rem 0 0;
+    padding: 0;
+
+    color: rgba(255, 255, 255, 0.38);
+
+    font-size: 0.62rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .tickets-widget :global(.pretix-widget-attribution a) {
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .tickets-widget :global(.pretix-widget-info-message),
+  .tickets-widget :global(.pretix-widget-error-message) {
+    margin: 0 0 0.85rem;
+    padding: 0.7rem 0.8rem;
+
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 0.7rem;
+
+    font-size: 0.8rem;
+    line-height: 1.45;
+  }
+
+  .tickets-widget :global(.pretix-widget a) {
+    color: var(--rf-yellow, #f5ff00);
+  }
+
+  .tickets-checkout__close {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+
+    max-width: 36rem;
+    margin: clamp(1.5rem, 2.5vw, 2rem) auto 0;
+
+    color: rgba(255, 255, 255, 0.68);
 
     font-family: var(--font-sans, "Montserrat", sans-serif);
     font-size: 0.82rem;
     font-weight: 500;
     line-height: 1.5;
+    text-align: center;
+  }
+
+  .tickets-checkout__close-lead {
+    color: #ffffff;
+
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
   }
 
   @keyframes ticket-scan {
@@ -1018,6 +1460,38 @@ const tiers = showFullLadder
       min-height: 0;
       animation: ticket-gradient-shift 12s ease-in-out infinite;
     }
+
+    .tickets-checkout {
+      width: 100%;
+    }
+
+    .tickets-widget {
+      padding: 0.95rem 0.95rem 1.25rem;
+    }
+
+    .tickets-widget :global(.pretix-widget-main-item-row) {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        "info"
+        "price"
+        "qty";
+      gap: 0.55rem;
+    }
+
+    .tickets-widget :global(.pretix-widget-item-price-col) {
+      text-align: left;
+      font-size: 1.35rem;
+    }
+
+    .tickets-widget :global(.pretix-widget-item-availability-col) {
+      width: 100%;
+    }
+
+    .tickets-widget :global(.pretix-widget-action button) {
+      box-shadow:
+        4px 4px 0 var(--rf-pink-dark),
+        0 10px 22px rgba(255, 32, 131, 0.28);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1033,6 +1507,11 @@ const tiers = showFullLadder
 
     .ticket-card {
       opacity: 1;
+      transform: none;
+    }
+
+    .tickets-widget :global(.pretix-widget-action button:hover:not(:disabled)),
+    .tickets-widget :global(.pretix-widget-action button:focus-visible:not(:disabled)) {
       transform: none;
     }
   }
