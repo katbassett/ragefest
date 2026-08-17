@@ -139,25 +139,39 @@ const tiers = showFullLadder
                   <li>{feature}</li>
                 ))}
               </ul>
-
-              <div class="ticket-card__foot">
-                <a href="#signal" class="join-waitlist-btn ticket-card__cta">
-                  <span>Join the Waitlist</span>
-                </a>
-              </div>
             </div>
           </article>
         ))
       }
     </div>
 
+    <div class="tickets-widget">
+      <pretix-widget event="https://loop1tickets.com/Ragefest/Ragefest2027/"
+      ></pretix-widget>
+      <noscript>
+        <div class="pretix-widget">
+          <div class="pretix-widget-info-message">
+            JavaScript is disabled in your browser. To access our ticket shop
+            without JavaScript, please{" "}
+            <a
+              target="_blank"
+              rel="noopener"
+              href="https://loop1tickets.com/Ragefest/Ragefest2027/"
+            >
+              click here
+            </a>.
+          </div>
+        </div>
+      </noscript>
+    </div>
+
     <p class="tickets-note">
       {
         showFullLadder
           ? "On-sale dates set at launch — Founding Access opens first. Pricing announced with tickets."
-          : "Founding Access is the first release. More tiers unlock later, so join the waitlist to stay first in line."
-        }
-      </p>
+          : "Founding Access is the first release. More tiers unlock later."
+      }
+    </p>
   </div>
 </section>
 
@@ -750,6 +764,21 @@ const tiers = showFullLadder
   }
 
   .ticket-card__cta {
+    width: 100%;
+  }
+
+  .tickets-widget {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    margin-top: 1.35rem;
+    overflow: visible;
+  }
+
+  .tickets-widget :global(pretix-widget),
+  .tickets-widget :global(.pretix-widget) {
+    display: block;
     width: 100%;
   }
 
