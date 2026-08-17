@@ -278,20 +278,31 @@ const rightNavigationItems = navigation.slice(2, 4);
 
   .desktop-header {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) auto repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
-    column-gap: clamp(1.25rem, 2.5vw, 2.75rem);
+    column-gap: clamp(2rem, 5vw, 4.5rem);
     width: 100%;
   }
 
   .desktop-nav {
-    display: contents;
+    display: flex;
+    align-items: center;
+    gap: clamp(1.75rem, 5vw, 4.25rem);
+    min-width: 0;
+  }
+
+  .desktop-nav--left {
+    justify-content: flex-start;
+  }
+
+  .desktop-nav--right {
+    justify-content: flex-end;
   }
 
   .desktop-nav-link {
     position: relative;
 
-    justify-self: center;
+    flex: 0 0 auto;
 
     color: var(--rf-purple);
 
@@ -528,7 +539,11 @@ const rightNavigationItems = navigation.slice(2, 4);
 
   @media (min-width: 1024px) and (max-width: 1279px) {
     .desktop-header {
-      column-gap: 1rem;
+      column-gap: 1.5rem;
+    }
+
+    .desktop-nav {
+      gap: 1.5rem;
     }
 
     .desktop-nav-link {
