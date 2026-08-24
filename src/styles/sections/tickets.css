@@ -1,4 +1,4 @@
-/* tickets.css — extracted from components/sections/Tickets.astro */
+/* tickets.css — Loop1 Founding Access checkout */
 
 .tickets-section {
   position: relative;
@@ -12,11 +12,16 @@
 
   color: #ffffff;
   background: transparent;
+  overflow-x: hidden;
+  scroll-margin-top: 5.5rem;
 }
 
 .tickets-shell {
   width: min(calc(100% - clamp(1.25rem, 5vw, 4rem)), 76.25rem);
   margin-inline: auto;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .tickets-head {
@@ -26,7 +31,7 @@
   gap: 1rem;
 
   max-width: 46rem;
-  margin-bottom: clamp(2rem, 4vw, 3rem);
+  margin-bottom: clamp(2.5rem, 5vw, 3.75rem);
 }
 
 .tickets-kicker {
@@ -114,10 +119,13 @@
 
 /* Launch: wide ticket rectangle */
 .ticket-card--banner {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.1rem, 2.2vw, 1.5rem);
 
-  min-height: clamp(15rem, 28vw, 19rem);
-  padding: clamp(1.5rem, 2.8vw, 2.15rem) clamp(1.5rem, 3vw, 2.4rem);
+  min-height: 0;
+  padding: clamp(2rem, 4.2vw, 2.85rem) clamp(2rem, 4.6vw, 3.25rem)
+    clamp(2.1rem, 4.2vw, 2.95rem);
 
   border-radius: 1.35rem;
 
@@ -130,34 +138,11 @@
   z-index: 1;
 
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.15fr) auto;
-  grid-template-areas:
-    "top features cta"
-    "top features cta";
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.15fr);
+  grid-template-areas: "top features";
   align-items: center;
   column-gap: clamp(1.25rem, 3vw, 2.5rem);
   row-gap: 1rem;
-
-  height: 100%;
-}
-
-.ticket-card--banner .ticket-card__tagline {
-  color: #ffffff;
-
-  font-family: var(--font-sans, "Montserrat", sans-serif);
-  font-size: clamp(0.86rem, 1.45vw, 0.98rem);
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  line-height: 1.45;
-  text-transform: uppercase;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-}
-
-.ticket-card--banner .ticket-card__features li {
-  font-size: clamp(0.95rem, 1.5vw, 1.08rem);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  text-transform: none;
 }
 
 .ticket-card--banner .ticket-card__top {
@@ -188,7 +173,7 @@
 }
 
 .ticket-card--banner .ticket-card__name {
-  font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+  font-size: clamp(2.45rem, 4.8vw, 3.85rem);
 }
 
 .ticket-card--banner .ticket-card__flag {
@@ -290,6 +275,156 @@
 
 .ticket-card--banner.is-visible:hover {
   transform: translate3d(0, -0.25rem, 0) scale(1.01);
+}
+
+.tickets-purchase {
+  position: relative;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 24.5rem);
+  align-items: center;
+  column-gap: clamp(1.35rem, 3vw, 2.5rem);
+  row-gap: 1.15rem;
+
+  min-width: 0;
+  padding: clamp(2rem, 4.2vw, 2.85rem) clamp(2rem, 4.6vw, 3.25rem)
+    clamp(2.1rem, 4.2vw, 2.95rem);
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 1.35rem;
+  color: #ffffff;
+
+  background: linear-gradient(
+    115deg,
+    var(--rf-yellow) 0%,
+    var(--rf-orange) 38%,
+    var(--rf-pink) 72%,
+    var(--rf-purple) 100%
+  );
+  background-size: 180% 180%;
+  animation: ticket-gradient-shift 10s ease-in-out infinite;
+
+  box-shadow:
+    0 0 0 1px rgba(255, 32, 131, 0.28),
+    0 22px 48px rgba(255, 32, 131, 0.2);
+
+  opacity: 0;
+  transform: translate3d(0, 2rem, 0);
+
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tickets-purchase.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.tickets-purchase__fx {
+  z-index: 0;
+}
+
+.tickets-purchase .ticket-card,
+.tickets-purchase .tickets-checkout {
+  position: relative;
+  z-index: 1;
+}
+
+.tickets-purchase .ticket-card {
+  min-height: 0;
+  padding: 0;
+  overflow: visible;
+
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  animation: none;
+
+  opacity: 1;
+  transform: none;
+}
+
+.tickets-purchase .ticket-card .ticket-card__fx {
+  display: none;
+}
+
+.tickets-purchase .ticket-card__main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.tickets-purchase .ticket-card__top {
+  height: auto;
+  justify-content: flex-start;
+  padding: 0 0 1rem;
+  border-right: none;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.35);
+}
+
+.tickets-purchase .ticket-card__features {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.62rem;
+}
+
+.tickets-purchase .ticket-card__tagline {
+  color: #ffffff;
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: clamp(0.86rem, 1.45vw, 0.98rem);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 1.45;
+  text-transform: uppercase;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.tickets-purchase .ticket-card__features li {
+  gap: 0.7rem;
+
+  font-size: clamp(0.95rem, 1.5vw, 1.08rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+.tickets-purchase .ticket-card__features li::before {
+  margin-top: 0.12em;
+  font-size: 0.72em;
+}
+
+.tickets-purchase .tickets-checkout {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0.2rem 0.2rem 0.2rem clamp(1.35rem, 2.8vw, 2.15rem);
+  overflow: visible;
+  border-left: 1px dashed rgba(255, 255, 255, 0.38);
+}
+
+.tickets-purchase .tickets-widget {
+  padding: 0;
+  overflow: visible;
+
+  color: #ffffff;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 /* Ladder colors — sun → strobe arc */
@@ -563,16 +698,576 @@
   width: 100%;
 }
 
-.tickets-note {
-  max-width: 48rem;
-  margin: 1.35rem 0 0;
+.tickets-checkout {
+  position: relative;
+  z-index: 2;
+
+  width: min(100%, 50rem);
+  margin: 0 auto;
+  min-width: 0;
+  overflow-x: visible;
+}
+
+.tickets-purchase .tickets-widget .pretix-widget-item-title,
+.tickets-purchase .tickets-widget .pretix-widget-pricebox,
+.tickets-purchase .tickets-widget .pretix-widget-item-price-col {
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+}
+
+.tickets-checkout__title {
+  margin: 0 0 clamp(0.65rem, 1.4vw, 0.9rem);
+
+  color: #ffffff;
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 0.84rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  line-height: 1.2;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 0 2px 7px rgba(0, 0, 0, 0.43);
+}
+
+.tickets-widget {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  min-width: 0;
+  overflow-x: visible;
+  overflow-y: visible;
+  box-sizing: border-box;
+
+  padding: clamp(1.05rem, 2.6vw, 1.4rem) clamp(1.05rem, 2.8vw, 1.5rem) clamp(1.35rem, 3vw, 1.75rem);
+
+  color: #ffffff;
+  background: rgba(5, 5, 5, 0.76);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 1rem;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 18px 40px rgba(0, 0, 0, 0.38);
+
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.tickets-widget__preview {
+  margin: 0 0 0.85rem;
+
+  color: var(--rf-yellow, #f5ff00);
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.tickets-widget__status {
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.tickets-widget__status:not([hidden]) {
+  margin-bottom: 0.85rem;
+}
+
+.tickets-widget__status a {
+  color: var(--rf-yellow, #f5ff00);
+}
+
+.tickets-widget[data-shop="disabled"] .pretix-widget,
+.tickets-widget[data-shop="disabled"] .pretix-widget-compat,
+.tickets-widget[data-shop="disabled"] .pretix-widget-wrapper {
+  display: none;
+}
+
+.tickets-widget pretix-widget,
+.tickets-widget .pretix-widget-wrapper,
+.tickets-widget .pretix-widget,
+.tickets-widget .pretix-widget-compat {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Product list is in-page Vue — style chrome only. Checkout iframe is untouched. */
+.tickets-widget .pretix-widget {
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+  overflow: visible;
+
+  color: #ffffff;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+}
+
+.tickets-widget .pretix-widget-category-name,
+.tickets-widget .pretix-widget-event-header,
+.tickets-widget .pretix-widget-event-details,
+.tickets-widget .pretix-widget-event-location,
+.tickets-widget .pretix-widget-event-description {
+  display: none;
+}
+
+.tickets-widget .pretix-widget-category {
+  margin: 0;
+}
+
+.tickets-widget .pretix-widget-item-row,
+.tickets-widget .pretix-widget-category {
+  clear: none;
+}
+
+.tickets-widget .pretix-widget-main-item-row,
+.tickets-widget .pretix-widget-item-row,
+.tickets-widget .pretix-widget-action,
+.tickets-widget .pretix-widget.pretix-widget-mobile .pretix-widget-action {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.tickets-widget .pretix-widget-main-item-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "info price"
+    "qty qty";
+  gap: 0.35rem 1rem;
+  align-items: start;
+
+  width: 100%;
+  padding: 0 0 0.95rem;
+  margin: 0;
+}
+
+.tickets-widget .pretix-widget-item-info-col,
+.tickets-widget .pretix-widget-item-price-col,
+.tickets-widget .pretix-widget-item-availability-col,
+.tickets-widget .pretix-widget.pretix-widget-mobile .pretix-widget-item-info-col,
+.tickets-widget .pretix-widget.pretix-widget-mobile .pretix-widget-item-price-col,
+.tickets-widget .pretix-widget.pretix-widget-mobile .pretix-widget-item-availability-col {
+  float: none;
+  width: auto;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.tickets-widget .pretix-widget-item-info-col {
+  grid-area: info;
+  min-width: 0;
+}
+
+.tickets-widget .pretix-widget-item-price-col {
+  grid-area: price;
+  text-align: right;
+}
+
+.tickets-widget .pretix-widget-item-availability-col {
+  grid-area: qty;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.tickets-widget .pretix-widget-item-availability-col::before {
+  content: "Quantity";
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.tickets-widget .pretix-widget-clear {
+  display: none;
+}
+
+.tickets-widget .pretix-widget-item-title {
+  display: block;
+
+  color: #ffffff;
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.tickets-widget .pretix-widget-item-title::after {
+  content: "General Admission";
+  display: block;
+  margin-top: 0.28rem;
+
+  color: rgba(255, 255, 255, 0.68);
+
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  text-transform: none;
+}
+
+.tickets-widget .pretix-widget-item-description,
+.tickets-widget .pretix-widget-item-meta {
+  margin: 0.28rem 0 0;
+
+  color: rgba(255, 255, 255, 0.68);
+
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.tickets-widget .pretix-widget-pricebox,
+.tickets-widget .pretix-widget-item-price-col {
+  color: #ffffff;
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.tickets-widget .pretix-widget-pricebox-tax {
+  display: block;
+  margin-top: 0.2rem;
 
   color: rgba(255, 255, 255, 0.62);
+
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tickets-widget .pretix-widget-availability-box {
+  margin: 0;
+}
+
+.tickets-widget .pretix-widget-item-count-group {
+  display: inline-flex;
+  align-items: stretch;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 0.7rem;
+  background: rgba(0, 0, 0, 0.38);
+}
+
+.tickets-widget .pretix-widget-item-count-dec,
+.tickets-widget .pretix-widget-item-count-inc,
+.tickets-widget .pretix-widget button.pretix-widget-btn-default {
+  width: 2.75rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  margin: 0;
+  padding: 0;
+
+  color: #ffffff;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.tickets-widget .pretix-widget-item-count-dec:hover,
+.tickets-widget .pretix-widget-item-count-inc:hover,
+.tickets-widget .pretix-widget button.pretix-widget-btn-default:hover,
+.tickets-widget .pretix-widget-item-count-dec:focus-visible,
+.tickets-widget .pretix-widget-item-count-inc:focus-visible {
+  color: var(--rf-yellow, #f5ff00);
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+}
+
+.tickets-widget .pretix-widget-item-count-dec:focus-visible,
+.tickets-widget .pretix-widget-item-count-inc:focus-visible,
+.tickets-widget .pretix-widget-item-count-multiple:focus-visible {
+  outline: 2px solid var(--rf-yellow, #f5ff00);
+  outline-offset: -2px;
+}
+
+.tickets-widget .pretix-widget-item-count-multiple,
+.tickets-widget .pretix-widget input[type="number"].pretix-widget-item-count-multiple {
+  width: 2.85rem;
+  min-height: 2.75rem;
+  margin: 0;
+  padding: 0;
+
+  color: #ffffff;
+  background: transparent;
+  border: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+  border-right: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0;
+  box-shadow: none;
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.tickets-widget .pretix-widget-item-count-multiple::-webkit-outer-spin-button,
+.tickets-widget .pretix-widget-item-count-multiple::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.tickets-widget .pretix-widget-action,
+.tickets-widget .pretix-widget.pretix-widget-mobile .pretix-widget-action {
+  float: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.tickets-widget .pretix-widget-action button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: calc(100% - 6px);
+  max-width: 100%;
+  min-width: 0;
+  min-height: 3.05rem;
+  margin: 0 6px 6px 0;
+  padding: 0.85rem 1rem;
+  box-sizing: border-box;
+
+  color: transparent;
+  background: linear-gradient(135deg, var(--rf-pink) 0%, var(--rf-purple) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.2rem;
+  box-shadow:
+    6px 6px 0 var(--rf-pink-dark),
+    0 12px 28px rgba(255, 32, 131, 0.28);
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 0;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 0;
+  text-transform: uppercase;
+  white-space: normal;
+}
+
+.tickets-widget .pretix-widget-action button::after {
+  content: "Buy Founding Access";
+
+  color: #ffffff;
+
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: normal;
+  text-align: center;
+}
+
+.tickets-widget .pretix-widget-action button:hover:not(:disabled),
+.tickets-widget .pretix-widget-action button:focus-visible:not(:disabled) {
+  color: transparent;
+  background: linear-gradient(135deg, var(--rf-orange) 0%, var(--rf-pink) 55%, var(--rf-purple) 100%);
+  transform: translate(2px, 2px);
+  box-shadow:
+    4px 4px 0 var(--rf-pink-dark),
+    0 10px 22px rgba(255, 32, 131, 0.32);
+}
+
+.tickets-widget .pretix-widget-action button:focus-visible {
+  outline: 2px solid var(--rf-yellow, #f5ff00);
+  outline-offset: 3px;
+}
+
+.tickets-widget .pretix-widget-action button:disabled,
+.tickets-widget .pretix-widget-action button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.48;
+  filter: saturate(0.7);
+  box-shadow: 4px 4px 0 rgba(185, 19, 90, 0.35);
+  transform: none;
+}
+
+.tickets-widget .pretix-widget-attribution {
+  margin: 0.75rem 0 0;
+  padding: 0;
+
+  color: rgba(255, 255, 255, 0.38);
+
+  font-size: 0.62rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.tickets-widget .pretix-widget-attribution a {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.tickets-widget .pretix-widget-error-message {
+  margin: 0 0 0.85rem;
+  padding: 0.7rem 0.8rem;
+
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.7rem;
+
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.tickets-widget .pretix-widget-event-form > form {
+  display: flex;
+  flex-direction: column;
+}
+
+.tickets-widget .pretix-widget-category {
+  order: 1;
+}
+
+.tickets-widget .pretix-widget-action,
+.tickets-widget .pretix-widget.pretix-widget-mobile .pretix-widget-action {
+  order: 2;
+}
+
+.tickets-widget .pretix-widget-info-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  order: 3;
+
+  width: 100%;
+  max-width: 22rem;
+  margin: 1.15rem auto 0;
+  padding: 0.55rem 0.75rem;
+
+  color: rgba(255, 255, 255, 0.72);
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.7rem;
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.tickets-widget .pretix-widget-resume-button,
+.tickets-widget .pretix-widget button.pretix-widget-resume-button {
+  float: none;
+  flex: none;
+  order: 1;
+
+  width: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0.38rem 0.7rem;
+
+  color: rgba(255, 255, 255, 0.88);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 999px;
+  box-shadow: none;
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tickets-widget .pretix-widget-resume-button:hover,
+.tickets-widget .pretix-widget-resume-button:focus-visible,
+.tickets-widget .pretix-widget button.pretix-widget-resume-button:hover,
+.tickets-widget .pretix-widget button.pretix-widget-resume-button:focus-visible {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: none;
+  transform: none;
+  outline: none;
+}
+
+.tickets-widget .pretix-widget button.pretix-widget-resume-button:focus-visible {
+  outline: 2px solid var(--rf-yellow, #f5ff00);
+  outline-offset: 2px;
+}
+
+.tickets-widget .pretix-widget a {
+  color: var(--rf-yellow, #f5ff00);
+}
+
+.tickets-checkout__close {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+
+  max-width: 36rem;
+  margin: clamp(1.5rem, 2.5vw, 2rem) auto 0;
+
+  color: rgba(255, 255, 255, 0.86);
 
   font-family: var(--font-sans, "Montserrat", sans-serif);
   font-size: 0.82rem;
   font-weight: 500;
   line-height: 1.5;
+  text-align: center;
+}
+
+.tickets-checkout__close-lead {
+  color: #ffffff;
+
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 @keyframes ticket-scan {
@@ -665,8 +1360,7 @@
     grid-template-columns: 1fr;
     grid-template-areas:
       "top"
-      "features"
-      "cta";
+      "features";
     align-items: start;
   }
 
@@ -683,12 +1377,165 @@
   .ticket-card--banner .ticket-card__cta {
     width: 100%;
   }
+
+  .tickets-purchase {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+
+    padding: 0;
+    overflow: visible;
+
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    animation: none;
+  }
+
+  .tickets-purchase__fx {
+    display: none;
+  }
+
+  .tickets-purchase .ticket-card .ticket-card__fx {
+    display: block;
+  }
+
+  .tickets-purchase .ticket-card {
+    width: 100%;
+    padding: clamp(1.35rem, 5vw, 1.85rem);
+    overflow: hidden;
+
+    background: linear-gradient(
+      115deg,
+      var(--rf-yellow) 0%,
+      var(--rf-orange) 38%,
+      var(--rf-pink) 72%,
+      var(--rf-purple) 100%
+    );
+    background-size: 180% 180%;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 1.35rem;
+    box-shadow:
+      0 0 0 1px rgba(255, 32, 131, 0.28),
+      0 22px 48px rgba(255, 32, 131, 0.2);
+    animation: ticket-gradient-shift 12s ease-in-out infinite;
+  }
+
+  .tickets-purchase .tickets-checkout {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 1.1rem 1rem 1.25rem;
+    overflow: hidden;
+    box-sizing: border-box;
+
+    background: rgba(5, 5, 5, 0.78);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 1rem;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 18px 40px rgba(0, 0, 0, 0.38);
+
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+  }
+
+  .tickets-purchase .tickets-widget {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .tickets-widget .pretix-widget-wrapper,
+  .tickets-widget .pretix-widget {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .tickets-widget .pretix-widget-main-item-row {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "info"
+      "price"
+      "qty";
+    gap: 0.55rem;
+  }
+
+  .tickets-widget .pretix-widget-item-price-col {
+    text-align: left;
+    white-space: normal;
+  }
+
+  .tickets-widget .pretix-widget-pricebox {
+    white-space: normal;
+  }
+
+  .tickets-widget .pretix-widget-item-availability-col {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .tickets-widget .pretix-widget-action button {
+    white-space: normal;
+    padding-inline: 0.7rem;
+    box-sizing: border-box;
+  }
+
+  .tickets-widget .pretix-widget-action button::after {
+    white-space: normal;
+    letter-spacing: 0.12em;
+  }
+
+  .tickets-purchase .tickets-checkout__title {
+    text-align: center;
+    padding-left: 0;
+  }
 }
 
 @media (max-width: 680px) {
-  .tickets-kicker {
-    font-size: 0.62rem;
-    letter-spacing: 0.16em;
+  .tickets-section {
+    padding-top: 5.75rem;
+    scroll-margin-top: 5.75rem;
+  }
+
+  .tickets-purchase,
+  .tickets-purchase .tickets-checkout,
+  .tickets-purchase .tickets-widget {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .tickets-widget .pretix-widget-item-count-dec,
+  .tickets-widget .pretix-widget-item-count-inc,
+  .tickets-widget .pretix-widget button.pretix-widget-btn-default {
+    width: 2.5rem;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+  }
+
+  .tickets-widget .pretix-widget-item-count-multiple,
+  .tickets-widget .pretix-widget input[type="number"].pretix-widget-item-count-multiple {
+    width: 2.4rem;
+    min-height: 2.5rem;
+  }
+
+  .tickets-widget .pretix-widget-action button {
+    width: calc(100% - 4px);
+    margin: 0 4px 4px 0;
+    padding: 0.8rem 0.6rem;
+    white-space: normal;
+    box-shadow:
+      4px 4px 0 var(--rf-pink-dark),
+      0 10px 22px rgba(255, 32, 131, 0.28);
+  }
+
+  .tickets-widget .pretix-widget-action button::after {
+    white-space: normal;
+    letter-spacing: 0.1em;
   }
 
   .tickets-title {
@@ -712,7 +1559,55 @@
 
   .ticket-card--banner {
     min-height: 0;
+    padding: 1.25rem 1.15rem 1.45rem;
     animation: ticket-gradient-shift 12s ease-in-out infinite;
+  }
+
+  .ticket-card--banner .ticket-card__name {
+    font-size: clamp(2rem, 12vw, 2.6rem);
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .tickets-checkout {
+    width: 100%;
+  }
+
+  .tickets-widget {
+    padding: 0;
+  }
+
+  .tickets-widget .pretix-widget-main-item-row {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "info"
+      "price"
+      "qty";
+    gap: 0.55rem;
+  }
+
+  .tickets-widget .pretix-widget-item-price-col {
+    text-align: left;
+    font-size: 1.35rem;
+  }
+
+  .tickets-widget .pretix-widget-item-availability-col {
+    width: 100%;
+  }
+
+  .tickets-widget .pretix-widget-action button {
+    box-shadow:
+      4px 4px 0 var(--rf-pink-dark),
+      0 10px 22px rgba(255, 32, 131, 0.28);
+  }
+
+  .tickets-widget .pretix-widget-info-message {
+    max-width: 100%;
+  }
+
+  .tickets-widget .pretix-widget-resume-button,
+  .tickets-widget .pretix-widget button.pretix-widget-resume-button {
+    width: auto;
   }
 }
 
@@ -729,6 +1624,11 @@
 
   .ticket-card {
     opacity: 1;
+    transform: none;
+  }
+
+  .tickets-widget .pretix-widget-action button:hover:not(:disabled),
+  .tickets-widget .pretix-widget-action button:focus-visible:not(:disabled) {
     transform: none;
   }
 }

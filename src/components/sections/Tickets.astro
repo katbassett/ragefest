@@ -1,4 +1,6 @@
 ---
+import { ticketShop, useDemoShop } from "../../data/ticket-shop";
+
 /* Full ladder kept for later — flip showFullLadder when ready */
 const showFullLadder = false;
 
@@ -86,6 +88,8 @@ const allTiers = [
   },
 ];
 
+const foundingTier = allTiers.find((tier) => tier.name === "Founding Access");
+
 const tiers = showFullLadder
   ? allTiers
   : allTiers.filter((tier) => tier.name === "Founding Access");
@@ -102,18 +106,53 @@ const tiers = showFullLadder
       </h2>
     </header>
 
-    <div class:list={["tickets-grid", !showFullLadder && "tickets-grid--launch"]}>
-      {
-        tiers.map((tier) => (
-          <article
-            class:list={[
-              "ticket-card",
-              tier.className,
-              tier.featured && "ticket-card--featured",
-              !showFullLadder && "ticket-card--banner",
-            ]}
-          >
-            <div class="ticket-card__fx" aria-hidden="true">
+    {
+      showFullLadder ? (
+        <div class="tickets-grid">
+          {
+            tiers.map((tier) => (
+              <article
+                class:list={[
+                  "ticket-card",
+                  tier.className,
+                  tier.featured && "ticket-card--featured",
+                ]}
+              >
+                <div class="ticket-card__fx" aria-hidden="true">
+                  <span class="ticket-card__scan"></span>
+                  <span class="ticket-card__glow"></span>
+                  <span class="ticket-card__sheen"></span>
+                  <span class="ticket-card__orb ticket-card__orb--one"></span>
+                  <span class="ticket-card__orb ticket-card__orb--two"></span>
+                </div>
+
+                {tier.featured && (
+                  <p class="ticket-card__flag">Believers move first</p>
+                )}
+
+                <div class="ticket-card__main">
+                  <div class="ticket-card__top">
+                    <div class="ticket-card__heading">
+                      <h3 class="ticket-card__name">{tier.name}</h3>
+                      <p class="ticket-card__tagline">{tier.tagline}</p>
+                    </div>
+                    <p class="ticket-card__status">{tier.status}</p>
+                  </div>
+
+                  <ul class="ticket-card__features">
+                    {tier.features.map((feature) => (
+                      <li>{feature}</li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      ) : (
+        foundingTier && (
+          <div class="tickets-purchase">
+            <div class="ticket-card__fx tickets-purchase__fx" aria-hidden="true">
               <span class="ticket-card__scan"></span>
               <span class="ticket-card__glow"></span>
               <span class="ticket-card__sheen"></span>
@@ -121,43 +160,94 @@ const tiers = showFullLadder
               <span class="ticket-card__orb ticket-card__orb--two"></span>
             </div>
 
-            {tier.featured && showFullLadder && (
-              <p class="ticket-card__flag">Believers move first</p>
-            )}
-
-            <div class="ticket-card__main">
-              <div class="ticket-card__top">
-                <div class="ticket-card__heading">
-                  <h3 class="ticket-card__name">{tier.name}</h3>
-                  <p class="ticket-card__tagline">{tier.tagline}</p>
-                </div>
-                <p class="ticket-card__status">{tier.status}</p>
+            <article
+              class:list={[
+                "ticket-card",
+                foundingTier.className,
+                foundingTier.featured && "ticket-card--featured",
+                "ticket-card--banner",
+              ]}
+            >
+              <div class="ticket-card__fx" aria-hidden="true">
+                <span class="ticket-card__scan"></span>
+                <span class="ticket-card__glow"></span>
+                <span class="ticket-card__sheen"></span>
+                <span class="ticket-card__orb ticket-card__orb--one"></span>
+                <span class="ticket-card__orb ticket-card__orb--two"></span>
               </div>
 
-              <ul class="ticket-card__features">
-                {tier.features.map((feature) => (
-                  <li>{feature}</li>
-                ))}
-              </ul>
+              <div class="ticket-card__main">
+                <div class="ticket-card__top">
+                  <div class="ticket-card__heading">
+                    <h3 class="ticket-card__name">{foundingTier.name}</h3>
+                    <p class="ticket-card__tagline">{foundingTier.tagline}</p>
+                  </div>
+                  <p class="ticket-card__status">{foundingTier.status}</p>
+                </div>
 
-              <div class="ticket-card__foot">
-                <a href="#signal" class="join-waitlist-btn ticket-card__cta">
-                  <span>Join the Waitlist</span>
-                </a>
+                <ul class="ticket-card__features">
+                  {foundingTier.features.map((feature) => (
+                    <li>{feature}</li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+
+            <div class="tickets-checkout">
+              <h3 class="tickets-checkout__title">Secure Your Access</h3>
+
+              <div
+                class="tickets-widget"
+                data-loop1-widget
+                data-shop-list={ticketShop.productListUrl}
+                data-shop-event={ticketShop.eventUrl}
+              >
+                {
+                  useDemoShop && (
+                    <p class="tickets-widget__preview">
+                      Preview widget (pretix demo) — not live Ragefest tickets
+                    </p>
+                  )
+                }
+
+                <p class="tickets-widget__status" data-loop1-status>
+                  Checking the ticket shop…
+                </p>
+
+                <div
+                  class="pretix-widget-compat"
+                  event={ticketShop.eventUrl}
+                ></div>
+
+                <noscript>
+                  <div class="pretix-widget">
+                    <div class="pretix-widget-info-message">
+                      JavaScript is disabled in your browser. To access our
+                      ticket shop without JavaScript, please{" "}
+                      <a
+                        target="_blank"
+                        rel="noopener"
+                        href={ticketShop.eventUrl}
+                      >
+                        click here
+                      </a>.
+                    </div>
+                  </div>
+                </noscript>
               </div>
             </div>
-          </article>
-        ))
-      }
-    </div>
+          </div>
+        )
+      )
+    }
 
-    <p class="tickets-note">
-      {
-        showFullLadder
-          ? "On-sale dates set at launch — Founding Access opens first. Pricing announced with tickets."
-          : "Founding Access is the first release. More tiers unlock later, so join the waitlist to stay first in line."
-        }
-      </p>
+    <p class="tickets-checkout__close">
+      <span class="tickets-checkout__close-lead">The first gate is open.</span>
+      <span>
+        Founding Access is available now. More tiers will reveal themselves
+        later.
+      </span>
+    </p>
   </div>
 </section>
 
@@ -165,7 +255,9 @@ const tiers = showFullLadder
   const initTicketsReveal = () => {
     const section = document.querySelector("#tickets");
     const cards = Array.from(
-      document.querySelectorAll("#tickets .ticket-card"),
+      document.querySelectorAll(
+        "#tickets .tickets-purchase, #tickets .tickets-grid .ticket-card",
+      ),
     );
 
     if (!section || cards.length === 0) return;
@@ -206,4 +298,73 @@ const tiers = showFullLadder
 
   initTicketsReveal();
   document.addEventListener("astro:page-load", initTicketsReveal);
+
+  const initLoop1ShopStatus = () => {
+    const root = document.querySelector<HTMLElement>("[data-loop1-widget]");
+    const status = document.querySelector<HTMLElement>("[data-loop1-status]");
+    if (!root || !status) return;
+    if (root.dataset.statusReady === "true") return;
+    root.dataset.statusReady = "true";
+
+    const shopList = root.dataset.shopList;
+    const shopEvent = root.dataset.shopEvent || "https://loop1tickets.com/Ragefest/Ragefest2027/";
+
+    if (!shopList) return;
+
+    fetch(shopList)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && data.error) {
+          root.dataset.shop = "disabled";
+          status.textContent =
+            "The ticket shop isn’t open yet. Founding Access goes live on the 20th.";
+          return;
+        }
+
+        root.dataset.shop = "live";
+        status.hidden = true;
+      })
+      .catch(() => {
+        root.dataset.shop = "error";
+        status.innerHTML =
+          'The ticket shop couldn’t load here. <a href="' +
+          shopEvent +
+          '" target="_blank" rel="noopener">Open it in a new tab</a>.';
+      });
+  };
+
+  const relabelLoop1Copy = (root: HTMLElement) => {
+    root.querySelectorAll(".pretix-widget-item-title").forEach((node) => {
+      const current = node.textContent?.trim() ?? "";
+      if (current === "VIP") node.textContent = "FOUNDING ACCESS";
+    });
+
+    root.querySelectorAll(".pretix-widget-action button").forEach((node) => {
+      if (!(node instanceof HTMLButtonElement)) return;
+      node.setAttribute("aria-label", "Buy Founding Access");
+    });
+  };
+
+  const initLoop1Presentation = () => {
+    const root = document.querySelector<HTMLElement>("[data-loop1-widget]");
+    if (!root || root.dataset.presentationReady === "true") return;
+    root.dataset.presentationReady = "true";
+
+    relabelLoop1Copy(root);
+
+    const observer = new MutationObserver(() => {
+      relabelLoop1Copy(root);
+    });
+
+    observer.observe(root, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+    });
+  };
+
+  initLoop1ShopStatus();
+  initLoop1Presentation();
+  document.addEventListener("astro:page-load", initLoop1ShopStatus);
+  document.addEventListener("astro:page-load", initLoop1Presentation);
 </script>
