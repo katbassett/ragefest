@@ -85,22 +85,54 @@
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
 
   flex: 1 1 auto;
   min-height: 0;
   height: auto;
 
-  padding-top: clamp(4.75rem, 10vh, 8rem);
+  padding-top: clamp(7.75rem, 13vh, 9.75rem);
+}
+
+.hero-main::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  background: linear-gradient(
+    180deg,
+    rgba(20, 8, 24, 0.18) 0%,
+    rgba(20, 8, 24, 0.08) 38%,
+    rgba(255, 248, 229, 0.04) 72%,
+    rgba(9, 5, 17, 0.22) 100%
+  );
+
+  pointer-events: none;
+}
+
+.hero-main > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  width: 100%;
 }
 
 .hero-layout {
   display: flex;
+  flex: 1;
   flex-direction: column;
 
   width: 100%;
+  min-height: 0;
 
-  padding-block: clamp(3.5rem, 6vh, 5rem);
+  padding-block: clamp(0.35rem, 1.5vh, 1rem);
 }
 
 .hero-content {
@@ -112,6 +144,11 @@
   margin-inline: auto;
 
   text-align: center;
+}
+
+.hero-content--conversion {
+  gap: 0;
+  width: min(100%, 40rem);
 }
 
 /* ==========================================================
@@ -326,131 +363,257 @@
   justify-content: center;
 
   width: 100%;
-  max-width: 94rem;
-  padding-inline: clamp(1rem, 3vw, 3rem);
-
-  overflow-x: clip;
-
-  margin-top: 0;
-}
-
-.hero-logo-text {
-  display: inline-block;
-
+  max-width: 100%;
   margin: 0;
-  padding: 0.08em 0.22em;
+  padding-inline: clamp(1rem, 3vw, 2rem);
 
-  font-family: "Road Rage", cursive;
-  font-size: clamp(6rem, 15vw, 14rem);
-  font-weight: 400;
-  line-height: 0.68;
-  white-space: nowrap;
-
-  background: linear-gradient(
-    180deg,
-    var(--rf-yellow) 0%,
-    var(--rf-orange) 33%,
-    var(--rf-pink) 67%,
-    var(--rf-purple) 100%
-  );
-
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-
-  transform: scaleX(0.92);
-  transform-origin: center;
+  overflow: visible;
 }
 
-.hero-copy {
-  position: relative;
-  z-index: 6;
+.hero-content--conversion .hero-logo-wrap {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  padding-inline: clamp(0.5rem, 2vw, 1.25rem);
+}
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.hero-logo-image {
+  display: block;
 
-  width: min(100%, 62rem);
-  margin-top: clamp(1.35rem, 2.2vw, 2.25rem);
+  width: auto;
+  height: clamp(7rem, 11vw, 20rem);
+  max-width: min(98vw, 110rem);
+  margin: 0 auto;
+
+  object-fit: contain;
+}
+
+.hero-meta {
+  margin: clamp(0.45rem, 1vh, 0.65rem) 0 0;
+
+  color: rgba(255, 255, 255, 0.92);
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: clamp(0.7rem, 1.55vw, 0.88rem);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+
+  text-shadow: 0 1px 12px rgba(9, 5, 17, 0.35);
 }
 
 .hero-title {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
 
-  margin: 0;
-  padding: 0;
+  margin: clamp(0.55rem, 1.2vh, 0.85rem) 0 0;
+  padding: 0 0.25rem;
 
   font-family: var(--font-sans, "Montserrat", sans-serif);
-  font-size: clamp(3rem, 6vw, 5.8rem);
+  font-size: clamp(2.35rem, 5.5vw, 4.5rem);
   font-weight: 900;
-  line-height: 0.92;
-  letter-spacing: -0.045em;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
   text-align: center;
   text-transform: uppercase;
+}
 
-  background: linear-gradient(
-    180deg,
-    var(--rf-yellow) 0%,
-    var(--rf-orange) 53%,
-    var(--rf-pink) 75%,
-    var(--rf-purple) 100%
-  );
+.hero-title__line {
+  display: inline-block;
+  padding-inline: 0.14em;
+  padding-block: 0.04em;
 
-  background-clip: text;
-  -webkit-background-clip: text;
+  white-space: nowrap;
+
   color: transparent;
   -webkit-text-fill-color: transparent;
 }
 
-.hero-eyebrow {
-  margin: clamp(0.9rem, 1.4vw, 1.3rem) 0 0;
+.hero-title__line:first-child {
+  background-image: linear-gradient(
+    to top,
+    var(--rf-pink) 0%,
+    var(--rf-orange) 52%,
+    var(--rf-yellow) 100%
+  );
 
-  color: #a53dff;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
 
-  font-family: var(--font-sans, "Montserrat", sans-serif);
-  font-size: clamp(1rem, 1.6vw, 1.75rem);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
+.hero-title__line--rage {
+  margin-top: -0.1em;
+  padding-block: 0.08em 0.12em;
+
+  font-family: "Road Rage", cursive;
+  font-size: 1.18em;
+  font-weight: 400;
+  line-height: 0.82;
+  letter-spacing: 0.02em;
+  text-transform: none;
+
+  transform: scaleX(0.94);
+  transform-origin: center;
+
+  background-image: linear-gradient(
+    to top,
+    #120818 0%,
+    var(--rf-purple) 42%,
+    var(--rf-pink) 100%
+  );
+
+  background-clip: text;
+  -webkit-background-clip: text;
 }
 
 .hero-description {
-  width: min(100%, 53rem);
-  margin: clamp(0.9rem, 1.3vw, 1.15rem) auto 0;
+  width: min(100%, 30rem);
+  margin: 0 auto;
 
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.82);
 
   font-family: var(--font-sans, "Montserrat", sans-serif);
-  font-size: clamp(1.05rem, 1.7vw, 1.25rem);
+  font-size: clamp(0.88rem, 1.65vw, 1.08rem);
   font-weight: 500;
-  line-height: 1.55;
-  letter-spacing: 0;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
   text-align: center;
   text-transform: none;
 }
 
-.hero-event-details {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem 0.75rem;
+.hero-description--bottom {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 100%;
+  margin-top: auto;
+  padding-block: clamp(0.65rem, 1.2vh, 1rem) clamp(0.35rem, 0.8vh, 0.65rem);
+  padding-inline: clamp(0.5rem, 2vw, 1.25rem);
 
-  margin-top: clamp(0.55rem, 0.9vw, 0.8rem);
-
-  color: var(--rf-purple);
-
-  font-family: var(--font-sans, "Montserrat", sans-serif);
-  font-size: clamp(0.85rem, 1.15vw, 1rem);
-  font-weight: 500;
-  line-height: 1.4;
-  text-align: center;
+  font-size: clamp(0.68rem, 1.25vw, 1rem);
+  white-space: nowrap;
 }
 
-.hero-event-divider {
-  color: var(--rf-pink);
+/* Founders Access credential */
+.hero-pass {
+  position: relative;
+  z-index: 6;
+
+  width: min(100%, 20.5rem);
+  margin-top: clamp(0.75rem, 1.4vh, 1rem);
+
+  color: #ffffff;
+  text-align: left;
+
+  transform: skewX(-5deg);
+}
+
+.hero-pass__fx {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-pass__scan {
+  position: absolute;
+  top: -40%;
+  left: -30%;
+
+  width: 45%;
+  height: 180%;
+
+  opacity: 0.12;
+  transform: rotate(18deg);
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(245, 255, 0, 0.9),
+    transparent
+  );
+}
+
+.hero-pass__inner {
+  position: relative;
+
+  padding: 0.72rem 0.95rem 0.78rem;
+
+  background:
+    linear-gradient(135deg, rgba(245, 255, 0, 0.08), transparent 42%),
+    linear-gradient(225deg, rgba(255, 32, 131, 0.1), transparent 48%),
+    rgba(9, 5, 17, 0.62);
+
+  border: 1px solid rgba(245, 255, 0, 0.42);
+  border-left: 3px solid var(--rf-orange);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 24px rgba(9, 5, 17, 0.28);
+
+  clip-path: polygon(
+    0 0,
+    calc(100% - 0.65rem) 0,
+    100% 0.65rem,
+    100% 100%,
+    0.65rem 100%,
+    0 calc(100% - 0.65rem)
+  );
+
+  transform: skewX(5deg);
+}
+
+.hero-pass__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.hero-pass__label {
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.hero-pass__badge {
+  padding: 0.2rem 0.5rem;
+
+  color: var(--rf-yellow);
+  background: rgba(255, 32, 131, 0.18);
+  border: 1px solid rgba(255, 32, 131, 0.45);
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hero-pass__price {
+  margin: 0.42rem 0 0;
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: clamp(0.96rem, 2vw, 1.12rem);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hero-pass__window {
+  margin: 0.2rem 0 0;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 /* ==========================================================
@@ -462,8 +625,8 @@
   z-index: 6;
 
   width: 100%;
-  max-width: 34rem;
-  margin-top: clamp(1.65rem, 2.4vw, 2.2rem);
+  max-width: 100%;
+  margin-top: clamp(0.65rem, 1.2vh, 0.85rem);
 }
 
 .countdown-widget {
@@ -540,6 +703,65 @@
   text-transform: uppercase;
 }
 
+/* Compact horizontal countdown */
+.countdown-widget--compact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+
+  width: 100%;
+}
+
+.countdown-compact__label {
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: clamp(0.58rem, 1.2vw, 0.68rem);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.countdown-compact__track {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem 0.35rem;
+
+  margin: 0;
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: clamp(0.72rem, 1.5vw, 0.82rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
+
+.countdown-compact__segment {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.05em;
+}
+
+.countdown-compact__value {
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-compact__suffix {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.92em;
+}
+
+.countdown-compact__sep {
+  color: rgba(255, 106, 0, 0.75);
+  font-weight: 800;
+}
+
 .hero-actions {
   position: relative;
   z-index: 6;
@@ -548,9 +770,22 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 1.25rem;
+  gap: 0.75rem;
 
-  margin-top: clamp(1.65rem, 2.4vw, 2rem);
+  width: 100%;
+  margin-top: clamp(0.75rem, 1.4vh, 1rem);
+}
+
+.hero-cta-primary {
+  width: min(100%, 20.5rem);
+  padding: 0.85rem 1.5rem;
+
+  font-size: clamp(0.68rem, 1.4vw, 0.74rem);
+  letter-spacing: 0.14em;
+
+  box-shadow:
+    6px 6px 0 rgba(170, 50, 0, 0.5),
+    0 14px 32px rgba(255, 70, 90, 0.32);
 }
 
 /* ==========================================================
@@ -751,10 +986,10 @@
   gap: 2rem;
 
   width: max-content;
-  padding-block: 1rem;
+  padding-block: 0.72rem;
 
   font-family: var(--font-display, "Road Rage", cursive);
-  font-size: 1rem;
+  font-size: 0.88rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -782,15 +1017,7 @@
 
 @media (max-width: 1023px) {
   .hero-layout {
-    padding-block: clamp(3rem, 6vh, 4rem);
-  }
-
-  .hero-logo-text {
-    font-size: clamp(7rem, 16vw, 11rem);
-  }
-
-  .hero-copy {
-    margin-top: 1.25rem;
+    padding-block: clamp(0.25rem, 1vh, 0.75rem);
   }
 
   .hero-artwork {
@@ -804,18 +1031,19 @@
 
     width: 100%;
     min-width: 0;
-    padding-top: 6.25rem;
+    padding-top: 8.25rem;
   }
 
   .hero-layout {
     min-width: 0;
-    padding-block: 1.5rem 3rem;
+    padding-block: 0.35rem 0.5rem;
   }
 
   .hero-content,
-  .hero-copy {
+  .hero-content--conversion {
     min-width: 0;
     max-width: 100%;
+    padding-inline: 0.25rem;
   }
 
   .hero-tropical-background {
@@ -835,74 +1063,66 @@
     overflow: visible;
   }
 
-  .hero-logo-text {
-    max-width: 100%;
-    padding-inline: 0.04em;
+  .hero-logo-image {
+    height: clamp(5rem, 14vw, 9rem);
+    max-width: 98vw;
+  }
 
-    font-size: clamp(4rem, 18vw, 5.75rem);
-    line-height: 0.72;
-    transform: scaleX(0.84);
+  .hero-meta {
+    font-size: clamp(0.64rem, 3vw, 0.76rem);
+    letter-spacing: 0.22em;
   }
 
   .hero-title {
     max-width: 100%;
-    font-size: clamp(2.2rem, 10vw, 3.5rem);
+    font-size: clamp(2rem, 9vw, 3.15rem);
   }
 
-  .hero-eyebrow {
+  .hero-title__line--rage {
+    font-size: 1.14em;
+  }
+
+  .hero-description--bottom {
+    width: 100%;
     max-width: 100%;
-
-    font-size: clamp(0.82rem, 4vw, 1.05rem);
-    letter-spacing: 0.16em;
-    text-align: center;
+    font-size: clamp(0.58rem, 2.6vw, 0.88rem);
+    padding-block: clamp(0.5rem, 1vh, 0.75rem) clamp(0.25rem, 0.6vh, 0.5rem);
+    padding-inline: 0.35rem;
+    white-space: nowrap;
   }
 
-  .hero-description {
-    width: min(100%, 32rem);
+  .hero-pass {
+    width: min(100%, 19rem);
   }
 
-  .hero-event-details {
-    flex-direction: column;
-    gap: 0.15rem;
-  }
-
-  .hero-event-divider {
-    display: none;
+  .hero-pass__inner {
+    padding: 0.65rem 0.85rem 0.7rem;
   }
 
   .hero-countdown {
     width: 100%;
     max-width: 100%;
-    margin-top: 1.35rem;
+    margin-top: 0.55rem;
   }
 
-  .countdown-widget {
-    gap: 0.3rem;
+  .countdown-compact__label {
+    letter-spacing: 0.16em;
   }
 
-  .countdown-unit {
-    min-width: 0;
-    min-height: 5rem;
-    padding: 0.55rem 0.3rem 0.4rem;
-    border-radius: 0.55rem;
-  }
-
-  .countdown-value {
-    padding-inline: 0.12em;
-    font-size: clamp(1.55rem, 7.2vw, 2rem);
-    line-height: 1.08;
-    letter-spacing: 0.01em;
-  }
-
-  .countdown-label {
-    margin-top: 0.4rem;
-    font-size: 0.48rem;
+  .countdown-compact__track {
+    gap: 0.15rem 0.28rem;
+    font-size: clamp(0.68rem, 3.2vw, 0.76rem);
   }
 
   .hero-actions {
     width: 100%;
-    gap: 1rem;
-    margin-top: 1.5rem;
+    gap: 0.65rem;
+    margin-top: 0.7rem;
+  }
+
+  .hero-cta-primary {
+    width: min(100%, 19rem);
+    padding: 0.82rem 1.25rem;
   }
 
   .hero-artwork {
@@ -935,18 +1155,27 @@
 
   .festival-ticker-track {
     gap: 1.4rem;
-    font-size: 0.85rem;
+    font-size: 0.78rem;
+    padding-block: 0.62rem;
   }
 }
 
 @media (max-width: 520px) {
-  .hero-layout {
-    padding-block: 1.25rem 2.5rem;
+  .hero-main {
+    padding-top: 7.75rem;
   }
 
-  .hero-logo-text {
-    font-size: clamp(3.8rem, 18vw, 5.1rem);
-    transform: scaleX(0.82);
+  .hero-layout {
+    padding-block: 0.2rem 0.35rem;
+  }
+
+  .hero-logo-image {
+    height: clamp(4.25rem, 13vw, 7rem);
+    max-width: 98vw;
+  }
+
+  .hero-title {
+    font-size: clamp(1.85rem, 8.4vw, 2.75rem);
   }
 
   .hero-actions {
@@ -954,8 +1183,19 @@
   }
 
   .join-waitlist-btn,
-  .hero-secondary-button {
-    width: min(100%, 17rem);
+  .hero-secondary-button,
+  .hero-cta-primary {
+    width: min(100%, 19rem);
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-meta {
+    letter-spacing: 0.18em;
+  }
+
+  .hero-title__line {
+    white-space: normal;
   }
 }
 
