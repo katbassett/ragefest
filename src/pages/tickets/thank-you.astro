@@ -1,0 +1,150 @@
+---
+import Header from "../../components/layout/Header.astro";
+import Footer from "../../components/layout/Footer.astro";
+import { ticketThankYouUrl } from "../../data/ticket-shop";
+
+import "../../styles/global.css";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script is:inline>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-59JL8WMN");
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+
+    <link
+      rel="preload"
+      href="/fonts/road-rage.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <title>You're In — RAGEFEST</title>
+  </head>
+
+  <body class="thank-you-page">
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-59JL8WMN"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe>
+    </noscript>
+
+    <Header />
+
+    <main class="thank-you-page__main">
+      <article
+        class="thank-you-card"
+        data-thank-you-card
+        data-thank-you-url={ticketThankYouUrl}
+      >
+        <p class="thank-you-card__eyebrow" data-thank-you-eyebrow>
+          Founding Access
+        </p>
+
+        <h1 class="thank-you-card__title" data-thank-you-title>
+          You're in.
+        </h1>
+
+        <p class="thank-you-card__text" data-thank-you-text>
+          Your order is processing. Check your inbox for your Loop1 confirmation
+          and ticket details.
+        </p>
+
+        <p class="thank-you-card__meta" data-thank-you-meta hidden></p>
+
+        <div class="thank-you-card__actions">
+          <a class="thank-you-card__link" href="/#tickets">
+            <span>Back to tickets</span>
+          </a>
+          <a class="thank-you-card__link" href="/">
+            <span>Return home</span>
+          </a>
+        </div>
+      </article>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<script>
+  import {
+    handlePostPurchase,
+    parsePurchaseParams,
+  } from "../../scripts/ticket-purchase";
+
+  const initThankYouPage = () => {
+    const card = document.querySelector<HTMLElement>("[data-thank-you-card]");
+    const eyebrow = document.querySelector<HTMLElement>("[data-thank-you-eyebrow]");
+    const title = document.querySelector<HTMLElement>("[data-thank-you-title]");
+    const text = document.querySelector<HTMLElement>("[data-thank-you-text]");
+    const meta = document.querySelector<HTMLElement>("[data-thank-you-meta]");
+
+    if (!card || !eyebrow || !title || !text || !meta) return;
+    if (card.dataset.ready === "true") return;
+    card.dataset.ready = "true";
+
+    const params = parsePurchaseParams(window.location.search);
+
+    if (params.error) {
+      card.classList.add("thank-you-card--error");
+      eyebrow.textContent = "Checkout";
+      title.textContent = "Something went wrong.";
+      text.textContent = params.error;
+      meta.hidden = true;
+      return;
+    }
+
+    if (params.orderCode) {
+      meta.hidden = false;
+      meta.textContent = `Order ${params.orderCode}`;
+    }
+
+    void handlePostPurchase(params).then(({ addedToSignal }) => {
+      if (addedToSignal) {
+        text.textContent =
+          "Your order is in. We added you to The Signal too — watch your inbox for your ticket confirmation and future drops.";
+        return;
+      }
+
+      if (params.email) {
+        text.textContent =
+          "Your order is in. Check your inbox for your Loop1 confirmation and ticket details.";
+        return;
+      }
+
+      text.textContent =
+        "Your order is in. Check your inbox for your Loop1 confirmation and ticket details.";
+    });
+  };
+
+  initThankYouPage();
+  document.addEventListener("astro:page-load", initThankYouPage);
+</script>

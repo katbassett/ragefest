@@ -2,6 +2,11 @@
  * Ticket shop embed.
  *
  * `useDemoShop` points at pretix’s public demo. Keep this false to use Loop1.
+ *
+ * Post-purchase:
+ * - Thank-you page: ticketThankYouUrl
+ * - Loop1 admin: enable “Redirection from order page” → that base URL
+ * - Webhook: scripts/google-apps-ticket-webhook.js
  */
 export const useDemoShop = false;
 
@@ -10,6 +15,17 @@ const DEMO_EVENT = "https://pretix.eu/demo/democon/";
 
 /** Loop1 item id for the live Founding Access product (not VIP). */
 export const foundingAccessItemId = "15751";
+
+const SITE_ORIGIN =
+  (import.meta.env.PUBLIC_SITE_URL as string | undefined) ||
+  "https://ragefestspi.com";
+
+/** Configure Loop1 “Redirection from order page” to this URL. */
+export const ticketThankYouUrl = `${SITE_ORIGIN.replace(/\/$/, "")}/tickets/thank-you/`;
+
+/** Used by the Apps Script webhook when fetching order details. */
+export const loop1Organizer = "Ragefest";
+export const loop1EventSlug = "Ragefest2027";
 
 export const ticketShop = useDemoShop
   ? {

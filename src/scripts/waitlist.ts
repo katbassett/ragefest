@@ -9,7 +9,7 @@
  * treated as delivered.
  */
 
-export type WaitlistSource = "signal" | "popup";
+export type WaitlistSource = "signal" | "popup" | "purchase";
 
 const SIGNAL_ENDPOINT =
   "https://script.google.com/macros/s/AKfycbzg8d27Er_YUaDhAsDDZGMld9dYLnfndEkL5JRMv22lwvENDpInO5sdIQQJ8e0wLuArdg/exec";

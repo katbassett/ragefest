@@ -373,3 +373,10 @@ const tiers = showFullLadder
   document.addEventListener("astro:page-load", initLoop1ShopStatus);
   document.addEventListener("astro:page-load", initLoop1Presentation);
 </script>
+
+<script>
+  import { initTicketWidgetTracking } from "../../scripts/ticket-purchase";
+
+  initTicketWidgetTracking();
+  document.addEventListener("astro:page-load", initTicketWidgetTracking);
+</script>

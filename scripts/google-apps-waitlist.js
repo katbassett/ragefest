@@ -1,6 +1,12 @@
 /**
  * RageFest waitlist → Google Sheet
  *
+ * Sources written to the Source column:
+ *   signal  — Join The Signal section
+ *   popup   — email capture popup
+ *   purchase — thank-you page after ticket checkout (client-side)
+ *   purchase_webhook — Loop1 webhook handler (server-side)
+ *
  * SETUP
  * 1. Paste the ID of the target spreadsheet into SPREADSHEET_ID below.
  *    Grab it from the Sheet URL:
