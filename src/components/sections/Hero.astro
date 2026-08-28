@@ -51,44 +51,57 @@ import Countdown from "../features/Countdown.astro";
         <!-- Hero copy -->
         <div class="hero-copy">
 
-          <div class="hero-event-details">
-            <span>South Padre Island</span>
-
-            <span class="hero-event-divider" aria-hidden="true">·</span>
-
-            <span>March 19, 2027</span>
-          </div>
-
           <h2 class="hero-title">
-            Day Drink.<br class="hero-title__break" /> Night Rage.
+            Sun to Strobe
           </h2>
 
-          <p class="hero-description">
-            A spring break entertainment experience powered by bass music culture.
+          <p class="hero-eyebrow">
+            A new kind of spring break
           </p>
 
-          <p class="hero-founders-band">
-            <span>Founders Access</span>
-            <span class="hero-founders-band__dot" aria-hidden="true">·</span>
-            <span>$59</span>
-            <span class="hero-founders-band__dot" aria-hidden="true">·</span>
-            <span>Only 500</span>
-            <span class="hero-founders-band__dot" aria-hidden="true">·</span>
-            <span>September 1–30</span>
-          </p>
+          <div class="hero-event-details">
+            <span>March 19, 2027</span>
 
-        </div>
+            <span
+              class="hero-event-divider"
+              aria-hidden="true"
+            >
+              •
+            </span>
 
-        <!-- Primary ticket CTA -->
-        <div class="hero-actions">
-          <a href="#tickets" class="hero-cta-founders join-waitlist-btn">
-            <span>Get Founders Access</span>
-          </a>
+            <span>South Padre Island, Texas</span>
+          </div>
+
         </div>
 
         <!-- Countdown -->
         <div class="hero-countdown">
           <Countdown />
+        </div>
+
+        <!-- CTA buttons -->
+        <div class="hero-actions">
+          <a
+            href="#experience"
+            class="hero-secondary-button"
+          >
+            <span>Enter the World</span>
+
+            <svg
+              viewBox="0 0 24 24"
+              class="hero-secondary-icon"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14"></path>
+              <path d="m13 6 6 6-6 6"></path>
+            </svg>
+
+          </a>
         </div>
 
       </div>
