@@ -217,6 +217,9 @@ const tiers = showFullLadder
                 <div
                   class="pretix-widget-compat"
                   event={ticketShop.eventUrl}
+                  {...(ticketShop.foundingAccessItemId
+                    ? { items: ticketShop.foundingAccessItemId }
+                    : {})}
                 ></div>
 
                 <noscript>
@@ -336,7 +339,9 @@ const tiers = showFullLadder
   const relabelLoop1Copy = (root: HTMLElement) => {
     root.querySelectorAll(".pretix-widget-item-title").forEach((node) => {
       const current = node.textContent?.trim() ?? "";
-      if (current === "VIP") node.textContent = "FOUNDING ACCESS";
+      if (current === "Founding Access" || current === "VIP") {
+        node.textContent = "FOUNDING ACCESS";
+      }
     });
 
     root.querySelectorAll(".pretix-widget-action button").forEach((node) => {
