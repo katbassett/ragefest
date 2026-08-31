@@ -6,11 +6,6 @@
   isolation: isolate;
   overflow: hidden;
 
-  padding:
-    clamp(5.75rem, 12vh, 9.5rem)
-    0
-    clamp(3.5rem, 6vh, 5rem);
-
   color: #ffffff;
   background: transparent;
 }
@@ -431,10 +426,6 @@
 }
 
 @media (max-width: 600px) {
-  .s2s-section {
-    padding-block: 5.25rem 3.5rem;
-  }
-
   .s2s-kicker {
     font-size: 0.62rem;
     letter-spacing: 0.16em;

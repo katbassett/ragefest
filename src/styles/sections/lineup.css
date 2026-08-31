@@ -6,11 +6,6 @@
   isolation: isolate;
   overflow: hidden;
 
-  padding:
-    clamp(5.75rem, 12vh, 9.5rem)
-    0
-    clamp(3.5rem, 6vh, 5rem);
-
   color: #ffffff;
   background: transparent;
 }
@@ -1245,10 +1240,6 @@
 }
 
 @media (max-width: 680px) {
-  .lineup-section {
-    padding-block: 3.5rem 3.5rem;
-  }
-
   .lineup-grid {
     grid-template-columns: 1fr;
   }

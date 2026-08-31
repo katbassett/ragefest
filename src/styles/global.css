@@ -149,16 +149,25 @@ main > :not(.hero-section) {
   z-index: 1;
 }
 
+/* Uniform vertical rhythm between post-hero sections */
+.tickets-section,
+.lineup-section,
+.s2s-section,
+.signal-section,
+.faq-section {
+  padding-block: var(--space-festival-section);
+}
+
 /* ==========================================================
-   RAINBOW SCROLL PATHWAY (right glowing spine)
+   RAINBOW SCROLL PATHWAY (left glowing spine)
 ========================================================== */
 
 .festival-pathway {
   position: fixed;
   top: 18vh;
-  right: max(10px, 2vw);
+  left: max(10px, 2vw);
+  right: auto;
   bottom: 18vh;
-  left: auto;
   z-index: 40;
 
   width: 3px;
@@ -179,13 +188,7 @@ main > :not(.hero-section) {
   border-radius: inherit;
 
   /* Matches hero wordmark / title gradient */
-  background: linear-gradient(
-    180deg,
-    var(--rf-yellow) 0%,
-    var(--rf-orange) 33%,
-    var(--rf-pink) 67%,
-    var(--rf-purple) 100%
-  );
+  background: var(--rf-gradient-hero);
 
   box-shadow: 0 0 14px rgba(255, 32, 131, 0.55);
   will-change: height;
@@ -213,5 +216,58 @@ main > :not(.hero-section) {
 @media (max-width: 900px) {
   .festival-pathway {
     display: none;
+  }
+}
+
+/* ==========================================================
+   NATIVE SCROLLBAR (browser default — right side)
+========================================================== */
+
+html {
+  scrollbar-width: thin;
+  /* Firefox: solid colors only (no gradient support) */
+  scrollbar-color: #ff2083 rgb(255 255 255 / 0.14);
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(255 255 255 / 0.14);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid rgb(20 8 24 / 0.85);
+  border-radius: 999px;
+
+  background-color: #ff6a00;
+  background-image: linear-gradient(
+    180deg,
+    #f5ff00 0%,
+    #ff6a00 28%,
+    #ff2083 62%,
+    #8a2be2 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+  box-shadow: 0 0 10px rgb(255 32 131 / 0.35);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  box-shadow: 0 0 14px rgb(255 32 131 / 0.55);
+}
+
+@media (max-width: 900px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-width: 1px;
   }
 }

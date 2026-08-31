@@ -5,11 +5,6 @@
   z-index: 1;
   isolation: isolate;
 
-  padding:
-    clamp(2.5rem, 5vh, 4rem)
-    0
-    clamp(3.5rem, 6vh, 5rem);
-
   color: #ffffff;
   background: transparent;
   overflow-x: hidden;
@@ -1091,6 +1086,72 @@
   white-space: normal;
 }
 
+/* Shared ticket checkout CTA — matches Loop1 buy button */
+.ticket-buy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: calc(100% - 6px);
+  max-width: 100%;
+  min-height: 3.05rem;
+  margin: 0 6px 6px 0;
+  padding: 0.85rem 1rem;
+  box-sizing: border-box;
+
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--rf-pink) 0%, var(--rf-purple) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.2rem;
+  box-shadow:
+    6px 6px 0 var(--rf-pink-dark),
+    0 12px 28px rgba(255, 32, 131, 0.28);
+
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: normal;
+  text-align: center;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.ticket-buy-btn:hover,
+.ticket-buy-btn:focus-visible {
+  color: #ffffff;
+  background: linear-gradient(
+    135deg,
+    var(--rf-orange) 0%,
+    var(--rf-pink) 55%,
+    var(--rf-purple) 100%
+  );
+  transform: translate(2px, 2px);
+  box-shadow:
+    4px 4px 0 var(--rf-pink-dark),
+    0 10px 22px rgba(255, 32, 131, 0.32);
+}
+
+.ticket-buy-btn:focus-visible {
+  outline: 2px solid var(--rf-yellow, #f5ff00);
+  outline-offset: 3px;
+}
+
+.ticket-buy-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: 2px 2px 0 var(--rf-pink-dark);
+}
+
+.ticket-buy-btn > span {
+  transform: none;
+}
+
 .tickets-widget .pretix-widget-action button::after {
   content: "Buy Founding Access";
 
@@ -1497,7 +1558,6 @@
 
 @media (max-width: 680px) {
   .tickets-section {
-    padding-top: 5.75rem;
     scroll-margin-top: 5.75rem;
   }
 
@@ -1628,7 +1688,10 @@
   }
 
   .tickets-widget .pretix-widget-action button:hover:not(:disabled),
-  .tickets-widget .pretix-widget-action button:focus-visible:not(:disabled) {
+  .tickets-widget .pretix-widget-action button:focus-visible:not(:disabled),
+  .ticket-buy-btn:hover,
+  .ticket-buy-btn:focus-visible,
+  .ticket-buy-btn:active {
     transform: none;
   }
 }

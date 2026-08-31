@@ -2,7 +2,7 @@
 import Container from "../primitives/Container.astro";
 import Countdown from "../features/Countdown.astro";
 
-const foundersAccessOpens = "2026-09-01T10:00:00-05:00";
+const eventDate = "2027-03-19T18:00:00-04:00";
 ---
 
 <section id="home" class="hero-section">
@@ -49,41 +49,70 @@ const foundersAccessOpens = "2026-09-01T10:00:00-05:00";
           </h1>
 
           <p class="hero-meta">
-            South Padre Island · March 19, 2027
+            <span class="hero-meta__chunk">South Padre Island</span>
+            <span class="hero-meta__sep" aria-hidden="true"> · </span>
+            <span class="hero-meta__chunk">March 19, 2027</span>
           </p>
 
           <h2 class="hero-title">
-            <span class="hero-title__line">Day Drink.</span>
-            <span class="hero-title__line hero-title__line--rage">Night Rage.</span>
+            <span class="hero-title__line">
+              <span class="hero-title__chunk">Party</span>
+              <span class="hero-title__chunk">by Day</span>
+            </span>
+            <span class="hero-title__line hero-title__line--rage">
+              <span class="hero-title__chunk">Rage</span>
+              <span class="hero-title__chunk">by Night</span>
+            </span>
           </h2>
 
-          <div class="hero-pass" aria-label="Founders Access ticket offer">
-            <div class="hero-pass__fx" aria-hidden="true">
-              <span class="hero-pass__scan"></span>
+          <article class="hero-pass" aria-label="Founders Access ticket offer">
+            <div class="ticket-card__fx" aria-hidden="true">
+              <span class="ticket-card__scan"></span>
+              <span class="ticket-card__glow"></span>
+              <span class="ticket-card__sheen"></span>
+              <span class="ticket-card__orb ticket-card__orb--one"></span>
+              <span class="ticket-card__orb ticket-card__orb--two"></span>
             </div>
 
-            <div class="hero-pass__inner">
-              <div class="hero-pass__row">
-                <span class="hero-pass__label">Founders Access</span>
-                <span class="hero-pass__badge">Limited Drop</span>
+            <div class="hero-pass__main">
+              <div class="hero-pass__admit">
+                <h3 class="hero-pass__name">Founders Access</h3>
               </div>
 
-              <p class="hero-pass__price">$59 · Only 500 Tickets</p>
-              <p class="hero-pass__window">September 1–30</p>
+              <div class="hero-pass__tear" aria-hidden="true"></div>
+
+              <div class="hero-pass__details">
+                <p class="hero-pass__price">$59 · Only 500 Tickets</p>
+                <p class="hero-pass__window">September 1–30</p>
+              </div>
             </div>
-          </div>
+          </article>
 
           <div class="hero-actions">
-            <a href="#tickets" class="join-waitlist-btn hero-cta-primary">
-              <span>Get Founders Access →</span>
+            <a href="#tickets" class="hero-secondary-button">
+              <span>Get Founders Access</span>
+
+              <svg
+                viewBox="0 0 24 24"
+                class="hero-secondary-icon"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
             </a>
           </div>
 
-          <div class="hero-countdown">
+          <div class="hero-countdown hero-countdown--compact">
             <Countdown
               variant="compact"
-              label="Founders Access Opens In"
-              targetDate={foundersAccessOpens}
+              label="Gates to Rage Open In"
+              targetDate={eventDate}
             />
           </div>
         </div>

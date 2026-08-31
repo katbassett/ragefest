@@ -5,11 +5,6 @@
   z-index: 1;
   isolation: isolate;
 
-  padding:
-    clamp(1.75rem, 3vh, 2.75rem)
-    0
-    clamp(2.75rem, 5vh, 4.25rem);
-
   color: #ffffff;
   background: transparent;
 }

@@ -131,6 +131,7 @@
   --space-4xl: 6rem;
   --space-5xl: 8rem;
   --space-section: clamp(5rem, 10vw, 10rem);
+  --space-festival-section: clamp(2.5rem, 5vh, 4rem);
 
   /* Content widths */
   --container-width: 1180px;

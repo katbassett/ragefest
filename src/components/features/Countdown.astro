@@ -12,18 +12,18 @@ const {
 } = Astro.props;
 
 const units = [
-  { id: "countdown-days", suffix: "D", label: "Days" },
-  { id: "countdown-hours", suffix: "H", label: "Hrs" },
-  { id: "countdown-minutes", suffix: "M", label: "Min" },
-  { id: "countdown-seconds", suffix: "S", label: "Sec" },
+  { key: "days", suffix: "D", label: "Days" },
+  { key: "hours", suffix: "H", label: "Hrs" },
+  { key: "minutes", suffix: "M", label: "Min" },
+  { key: "seconds", suffix: "S", label: "Sec" },
 ];
 ---
 
 {
   variant === "compact" ? (
     <div
-      id="countdown"
       class="countdown-widget countdown-widget--compact"
+      data-countdown
       data-target-date={targetDate}
       data-countdown-variant="compact"
       aria-label={label || "Countdown"}
@@ -32,115 +32,128 @@ const units = [
 
       <p class="countdown-compact__track" aria-live="polite">
         <span class="countdown-compact__segment">
-          <span id="countdown-days" class="countdown-compact__value">00</span>
+          <span class="countdown-compact__value" data-countdown-value="days">
+            00
+          </span>
           <span class="countdown-compact__suffix">D</span>
         </span>
         <span class="countdown-compact__sep" aria-hidden="true">:</span>
         <span class="countdown-compact__segment">
-          <span id="countdown-hours" class="countdown-compact__value">00</span>
+          <span class="countdown-compact__value" data-countdown-value="hours">
+            00
+          </span>
           <span class="countdown-compact__suffix">H</span>
         </span>
         <span class="countdown-compact__sep" aria-hidden="true">:</span>
         <span class="countdown-compact__segment">
-          <span id="countdown-minutes" class="countdown-compact__value">00</span>
+          <span class="countdown-compact__value" data-countdown-value="minutes">
+            00
+          </span>
           <span class="countdown-compact__suffix">M</span>
         </span>
         <span class="countdown-compact__sep" aria-hidden="true">:</span>
         <span class="countdown-compact__segment">
-          <span id="countdown-seconds" class="countdown-compact__value">00</span>
+          <span class="countdown-compact__value" data-countdown-value="seconds">
+            00
+          </span>
           <span class="countdown-compact__suffix">S</span>
         </span>
       </p>
     </div>
   ) : (
     <div
-      id="countdown"
       class="countdown-widget"
+      data-countdown
       data-target-date={targetDate}
-      aria-label="Countdown to Rage Fest"
+      aria-label={label || "Countdown to Rage Fest"}
     >
-      {
-        units.map((unit) => (
-          <div class="countdown-unit">
-            <span id={unit.id} class="countdown-value">
-              00
-            </span>
+      {label ? <p class="countdown-cards__label">{label}</p> : null}
 
-            <span class="countdown-label">{unit.label}</span>
-          </div>
-        ))
-      }
+      <div class="countdown-cards__grid">
+        {
+          units.map((unit) => (
+            <div class="countdown-unit">
+              <span class="countdown-value" data-countdown-value={unit.key}>
+                00
+              </span>
+
+              <span class="countdown-label">{unit.label}</span>
+            </div>
+          ))
+        }
+      </div>
     </div>
   )
 }
 
 <script>
-  const countdown = document.querySelector<HTMLElement>("#countdown");
-
-  const daysElement = document.querySelector<HTMLElement>("#countdown-days");
-  const hoursElement = document.querySelector<HTMLElement>("#countdown-hours");
-  const minutesElement =
-    document.querySelector<HTMLElement>("#countdown-minutes");
-  const secondsElement =
-    document.querySelector<HTMLElement>("#countdown-seconds");
-
-  let countdownInterval: number | undefined;
-
   const padNumber = (value: number) => String(value).padStart(2, "0");
 
-  const setCountdownValues = (
-    days: number,
-    hours: number,
-    minutes: number,
-    seconds: number,
-  ) => {
-    if (daysElement) daysElement.textContent = padNumber(days);
-    if (hoursElement) hoursElement.textContent = padNumber(hours);
-    if (minutesElement) minutesElement.textContent = padNumber(minutes);
-    if (secondsElement) secondsElement.textContent = padNumber(seconds);
-  };
-
-  const updateCountdown = () => {
-    if (!countdown) return;
-
-    const targetDateValue = countdown.dataset.targetDate;
-    if (!targetDateValue) return;
-
-    const targetTime = new Date(targetDateValue).getTime();
-
-    if (Number.isNaN(targetTime)) {
-      setCountdownValues(0, 0, 0, 0);
-      return;
-    }
-
-    const distance = targetTime - Date.now();
-
-    if (distance <= 0) {
-      setCountdownValues(0, 0, 0, 0);
-
-      if (countdownInterval) {
-        window.clearInterval(countdownInterval);
-      }
-
-      return;
-    }
-
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((distance / (1000 * 60)) % 60);
-    const seconds = Math.floor((distance / 1000) % 60);
-
-    setCountdownValues(days, hours, minutes, seconds);
-  };
-
-  const initCountdown = () => {
-    if (!countdown || countdown.dataset.countdownReady === "true") return;
+  const initCountdown = (countdown: HTMLElement) => {
+    if (countdown.dataset.countdownReady === "true") return;
     countdown.dataset.countdownReady = "true";
 
+    const daysElement = countdown.querySelector<HTMLElement>(
+      '[data-countdown-value="days"]',
+    );
+    const hoursElement = countdown.querySelector<HTMLElement>(
+      '[data-countdown-value="hours"]',
+    );
+    const minutesElement = countdown.querySelector<HTMLElement>(
+      '[data-countdown-value="minutes"]',
+    );
+    const secondsElement = countdown.querySelector<HTMLElement>(
+      '[data-countdown-value="seconds"]',
+    );
+
+    const setCountdownValues = (
+      days: number,
+      hours: number,
+      minutes: number,
+      seconds: number,
+    ) => {
+      if (daysElement) daysElement.textContent = padNumber(days);
+      if (hoursElement) hoursElement.textContent = padNumber(hours);
+      if (minutesElement) minutesElement.textContent = padNumber(minutes);
+      if (secondsElement) secondsElement.textContent = padNumber(seconds);
+    };
+
+    const updateCountdown = () => {
+      const targetDateValue = countdown.dataset.targetDate;
+      if (!targetDateValue) return;
+
+      const targetTime = new Date(targetDateValue).getTime();
+
+      if (Number.isNaN(targetTime)) {
+        setCountdownValues(0, 0, 0, 0);
+        return;
+      }
+
+      const distance = targetTime - Date.now();
+
+      if (distance <= 0) {
+        setCountdownValues(0, 0, 0, 0);
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
+
+      setCountdownValues(days, hours, minutes, seconds);
+    };
+
     updateCountdown();
-    countdownInterval = window.setInterval(updateCountdown, 1000);
+    window.setInterval(updateCountdown, 1000);
   };
 
-  initCountdown();
-  document.addEventListener("astro:page-load", initCountdown);
+  const initAllCountdowns = () => {
+    document
+      .querySelectorAll<HTMLElement>("[data-countdown]")
+      .forEach(initCountdown);
+  };
+
+  initAllCountdowns();
+  document.addEventListener("astro:page-load", initAllCountdowns);
 </script>
