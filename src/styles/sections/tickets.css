@@ -1943,6 +1943,11 @@
     text-align: center;
     padding-left: 0;
   }
+
+  .tickets-purchase--vip .tickets-checkout__title {
+    color: #ffffff;
+    text-shadow: 0 2px 7px rgba(0, 0, 0, 0.43);
+  }
 }
 
 @media (max-width: 680px) {
