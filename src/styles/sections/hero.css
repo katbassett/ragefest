@@ -263,7 +263,7 @@
   pointer-events: none;
   user-select: none;
   box-shadow: none;
-  animation: hero-cloud-float 14s ease-in-out infinite alternate;
+  transform: translate3d(-50%, var(--cloud-offset-y), 0);
 }
 
 @media (min-width: 1200px) {
@@ -465,8 +465,6 @@
 
   color: transparent;
   -webkit-text-fill-color: transparent;
-
-  filter: drop-shadow(0 2px 3px rgba(9, 5, 17, 0.38));
 }
 
 .hero-title__line:first-child {
@@ -491,9 +489,6 @@
   line-height: 0.82;
   letter-spacing: 0.02em;
   text-transform: none;
-
-  transform: scaleX(0.96);
-  transform-origin: center;
 
   background-image: linear-gradient(
     to top,
@@ -558,35 +553,12 @@
     var(--rf-pink) 72%,
     var(--rf-purple) 100%
   );
-  background-size: 180% 180%;
-
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 1rem;
 
   box-shadow:
     0 0 0 1px rgba(255, 32, 131, 0.28),
     0 16px 36px rgba(255, 32, 131, 0.22);
-
-  animation: ticket-gradient-shift 14s ease-in-out infinite;
-}
-
-.hero-pass .ticket-card__orb {
-  display: none;
-}
-
-.hero-pass .ticket-card__scan {
-  opacity: 0.08;
-  animation-duration: 9s;
-}
-
-.hero-pass .ticket-card__glow {
-  animation: none;
-  opacity: 0.35;
-}
-
-.hero-pass .ticket-card__sheen {
-  animation-duration: 7s;
-  opacity: 0.28;
 }
 
 .hero-pass::before,
@@ -613,20 +585,6 @@
 
 .hero-pass::after {
   right: -0.36rem;
-}
-
-.hero-pass .ticket-card__fx {
-  border-radius: inherit;
-}
-
-.hero-pass .ticket-card__orb--one {
-  width: 8rem;
-  height: 8rem;
-}
-
-.hero-pass .ticket-card__orb--two {
-  width: 6rem;
-  height: 6rem;
 }
 
 .hero-pass__main {
