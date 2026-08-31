@@ -1126,34 +1126,56 @@
    RESPONSIVE
 ========================================================== */
 
-/* Desktop: scale down only when the viewport is too short to fit the hero */
-@media (min-width: 768px) and (max-height: 900px) {
+/* Desktop: proportionally scale hero content when viewport height is tight */
+@media (min-width: 768px) and (max-height: 1020px) {
   .hero-main {
-    padding-top: clamp(6rem, 10svh, 7.75rem);
+    padding-top: clamp(6.25rem, 10svh, 8rem);
   }
 
-  .hero-logo-image {
-    height: clamp(6.5rem, min(13vw, 11svh), 11.5rem);
-  }
-
-  .hero-title {
-    font-size: clamp(2.35rem, min(6.5vw, 5svh), 4.15rem);
-  }
-
-  .hero-pass {
-    padding: 1rem 1.25rem;
-  }
-
-  .hero-actions {
-    margin-top: 0.5rem;
-  }
-
-  .hero-countdown--compact {
-    margin-top: 0.4rem;
+  .hero-layout {
+    zoom: clamp(0.86, calc(100svh / 1020), 1);
+    padding-block: 0.2rem 0.3rem;
   }
 
   .hero-description--bottom {
-    padding-block: 0.45rem 0.35rem;
+    padding-block: 0.4rem 0.3rem;
+  }
+}
+
+/* Firefox fallback when zoom is unavailable */
+@supports not (zoom: 1) {
+  @media (min-width: 768px) and (max-height: 1020px) {
+    .hero-main {
+      padding-top: clamp(5.75rem, 9.5svh, 7.25rem);
+    }
+
+    .hero-logo-image {
+      height: clamp(6rem, min(12vw, 10svh), 10rem);
+    }
+
+    .hero-title {
+      font-size: clamp(2.2rem, min(6vw, 4.8svh), 3.85rem);
+    }
+
+    .hero-pass {
+      padding: 0.95rem 1.2rem;
+    }
+
+    .hero-pass__admit {
+      min-height: 4rem;
+    }
+
+    .hero-pass__tear {
+      min-height: 4.1rem;
+    }
+
+    .hero-actions {
+      margin-top: 0.45rem;
+    }
+
+    .hero-countdown--compact {
+      margin-top: 0.35rem;
+    }
   }
 }
 
