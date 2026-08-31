@@ -243,50 +243,59 @@ const purchaseBlocks: PurchaseBlock[] = [
               <div class="tickets-checkout">
                 <h3 class="tickets-checkout__title">{block.checkoutTitle}</h3>
 
-                <div
-                  class="tickets-widget"
-                  data-loop1-widget
-                  data-tier={block.id}
-                  data-widget-label={block.widgetLabel}
-                  data-buy-label={block.buyLabel}
-                  data-closed-message={block.closedMessage}
-                  data-shop-list={ticketShop.productListUrl}
-                  data-shop-event={ticketShop.eventUrl}
-                >
-                  {
-                    useDemoShop && (
-                      <p class="tickets-widget__preview">
-                        Preview widget (pretix demo) — not live Ragefest tickets
+                {
+                  block.itemId ? (
+                    <div
+                      class="tickets-widget"
+                      data-loop1-widget
+                      data-tier={block.id}
+                      data-widget-label={block.widgetLabel}
+                      data-buy-label={block.buyLabel}
+                      data-closed-message={block.closedMessage}
+                      data-shop-list={ticketShop.productListUrl}
+                      data-shop-event={ticketShop.eventUrl}
+                    >
+                      {
+                        useDemoShop && (
+                          <p class="tickets-widget__preview">
+                            Preview widget (pretix demo) — not live Ragefest
+                            tickets
+                          </p>
+                        )
+                      }
+
+                      <p class="tickets-widget__status" data-loop1-status>
+                        Checking the ticket shop…
                       </p>
-                    )
-                  }
 
-                  <p class="tickets-widget__status" data-loop1-status>
-                    Checking the ticket shop…
-                  </p>
+                      <div
+                        class="pretix-widget-compat"
+                        event={ticketShop.eventUrl}
+                        items={block.itemId}
+                      ></div>
 
-                  <div
-                    class="pretix-widget-compat"
-                    event={ticketShop.eventUrl}
-                    {...(block.itemId ? { items: block.itemId } : {})}
-                  ></div>
-
-                  <noscript>
-                    <div class="pretix-widget">
-                      <div class="pretix-widget-info-message">
-                        JavaScript is disabled in your browser. To access our
-                        ticket shop without JavaScript, please{" "}
-                        <a
-                          target="_blank"
-                          rel="noopener"
-                          href={ticketShop.eventUrl}
-                        >
-                          click here
-                        </a>.
-                      </div>
+                      <noscript>
+                        <div class="pretix-widget">
+                          <div class="pretix-widget-info-message">
+                            JavaScript is disabled in your browser. To access
+                            our ticket shop without JavaScript, please{" "}
+                            <a
+                              target="_blank"
+                              rel="noopener"
+                              href={ticketShop.eventUrl}
+                            >
+                              click here
+                            </a>.
+                          </div>
+                        </div>
+                      </noscript>
                     </div>
-                  </noscript>
-                </div>
+                  ) : (
+                    <p class="tickets-widget__status tickets-widget__status--static">
+                      {block.closedMessage}
+                    </p>
+                  )
+                }
               </div>
             </div>
           </div>
@@ -396,11 +405,13 @@ const purchaseBlocks: PurchaseBlock[] = [
     const buyLabel = root.dataset.buyLabel?.trim() || "Buy tickets";
 
     root.querySelectorAll(".pretix-widget-item-title").forEach((node) => {
+      if (node.textContent?.trim() === widgetLabel) return;
       node.textContent = widgetLabel;
     });
 
     root.querySelectorAll(".pretix-widget-action button").forEach((node) => {
       if (!(node instanceof HTMLButtonElement)) return;
+      if (node.getAttribute("aria-label") === buyLabel) return;
       node.setAttribute("aria-label", buyLabel);
     });
   };
@@ -412,14 +423,21 @@ const purchaseBlocks: PurchaseBlock[] = [
 
       relabelLoop1Copy(root);
 
+      let pending = false;
+
       const observer = new MutationObserver(() => {
-        relabelLoop1Copy(root);
+        if (pending) return;
+        pending = true;
+
+        window.requestAnimationFrame(() => {
+          pending = false;
+          relabelLoop1Copy(root);
+        });
       });
 
       observer.observe(root, {
         subtree: true,
         childList: true,
-        characterData: true,
       });
     });
   };

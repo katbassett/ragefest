@@ -880,6 +880,11 @@
   color: var(--rf-yellow, #f5ff00);
 }
 
+.tickets-widget__status--static {
+  margin: 0;
+  padding: 0.35rem 0.15rem 0;
+}
+
 .tickets-widget[data-shop="disabled"] .pretix-widget,
 .tickets-widget[data-shop="disabled"] .pretix-widget-compat,
 .tickets-widget[data-shop="disabled"] .pretix-widget-wrapper {
