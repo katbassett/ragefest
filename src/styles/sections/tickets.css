@@ -557,6 +557,120 @@
   border-left-color: rgba(20, 8, 24, 0.16);
 }
 
+.tickets-purchase--vip .tickets-checkout__title {
+  color: #140818;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.tickets-purchase--vip .tickets-widget {
+  color: #140818;
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-item-title,
+.tickets-purchase--vip .tickets-widget .pretix-widget-pricebox,
+.tickets-purchase--vip .tickets-widget .pretix-widget-item-price-col {
+  color: #140818;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-item-title::after {
+  content: "Premium Experience";
+  color: rgba(20, 8, 24, 0.72);
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-pricebox-tax,
+.tickets-purchase--vip .tickets-widget .pretix-widget-item-description,
+.tickets-purchase--vip .tickets-widget .pretix-widget-item-meta {
+  color: rgba(20, 8, 24, 0.68);
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-item-availability-col {
+  border-top-color: rgba(20, 8, 24, 0.14);
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-item-availability-col::before {
+  color: rgba(20, 8, 24, 0.72);
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-item-count-group {
+  border-color: rgba(20, 8, 24, 0.18);
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-item-count-dec,
+.tickets-purchase--vip .tickets-widget .pretix-widget-item-count-inc,
+.tickets-purchase--vip .tickets-widget .pretix-widget button.pretix-widget-btn-default {
+  color: #140818;
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-item-count-dec:hover,
+.tickets-purchase--vip .tickets-widget .pretix-widget-item-count-inc:hover,
+.tickets-purchase--vip .tickets-widget .pretix-widget button.pretix-widget-btn-default:hover {
+  color: #334155;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-item-count-multiple,
+.tickets-purchase--vip .tickets-widget .pretix-widget input[type="number"].pretix-widget-item-count-multiple {
+  color: #140818;
+  background: transparent;
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-action button {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #dbe3ec 18%,
+    #94a3b8 42%,
+    #e2e8f0 68%,
+    #f8fafc 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  box-shadow:
+    6px 6px 0 rgba(51, 65, 85, 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    inset 0 -1px 0 rgba(100, 116, 139, 0.28),
+    0 12px 28px rgba(71, 85, 105, 0.32);
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-action button:hover:not(:disabled),
+.tickets-purchase--vip .tickets-widget .pretix-widget-action button:focus-visible:not(:disabled) {
+  color: transparent;
+  background: linear-gradient(
+    135deg,
+    #fafbfd 0%,
+    #ffffff 24%,
+    #64748b 50%,
+    #f1f5f9 76%,
+    #ffffff 100%
+  );
+  transform: translate(2px, 2px);
+  box-shadow:
+    4px 4px 0 rgba(51, 65, 85, 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(100, 116, 139, 0.32),
+    0 10px 22px rgba(71, 85, 105, 0.38);
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-action button:focus-visible {
+  outline-color: rgba(51, 65, 85, 0.75);
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-action button:disabled,
+.tickets-purchase--vip .tickets-widget .pretix-widget-action button[disabled] {
+  box-shadow:
+    4px 4px 0 rgba(100, 116, 139, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-attribution {
+  color: rgba(20, 8, 24, 0.42);
+}
+
+.tickets-purchase--vip .tickets-widget .pretix-widget-attribution a {
+  color: rgba(20, 8, 24, 0.58);
+}
+
 .tickets-purchase--vip .ticket-card__glow {
   background: radial-gradient(
     circle at 50% 50%,
@@ -1348,6 +1462,14 @@
   text-align: center;
 }
 
+.tickets-widget[data-tier="vip"] .pretix-widget-action button::after {
+  content: "Claim VIP Access";
+
+  color: #140818;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.14em;
+}
+
 .tickets-widget .pretix-widget-action button:hover:not(:disabled),
 .tickets-widget .pretix-widget-action button:focus-visible:not(:disabled) {
   color: transparent;
@@ -1858,6 +1980,14 @@
     box-shadow:
       4px 4px 0 var(--rf-pink-dark),
       0 10px 22px rgba(255, 32, 131, 0.28);
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-action button {
+    box-shadow:
+      4px 4px 0 rgba(51, 65, 85, 0.58),
+      inset 0 1px 0 rgba(255, 255, 255, 0.98),
+      inset 0 -1px 0 rgba(100, 116, 139, 0.28),
+      0 10px 22px rgba(71, 85, 105, 0.32);
   }
 
   .tickets-widget .pretix-widget-action button::after {

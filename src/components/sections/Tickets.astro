@@ -74,7 +74,7 @@ const allTiers = [
   {
     name: "VIP",
     tagline: "A limited premium RAGEFEST experience.",
-    status: "$299 · 100 Available",
+    status: "$299 · 150 Available",
     featured: false,
     className: "ticket-card--vip",
     features: [
@@ -82,8 +82,8 @@ const allTiers = [
       "Event Center access",
       "Premium VIP experience",
       "Additional VIP amenities to be announced",
-      "Very limited availability",
-      "Initial release — 100 tickets available",
+      "Only 150 VIP tickets available",
+      "No additional VIP tickets will be released after this allocation",
     ],
   },
 ];
@@ -126,7 +126,7 @@ const purchaseBlocks: PurchaseBlock[] = [
     blockClass: "tickets-purchase tickets-purchase--vip",
     checkoutTitle: "Secure VIP Access",
     widgetLabel: "VIP",
-    buyLabel: "Buy VIP",
+    buyLabel: "Claim VIP Access",
     itemId: ticketShop.vipItemId,
     closedMessage: "VIP checkout is temporarily unavailable. Check back soon.",
     showTierLabel: true,
