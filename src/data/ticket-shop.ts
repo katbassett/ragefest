@@ -16,8 +16,8 @@ const DEMO_EVENT = "https://pretix.eu/demo/democon/";
 /** Loop1 item id for the live Founding Access product (not VIP). */
 export const foundingAccessItemId = "15751";
 
-/** Loop1 item id for VIP — add when the VIP product is live in Loop1. */
-export const vipItemId = undefined as string | undefined;
+/** Loop1 item id for VIP. */
+export const vipItemId = "15756";
 
 const SITE_ORIGIN =
   (import.meta.env.PUBLIC_SITE_URL as string | undefined) ||

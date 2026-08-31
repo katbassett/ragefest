@@ -74,7 +74,7 @@ const allTiers = [
   {
     name: "VIP",
     tagline: "A limited premium RAGEFEST experience.",
-    status: "150 Initial",
+    status: "$299 · 100 Available",
     featured: false,
     className: "ticket-card--vip",
     features: [
@@ -83,7 +83,7 @@ const allTiers = [
       "Premium VIP experience",
       "Additional VIP amenities to be announced",
       "Very limited availability",
-      "Initial release limited to 150 tickets",
+      "Initial release — 100 tickets available",
     ],
   },
 ];
@@ -128,7 +128,7 @@ const purchaseBlocks: PurchaseBlock[] = [
     widgetLabel: "VIP",
     buyLabel: "Buy VIP",
     itemId: ticketShop.vipItemId,
-    closedMessage: "VIP tickets aren’t available in the shop yet.",
+    closedMessage: "VIP checkout is temporarily unavailable. Check back soon.",
     showTierLabel: true,
   },
 ].filter((block): block is PurchaseBlock => Boolean(block));
@@ -215,14 +215,6 @@ const purchaseBlocks: PurchaseBlock[] = [
                   "ticket-card--banner",
                 ]}
               >
-                <div class="ticket-card__fx" aria-hidden="true">
-                  <span class="ticket-card__scan"></span>
-                  <span class="ticket-card__glow"></span>
-                  <span class="ticket-card__sheen"></span>
-                  <span class="ticket-card__orb ticket-card__orb--one"></span>
-                  <span class="ticket-card__orb ticket-card__orb--two"></span>
-                </div>
-
                 <div class="ticket-card__main">
                   <div class="ticket-card__top">
                     <div class="ticket-card__heading">
