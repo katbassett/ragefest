@@ -263,7 +263,7 @@
   pointer-events: none;
   user-select: none;
   box-shadow: none;
-  animation: hero-cloud-float 16s ease-in-out infinite alternate;
+  animation: hero-cloud-float 14s ease-in-out infinite alternate;
 }
 
 @media (min-width: 1200px) {
@@ -449,8 +449,6 @@
   letter-spacing: -0.02em;
   text-align: center;
   text-transform: uppercase;
-
-  contain: layout style;
 }
 
 .hero-title__line {
@@ -468,10 +466,7 @@
   color: transparent;
   -webkit-text-fill-color: transparent;
 
-  filter: none;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  transform: translate3d(0, 0, 0);
+  filter: drop-shadow(0 2px 3px rgba(9, 5, 17, 0.38));
 }
 
 .hero-title__line:first-child {
@@ -497,7 +492,7 @@
   letter-spacing: 0.02em;
   text-transform: none;
 
-  transform: translate3d(0, 0, 0);
+  transform: scaleX(0.96);
   transform-origin: center;
 
   background-image: linear-gradient(
@@ -1171,7 +1166,7 @@
     --hero-stack-gap: clamp(0.25rem, 0.75vh, 0.5rem);
     --hero-logo-h: clamp(8.25rem, 15.5vw, 15.5rem);
     --hero-meta-size: clamp(0.84rem, 1.9vw, 1.05rem);
-    --hero-title-size: clamp(3.4rem, 8.5vw, 6.35rem);
+    --hero-title-size: clamp(3.25rem, 8.25vw, 6rem);
     --hero-pass-pad: 1.35rem 1.5rem;
     --hero-pass-min-h: 4.75rem;
     --hero-pass-name: clamp(1.5rem, 3.5vw, 1.95rem);
@@ -1183,11 +1178,12 @@
   }
 
   .hero-title {
-    margin: 0.18em 0;
+    margin: 0.2em 0;
+    font-size: min(var(--hero-title-size), 5.5svh);
   }
 
   .hero-title__line--rage {
-    font-size: 1.38em;
+    font-size: 1.36em;
   }
 
   .hero-pass {
@@ -1211,7 +1207,7 @@
   .hero-section {
     --hero-pad-top: clamp(6.5rem, min(12vh, 10.5svh), 8.75rem);
     --hero-logo-h: clamp(8rem, min(14vw, 13.5svh), 15.5rem);
-    --hero-title-size: clamp(3.4rem, min(7.5vw, 6.5svh), 6.35rem);
+    --hero-title-size: clamp(3.25rem, min(7.25vw, 5.5svh), 6rem);
     --hero-pass-name: clamp(1.35rem, min(3.2vw, 2.6svh), 1.85rem);
   }
 }
@@ -1221,7 +1217,7 @@
   .hero-section {
     --hero-pad-top: clamp(6.25rem, 10svh, 7.75rem);
     --hero-logo-h: clamp(7rem, min(14vw, 12.5svh), 16rem);
-    --hero-title-size: clamp(2.85rem, min(7.5vw, 6.5svh), 5.55rem);
+    --hero-title-size: clamp(2.75rem, min(7.25vw, 5.5svh), 5.35rem);
     --hero-pass-pad: clamp(1rem, 1.8svh, 1.35rem) clamp(1.1rem, 2svh, 1.5rem);
   }
 }
