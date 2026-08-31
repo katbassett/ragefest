@@ -89,16 +89,55 @@ const allTiers = [
 ];
 
 const foundingTier = allTiers.find((tier) => tier.name === "Founding Access");
+const vipTier = allTiers.find((tier) => tier.name === "VIP");
 
 const tiers = showFullLadder
   ? allTiers
   : allTiers.filter((tier) => tier.name === "Founding Access");
+
+type PurchaseBlock = {
+  id: "founding" | "vip";
+  tier: (typeof allTiers)[number];
+  blockClass: string;
+  checkoutTitle: string;
+  widgetLabel: string;
+  buyLabel: string;
+  itemId?: string;
+  closedMessage: string;
+  showTierLabel: boolean;
+};
+
+const purchaseBlocks: PurchaseBlock[] = [
+  foundingTier && {
+    id: "founding",
+    tier: foundingTier,
+    blockClass: "tickets-purchase tickets-purchase--founding",
+    checkoutTitle: "Secure Your Access",
+    widgetLabel: "FOUNDING ACCESS",
+    buyLabel: "Buy Founding Access",
+    itemId: ticketShop.foundingAccessItemId,
+    closedMessage:
+      "The ticket shop isn’t open yet. Founding Access goes live on the 20th.",
+    showTierLabel: false,
+  },
+  vipTier && {
+    id: "vip",
+    tier: vipTier,
+    blockClass: "tickets-purchase tickets-purchase--vip",
+    checkoutTitle: "Secure VIP Access",
+    widgetLabel: "VIP",
+    buyLabel: "Buy VIP",
+    itemId: ticketShop.vipItemId,
+    closedMessage: "VIP tickets aren’t available in the shop yet.",
+    showTierLabel: true,
+  },
+].filter((block): block is PurchaseBlock => Boolean(block));
 ---
 
 <section id="tickets" class="tickets-section">
   <div class="tickets-shell">
     <header class="tickets-head">
-      <p class="tickets-kicker">Tickets • Founding Access</p>
+      <p class="tickets-kicker">Tickets • Access</p>
 
       <h2 class="tickets-title">
         <span class="tickets-title__main">Buy Into</span>
@@ -150,25 +189,17 @@ const tiers = showFullLadder
           }
         </div>
       ) : (
-        foundingTier && (
-          <div class="tickets-purchase">
-            <div class="ticket-card__fx tickets-purchase__fx" aria-hidden="true">
-              <span class="ticket-card__scan"></span>
-              <span class="ticket-card__glow"></span>
-              <span class="ticket-card__sheen"></span>
-              <span class="ticket-card__orb ticket-card__orb--one"></span>
-              <span class="ticket-card__orb ticket-card__orb--two"></span>
-            </div>
+        purchaseBlocks.map((block) => (
+          <div class="tickets-purchase-group">
+            {block.showTierLabel && (
+              <p class="tickets-tier-label">{block.tier.name}</p>
+            )}
 
-            <article
-              class:list={[
-                "ticket-card",
-                foundingTier.className,
-                foundingTier.featured && "ticket-card--featured",
-                "ticket-card--banner",
-              ]}
-            >
-              <div class="ticket-card__fx" aria-hidden="true">
+            <div class={block.blockClass}>
+              <div
+                class="ticket-card__fx tickets-purchase__fx"
+                aria-hidden="true"
+              >
                 <span class="ticket-card__scan"></span>
                 <span class="ticket-card__glow"></span>
                 <span class="ticket-card__sheen"></span>
@@ -176,79 +207,98 @@ const tiers = showFullLadder
                 <span class="ticket-card__orb ticket-card__orb--two"></span>
               </div>
 
-              <div class="ticket-card__main">
-                <div class="ticket-card__top">
-                  <div class="ticket-card__heading">
-                    <h3 class="ticket-card__name">{foundingTier.name}</h3>
-                    <p class="ticket-card__tagline">{foundingTier.tagline}</p>
-                  </div>
-                  <p class="ticket-card__status">{foundingTier.status}</p>
+              <article
+                class:list={[
+                  "ticket-card",
+                  block.tier.className,
+                  block.tier.featured && "ticket-card--featured",
+                  "ticket-card--banner",
+                ]}
+              >
+                <div class="ticket-card__fx" aria-hidden="true">
+                  <span class="ticket-card__scan"></span>
+                  <span class="ticket-card__glow"></span>
+                  <span class="ticket-card__sheen"></span>
+                  <span class="ticket-card__orb ticket-card__orb--one"></span>
+                  <span class="ticket-card__orb ticket-card__orb--two"></span>
                 </div>
 
-                <ul class="ticket-card__features">
-                  {foundingTier.features.map((feature) => (
-                    <li>{feature}</li>
-                  ))}
-                </ul>
-              </div>
-            </article>
+                <div class="ticket-card__main">
+                  <div class="ticket-card__top">
+                    <div class="ticket-card__heading">
+                      <h3 class="ticket-card__name">{block.tier.name}</h3>
+                      <p class="ticket-card__tagline">{block.tier.tagline}</p>
+                    </div>
+                    <p class="ticket-card__status">{block.tier.status}</p>
+                  </div>
 
-            <div class="tickets-checkout">
-              <h3 class="tickets-checkout__title">Secure Your Access</h3>
+                  <ul class="ticket-card__features">
+                    {block.tier.features.map((feature) => (
+                      <li>{feature}</li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
 
-              <div
-                class="tickets-widget"
-                data-loop1-widget
-                data-shop-list={ticketShop.productListUrl}
-                data-shop-event={ticketShop.eventUrl}
-              >
-                {
-                  useDemoShop && (
-                    <p class="tickets-widget__preview">
-                      Preview widget (pretix demo) — not live Ragefest tickets
-                    </p>
-                  )
-                }
-
-                <p class="tickets-widget__status" data-loop1-status>
-                  Checking the ticket shop…
-                </p>
+              <div class="tickets-checkout">
+                <h3 class="tickets-checkout__title">{block.checkoutTitle}</h3>
 
                 <div
-                  class="pretix-widget-compat"
-                  event={ticketShop.eventUrl}
-                  {...(ticketShop.foundingAccessItemId
-                    ? { items: ticketShop.foundingAccessItemId }
-                    : {})}
-                ></div>
+                  class="tickets-widget"
+                  data-loop1-widget
+                  data-tier={block.id}
+                  data-widget-label={block.widgetLabel}
+                  data-buy-label={block.buyLabel}
+                  data-closed-message={block.closedMessage}
+                  data-shop-list={ticketShop.productListUrl}
+                  data-shop-event={ticketShop.eventUrl}
+                >
+                  {
+                    useDemoShop && (
+                      <p class="tickets-widget__preview">
+                        Preview widget (pretix demo) — not live Ragefest tickets
+                      </p>
+                    )
+                  }
 
-                <noscript>
-                  <div class="pretix-widget">
-                    <div class="pretix-widget-info-message">
-                      JavaScript is disabled in your browser. To access our
-                      ticket shop without JavaScript, please{" "}
-                      <a
-                        target="_blank"
-                        rel="noopener"
-                        href={ticketShop.eventUrl}
-                      >
-                        click here
-                      </a>.
+                  <p class="tickets-widget__status" data-loop1-status>
+                    Checking the ticket shop…
+                  </p>
+
+                  <div
+                    class="pretix-widget-compat"
+                    event={ticketShop.eventUrl}
+                    {...(block.itemId ? { items: block.itemId } : {})}
+                  ></div>
+
+                  <noscript>
+                    <div class="pretix-widget">
+                      <div class="pretix-widget-info-message">
+                        JavaScript is disabled in your browser. To access our
+                        ticket shop without JavaScript, please{" "}
+                        <a
+                          target="_blank"
+                          rel="noopener"
+                          href={ticketShop.eventUrl}
+                        >
+                          click here
+                        </a>.
+                      </div>
                     </div>
-                  </div>
-                </noscript>
+                  </noscript>
+                </div>
               </div>
             </div>
           </div>
-        )
+        ))
       )
     }
 
     <p class="tickets-checkout__close">
       <span class="tickets-checkout__close-lead">The first gate is open.</span>
       <span>
-        Founding Access is available now. More tiers will reveal themselves
-        later.
+        Founding Access and VIP are available now. More tiers will reveal
+        themselves later.
       </span>
     </p>
   </div>
@@ -303,68 +353,74 @@ const tiers = showFullLadder
   document.addEventListener("astro:page-load", initTicketsReveal);
 
   const initLoop1ShopStatus = () => {
-    const root = document.querySelector<HTMLElement>("[data-loop1-widget]");
-    const status = document.querySelector<HTMLElement>("[data-loop1-status]");
-    if (!root || !status) return;
-    if (root.dataset.statusReady === "true") return;
-    root.dataset.statusReady = "true";
+    document.querySelectorAll<HTMLElement>("[data-loop1-widget]").forEach((root) => {
+      const status = root.querySelector<HTMLElement>("[data-loop1-status]");
+      if (!status) return;
+      if (root.dataset.statusReady === "true") return;
+      root.dataset.statusReady = "true";
 
-    const shopList = root.dataset.shopList;
-    const shopEvent = root.dataset.shopEvent || "https://loop1tickets.com/Ragefest/Ragefest2027/";
+      const shopList = root.dataset.shopList;
+      const shopEvent =
+        root.dataset.shopEvent ||
+        "https://loop1tickets.com/Ragefest/Ragefest2027/";
+      const closedMessage =
+        root.dataset.closedMessage ||
+        "The ticket shop isn’t open yet. Check back soon.";
 
-    if (!shopList) return;
+      if (!shopList) return;
 
-    fetch(shopList)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && data.error) {
-          root.dataset.shop = "disabled";
-          status.textContent =
-            "The ticket shop isn’t open yet. Founding Access goes live on the 20th.";
-          return;
-        }
+      fetch(shopList)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data && data.error) {
+            root.dataset.shop = "disabled";
+            status.textContent = closedMessage;
+            return;
+          }
 
-        root.dataset.shop = "live";
-        status.hidden = true;
-      })
-      .catch(() => {
-        root.dataset.shop = "error";
-        status.innerHTML =
-          'The ticket shop couldn’t load here. <a href="' +
-          shopEvent +
-          '" target="_blank" rel="noopener">Open it in a new tab</a>.';
-      });
+          root.dataset.shop = "live";
+          status.hidden = true;
+        })
+        .catch(() => {
+          root.dataset.shop = "error";
+          status.innerHTML =
+            'The ticket shop couldn’t load here. <a href="' +
+            shopEvent +
+            '" target="_blank" rel="noopener">Open it in a new tab</a>.';
+        });
+    });
   };
 
   const relabelLoop1Copy = (root: HTMLElement) => {
+    const widgetLabel = root.dataset.widgetLabel?.trim() || "FOUNDING ACCESS";
+    const buyLabel = root.dataset.buyLabel?.trim() || "Buy tickets";
+
     root.querySelectorAll(".pretix-widget-item-title").forEach((node) => {
-      const current = node.textContent?.trim() ?? "";
-      if (current === "Founding Access" || current === "VIP") {
-        node.textContent = "FOUNDING ACCESS";
-      }
+      node.textContent = widgetLabel;
     });
 
     root.querySelectorAll(".pretix-widget-action button").forEach((node) => {
       if (!(node instanceof HTMLButtonElement)) return;
-      node.setAttribute("aria-label", "Buy Founding Access");
+      node.setAttribute("aria-label", buyLabel);
     });
   };
 
   const initLoop1Presentation = () => {
-    const root = document.querySelector<HTMLElement>("[data-loop1-widget]");
-    if (!root || root.dataset.presentationReady === "true") return;
-    root.dataset.presentationReady = "true";
+    document.querySelectorAll<HTMLElement>("[data-loop1-widget]").forEach((root) => {
+      if (root.dataset.presentationReady === "true") return;
+      root.dataset.presentationReady = "true";
 
-    relabelLoop1Copy(root);
-
-    const observer = new MutationObserver(() => {
       relabelLoop1Copy(root);
-    });
 
-    observer.observe(root, {
-      subtree: true,
-      childList: true,
-      characterData: true,
+      const observer = new MutationObserver(() => {
+        relabelLoop1Copy(root);
+      });
+
+      observer.observe(root, {
+        subtree: true,
+        childList: true,
+        characterData: true,
+      });
     });
   };
 

@@ -16,6 +16,9 @@ const DEMO_EVENT = "https://pretix.eu/demo/democon/";
 /** Loop1 item id for the live Founding Access product (not VIP). */
 export const foundingAccessItemId = "15751";
 
+/** Loop1 item id for VIP — add when the VIP product is live in Loop1. */
+export const vipItemId = undefined as string | undefined;
+
 const SITE_ORIGIN =
   (import.meta.env.PUBLIC_SITE_URL as string | undefined) ||
   "https://ragefestspi.com";
@@ -33,7 +36,8 @@ export const ticketShop = useDemoShop
       cssUrl: "https://pretix.eu/demo/democon/widget/v2.css",
       jsUrl: "https://pretix.eu/widget/v2.en.js",
       productListUrl: `${DEMO_EVENT}widget/product_list`,
-      foundingAccessItemId: undefined as string | undefined,
+      foundingAccessItemId,
+      vipItemId,
     }
   : {
       eventUrl: LOOP1_EVENT,
@@ -41,4 +45,5 @@ export const ticketShop = useDemoShop
       jsUrl: "https://loop1tickets.com/widget/v1.en.js",
       productListUrl: `${LOOP1_EVENT}widget/product_list`,
       foundingAccessItemId,
+      vipItemId,
     };
