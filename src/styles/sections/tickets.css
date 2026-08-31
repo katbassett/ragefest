@@ -1948,6 +1948,85 @@
     color: #ffffff;
     text-shadow: 0 2px 7px rgba(0, 0, 0, 0.43);
   }
+
+  .tickets-purchase--vip .tickets-widget {
+    color: #ffffff;
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-item-title,
+  .tickets-purchase--vip .tickets-widget .pretix-widget-pricebox,
+  .tickets-purchase--vip .tickets-widget .pretix-widget-item-price-col {
+    color: #ffffff;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-item-title::after {
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-pricebox-tax,
+  .tickets-purchase--vip .tickets-widget .pretix-widget-item-description,
+  .tickets-purchase--vip .tickets-widget .pretix-widget-item-meta {
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-item-availability-col {
+    border-top-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-item-availability-col::before {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-item-count-group {
+    border-color: rgba(255, 255, 255, 0.22);
+    background: rgba(0, 0, 0, 0.38);
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-item-count-dec,
+  .tickets-purchase--vip .tickets-widget .pretix-widget-item-count-inc,
+  .tickets-purchase--vip .tickets-widget .pretix-widget button.pretix-widget-btn-default {
+    color: #ffffff;
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-item-count-dec:hover,
+  .tickets-purchase--vip .tickets-widget .pretix-widget-item-count-inc:hover,
+  .tickets-purchase--vip .tickets-widget .pretix-widget button.pretix-widget-btn-default:hover {
+    color: var(--rf-yellow, #f5ff00);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-item-count-multiple,
+  .tickets-purchase--vip
+    .tickets-widget
+    .pretix-widget
+    input[type="number"].pretix-widget-item-count-multiple {
+    color: #ffffff;
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-attribution {
+    color: rgba(255, 255, 255, 0.38);
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-attribution a {
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-error-message {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-info-message {
+    color: rgba(255, 255, 255, 0.72);
+    background: rgba(0, 0, 0, 0.22);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .tickets-purchase--vip .tickets-widget .pretix-widget-info-message a {
+    color: #ffffff;
+  }
 }
 
 @media (max-width: 680px) {
